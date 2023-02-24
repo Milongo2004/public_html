@@ -1,4 +1,9 @@
 <?php
+//echo "en esta página encontrarás la información de los rótulos que han pasado por la estación en un intervalo de tiempo específico"
+
+?>
+
+<?php
     $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
 
     $estacion=$_GET ["estaciones"];
@@ -12,7 +17,8 @@
     $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
     $pedido = isset( $_POST['pedido'] ) ? $_POST['pedido'] : '';
     $lote = isset( $_POST['lote'] ) ? $_POST['lote'] : '';
-    $fecha = isset( $_POST['fecha'] ) ? $_POST['fecha'] : '';
+    $fechaDesde = isset( $_POST['fechaDesde'] ) ? $_POST['fechaDesde'] : '';
+    $fechaHasta = isset( $_POST['fechaHasta'] ) ? $_POST['fechaHasta'] : '';
     
     
     
@@ -20,7 +26,7 @@
     
    $filtros = array();
     if ($estacion != ''){
-            $filtros[]= "rotulos2.`estacionId2` = '$estacion'";
+            $filtros[]= "rotuloestaciones2.`estacionId` = '$estacion'";
     }
     if ($id != ''){
             $filtros[]= "rotulos2.`id` = '$id'";
@@ -91,13 +97,17 @@ $resultLot=mysqli_query($conexion,$sqlLot);
         
             $filtros[]= "rotulos2.`loteId` = '$lote'";
     }
-    if ($fecha != ''){
-            $filtros[]= "rotulos2.`fechaActualizacion` LIKE '$fecha%'";
+    if ($fechaDesde != '' && $fechaHasta != ''){
+            $filtros[]= "rotuloestaciones2.`ingreso` BETWEEN '$fechaDesde%' AND '$fechaHasta%'";
     }
     
-    $consultaFiltros='SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido`= pedidos2.`idP` WHERE ';
     
-    $consultaSuma = 'select sum(total) as totales FROM rotulos2 WHERE ';
+   
+    
+    
+    $consultaFiltros='SELECT rotuloestaciones2.*, rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido`= pedidos2.`idP` WHERE ';
+    
+    $consultaSuma = 'select sum(total) as totales FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` WHERE ';
 
 
 
@@ -107,63 +117,25 @@ $resultLot=mysqli_query($conexion,$sqlLot);
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>PorEstacion</title>
+	<title>MovimientosPorEstacion</title>
 </head>
 <body>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/historialEstacion.php?estaciones=<?php echo $estacion ?>&Buscar=Enviar'">Historial Estación</button>
+    
+    <?php
+    //echo "movimientos de la estación" . $estacion;
+    ?>
     
     <center>
-    <?php
+         <?php
             
 
         $sql2= "SELECT nombre from estaciones2 WHERE id ='". $estacion. "'";
 
         $result2=mysqli_query($conexion,$sql2);
+        ?>
         
-        //a continuación presento botones según la estación.
-        
-        switch ($estacion){
-            case 7:
-                ?>
-                <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Ver tabla Pedidos</button>
-                <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaListasGeneral.php'">Ver Lista de Empaque Global</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_pedidos.php'">Nuevo Pedido</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_clientes.php'">Nuevo Cliente</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/listaFiltro.php'">Lista de empaque</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/PDL/inventario_Pdl.php'">Inventario PDL</button>
-    
-    <br>
-
-    </br>
-    
-    <?php
-                break;
-        
-
-case 1:
-    
-            ?>
-            
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaTiempoPrensas.php'">Tiempos Prensas</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPrensadas.php'">Cuenta Prensadas</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_temperaturaPrensas.php'">Temperatura Planchas</button>
-   <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/nuevaProgramacion.php'">Programación de Producción</button>-->
-   <button onclick="location.href='https://trazabilidadmasterdent.online/control/progProduccion/progProduccion1.php'">Programación</button>
-   <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/interaccion_arduino.php?proceso_php=9&rotulo_php=700'">simulaciónTags</button>-->
-    
-    <br>
-
-    </br>
-    
-    <?php
-                break;
-                case 2:
-    break;
-        }
-            ?>
-
-        <h1>Producción actualmente en 
+        <h1>Producción que ha pasado por la estación de
 
         
                  <?php
@@ -187,30 +159,34 @@ case 1:
             </h1>
             
             <br>
-            
-<!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/'">Ver Historial</button>-->
-<div class="row">
-            <form action="BusquedaRotulosPorEstacion.php" method="POST">
+        
+        <div class="row">
+            <form action="historialEstacion.php" method="POST">
             
             <div class="mb-3">
                 
                     <label for="id" class="form-label">Id</label>
-                    <input type="text" size="15" class="form-control "  id="id" name="id">
+                    <input type="text" size="15" class="form-control "  id="id" name="id" style="width: 70px">
                     
                     <label for="referencia" class="form-label">Referencia</label>
-                    <input type="text" size="15" class="form-control "  id="referencia" name="referencia">
+                    <input type="text" size="15" class="form-control "  id="referencia" name="referencia" style="width: 100px">
          
                     <label for="color" class="form-label">Color</label>
-                    <input type="text" size="15" class="form-control "  id="color" name="color">
+                    <input type="text" size="15" class="form-control "  id="color" name="color" style="width: 100px">
                     
                     <label for="pedido" class="form-label">Pedido</label>
-                    <input type="text" size="15" class="form-control "  id="pedido" name="pedido">
+                    <input type="text" size="15" class="form-control "  id="pedido" name="pedido" style="width: 100px">
                     
                     <label for="lote" class="form-label">Lote</label>
-                    <input type="text" size="15" class="form-control "  id="lote" name="lote">
+                    <input type="text" size="15" class="form-control "  id="lote" name="lote" style="width: 100px">
                     
-                    <label for="fecha" class="form-label">Fecha</label>
-                    <input type="Date" class="form-control" id="fecha" name="fecha" placeholder="Ingresa la fecha" >
+                    <br></br>
+                    
+                    <label for="fechaDesde" class="form-label">Desde</label>
+                    <input type="Date" class="form-control" id="fechaDesde" name="fechaDesde" placeholder="Ingresa la fecha" >
+                    
+                    <label for="fechaHasta" class="form-label">Hasta</label>
+                    <input type="Date" class="form-control" id="fechaHasta" name="fechaHasta" placeholder="Ingresa la fecha" >
                     
                     <input name="estacion" type="hidden" value=" <?php
                         echo $estacion;  
@@ -225,7 +201,7 @@ case 1:
     </div>
                     
 <br></br>
-    
+        
         <table border="1">
             <tr>
                 <td>id</td>
@@ -249,9 +225,15 @@ case 1:
             //$sql="SELECT * from Rotulo";
             //$sql= "SELECT * from rotulos2 WHERE estacionId2 ='". $estacion. "'";
             //$sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, colores2.`nombre` AS color FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id`  INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id`  WHERE rotulos2.`estacionId2` = '". $estacion. "'";
-            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." ORDER BY rotulos2.`fechaActualizacion` DESC";
+            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." ORDER BY rotuloestaciones2.ingreso DESC";
             //echo $sql;
+            
             $result=mysqli_query($conexion,$sql);
+            
+            echo "Movimientos de producción por la estación de $estacionActual";
+            if ($fechaDesde != '' && $fechaHasta != ''){
+            echo " entre $fechaDesde y $fechaHasta";
+            }
             
             while($mostrar=mysqli_fetch_array($result)){
             ?>
@@ -266,7 +248,7 @@ case 1:
                 <!--<td><?php //echo $mostrar['cantidadMoldes'] ?></td>-->
                 <td><?php echo $mostrar['total'] ?></td>
                 <td><?php echo $mostrar['fecha'] ?></td>
-                <td><?php echo $mostrar['fechaActualizacion'] ?></td>
+                <td><?php echo $mostrar['ingreso'] ?></td>
                 
                 
                 
@@ -276,9 +258,8 @@ case 1:
             }
             ?>
         </table>
-
         <br>
-<table border="1">
+        <table border="1">
             <tr>
                
                 <td>TOTAL JUEGOS</td>
@@ -306,10 +287,9 @@ case 1:
         </table>
         <br></br>
 
-
-
-
-    </br>
-</center>
+        
+        
+        
+    </center>
 </body>
-</html>
+</html>    

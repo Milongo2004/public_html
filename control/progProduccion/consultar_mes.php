@@ -21,6 +21,7 @@ if($resultado>0){
 <html>
 
 <head>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous'>
 </head>
 
@@ -44,6 +45,7 @@ if($resultado>0){
       <th scope='col'>Referencia</th>
       <th scope='col'>Color</th>
       <th scope='col'>Lote</th>
+      <th scope='col'>Producidos</th>
       
                        
     </tr>
@@ -59,6 +61,7 @@ if($resultado>0){
           <td><?php   echo $data['vereferencia'];?></td>
           <td><?php   echo $data['color'];?></td>
           <td><?php   echo $data['verlote'];?></td>
+          <td><?php   echo $data['total'];?></td>
           
            
               </td>

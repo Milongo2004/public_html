@@ -115,7 +115,7 @@ session_start();
 
                 
                 <div class="mb-3">
-                    <label for="nota" class="form-label">Nota</label>
+                    <label for="nota" class="form-label">Nota (Alias del pedido, como se conoce en terminación)</label>
                     <input type="text" class="form-control" id="nota" name="nota" placeholder="NOTA aclaratoria sobre el pedido o cliente para el Emplaquetado">
                     
                 </div>

@@ -37,6 +37,7 @@ $resultado=mysqli_num_rows($consultofecha);
                 <td>Referencia</td>
                 <td>Color</td>
                 <td>Lote</td>
+                <td>Producidos</td>
                 
             </tr>
 
@@ -51,7 +52,8 @@ while  ($mostrar = mysqli_fetch_assoc($consultofecha)) {
 <td> <?php  echo  $mostrar['fecha'];?></td>
 <td> <?php  echo  $mostrar['vereferencia'];?></td>
 <td> <?php  echo  $mostrar['color'];?></td>
-<td> <?php  echo  $mostrar['verlote'];}?></td>
+<td> <?php  echo  $mostrar['verlote'];?></td>
+<td> <?php  echo  $mostrar['total'];}?></td>
 
 </tr>
 </table>

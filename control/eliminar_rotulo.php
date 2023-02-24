@@ -53,4 +53,9 @@ $sql3= "SELECT * FROM referencias2 WHERE id = '". $referenciaId. "'";
 $sql = "DELETE FROM `rotulos2` WHERE id = ' ".$id."'";
 
 $resultado = mysqli_query($conexion, $sql);
+
+$sqlActualizaDetalles= mysqli_query($conexion, "DELETE FROM `pedidoDetalles` WHERE rotuloId = '$id'");
+
+mysqli_close($conexion);
+
 ?>

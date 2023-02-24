@@ -48,8 +48,10 @@
 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_clientes.php'">Nuevo Cliente</button>
 
 <h1></h1>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Ver tabla Pedidos</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaLotes.php'">Ver tabla Lotes</button>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Ver Pedidos</button>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=detalles&Crear=Enviar'">Consultar/Editar Pedidos</button>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaLotes.php'">Ver Lotes</button>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaGranel.php'">Producto a Granel</button>
     
     
     

@@ -4,7 +4,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
 
 
 
-$id=$_GET["id"];
+$id=$_POST["id"];
 
 
 $borrar=mysqli_query($conexion,"DELETE  FROM pedidos2 WHERE  idP='$id' ");

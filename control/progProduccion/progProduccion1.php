@@ -56,6 +56,7 @@ session_start();
             
               <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>   
                <button onclick="location.href='https://trazabilidadmasterdent.online/control/progProduccion/progProduccion2.php'">Nueva Programación</button>
+               <button onclick="location.href='https://trazabilidadmasterdent.online/control/registroProducidos/registroProducidos1.php'">Producidos</button>
                 <button onclick="location.href='https://trazabilidadmasterdent.online/control/filtros_Rotulos/filtrados.php'">Filtros de búsqueda</button>
                 <button onclick="location.href='https://trazabilidadmasterdent.online/control/progProduccion/formularioImprimirProg.php'">Imprimir</button>
                 <button onclick="location.href='../progProduccion/invima.php'">INVIMA</button>

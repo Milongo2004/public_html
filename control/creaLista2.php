@@ -47,7 +47,7 @@ $result1=mysqli_query($conexion,$sql1);
                 else if ($linea=='REVEAL' || $linea=='STARDENT' || $linea=='STARVIT'){
                     $juegos=20;
                 }
-                else if ($linea=='UHLERPLUS'){
+                else if ($linea=='UHLERPLUS' || $linea=='STARPLUS'){
                     $juegos=12;
                 }
                

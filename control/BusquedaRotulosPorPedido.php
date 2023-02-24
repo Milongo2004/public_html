@@ -18,7 +18,7 @@
     <?php
             
 
-        $sql2= "SELECT codigoP from pedidos2 WHERE idP ='". $pedido. "'";
+        $sql2= "SELECT codigoP, idP from pedidos2 WHERE codigoP ='". $pedido. "'";
         $result2=mysqli_query($conexion,$sql2);
 
             ?>
@@ -41,6 +41,8 @@
                 
             
             <?php
+            
+            $pedidoId=$mostrar2['idP'];
             }
             ?>
             </h1>
@@ -79,7 +81,7 @@
             
             //$sql= "SELECT * from rotulos2 WHERE id = '". $rotulo. "'";
 
-            $sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, estaciones2.`nombre` AS estacion FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id` WHERE rotulos2.`pedido` = '" . $pedido. "' ORDER BY rotulos2.`id` DESC";
+            $sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, estaciones2.`nombre` AS estacion FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id` WHERE rotulos2.`pedido` = '" . $pedidoId. "' ORDER BY rotulos2.`id` DESC";
 
             $result=mysqli_query($conexion,$sql);
             

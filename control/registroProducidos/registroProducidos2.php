@@ -11,29 +11,17 @@
     //$arrayPedido[$i]="";
     //$arrayLote[$i]="";
 
-    //obtengo los datos del formulario anterior
+  
     
-    $ano=$_POST ["Ano"];
     
-    $mes=$_POST ["Mes"];
-    $dia=$_POST ["Dia"];
    
     
-    if (is_null($ano)){
+    
         
        $fecha=$_POST ["fecha"];
+       $turno=$_POST ["turno"];
        
-        if(is_null($fecha)){
-            //echo "la fecha post es nula";
-        $fecha=$_GET ["fecha"];
-        //echo $fecha;
-        $turno=$_GET ["turno"];
-        //echo $turno;
-        //$prensada=$_GET ["prensada"];
-        //echo $prensada;
-        $aImprimir=$_GET ["aImprimir"];
-        
-        //limito el tamaño de los datos
+       
 
 $fecha = substr($fecha, int -12);
 $turno = substr($turno, int -10);
@@ -42,40 +30,13 @@ $turno = substr($turno, int -10);
         //elimino los espacios en blanco del string turno.
         
         $turno=trim($turno," ");
-        //echo "fecha sin espacios en blanco".$fecha;
-       
-    }
-    }
-    else{
-    //$fecha=$dia."/".$mes."/".$ano;
-    $ano=$ano+2000;
-    $fecha=$ano."-".$mes."-".$dia;
-    $turno=$_POST ["turno"];
-    //$prensada=$_POST ["prensada"];
-    $aImprimir=$_POST ["aImprimir"];
    
-    }
-    //$turno=$_POST ["turno"];
-    //$prensada=$_POST ["prensada"];
-    
 
-/*var_dump($fecha);
-var_dump($turno);
-var_dump($prensada);*/
 
-//limito el tamaño de los datos
-
-$fecha = substr($fecha, int -12);
-$turno = substr($turno, int -10);
-//$prensada = substr($prensada, int -2);
-
-//elimino los espacios en blanco del string
-
-$turno=trim($turno," ");
 
 //echo "después de limitar los datos";
-
-/*var_dump($fecha);
+/*
+var_dump($fecha);
 var_dump($turno);
 var_dump($prensada);*/
 
@@ -98,8 +59,9 @@ var_dump($prensada);*/
     	<button onclick="location.href='https://trazabilidadmasterdent.online/control/progProduccion/cambiarTurno.php?prensada=<?php //echo $prensada?>&fecha=<?php //echo $fecha?> ">Cambiar Turno</button>-->
 			
 <head>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
 	<meta charset="UTF-8">
-	<title>ImprimirProgramación</title>
+	<title>Producidos</title>
 	
 	 <!---->
     <!--<link rel="stylesheet" href="cssProyecto/estilosTablas.css"> -->
@@ -126,14 +88,15 @@ var_dump($prensada);*/
 </head>
 <body>
     <center>
-
+  <div class="row">
+            <form action="actualizaProducidos.php" method="POST">
     <?php
         //reviso el valor de la variable: aImprimir y dependiendo de éste presento la hoja o las etiquetas
         /*var_dump($aImprimir);
         $aImprimir=intval($aImprimir);
         var_dump($aImprimir);*/
         
-     if($aImprimir==1){
+    
             ?>
         <!--  
         
@@ -148,7 +111,7 @@ var_dump($prensada);*/
     
     <br>
     -->
-
+  <!--<h1>Regitro de juegos producidos</h1>-->
     
         <table border="1">
             
@@ -156,13 +119,13 @@ var_dump($prensada);*/
             <!--Encabezado general de la tabla-->
             
             <td ROWSPAN="3" COLSPAN="5" ><center><h2>MASTERDENT</center></td>
-            <td ROWSPAN="3" COLSPAN="13"><center><h4>PROGRAMACIÓN PARA LAS PRENSADAS</center></td>
+            <td ROWSPAN="3" COLSPAN="13"><center><h4>REGISTRO DE JUEGOS PRODUCIDOS</center></td>
             <td COLSPAN="4" >Cod F-PR-05</td>
         </tr>
         <tr><td COLSPAN="4">Versión 003</td></tr>
         <tr><td COLSPAN="4">09-jun-22</td></tr>
-        
-        <tr>
+            
+            <tr>
                 <td COLSPAN="8"><center>HORARIO: <?php 
                 switch ($turno) {
                 case "mañana":
@@ -178,11 +141,14 @@ var_dump($prensada);*/
                 <td COLSPAN="14"><center>FECHA: <?php echo $fecha ?></center></td>
             
             </tr>
-            
-            
         </tr>
             
             <?php 
+            
+             $cantidadRotulos=0;
+             $arregloIdRotulo=array();
+             
+             
             ///////////////////////////////////////////////
             for($prensada=1;$prensada<=7;$prensada++){
             
@@ -222,11 +188,7 @@ var_dump($prensada);*/
         </tr>
         <tr><td COLSPAN="4">Versión 003</td></tr>
         <tr><td COLSPAN="4">09-jun-22</td></tr>
-            
-            
-        </tr>
-        
-        <tr>
+            <tr>
                 <td COLSPAN="8"><center>HORARIO: <?php 
                 switch ($turno) {
                 case "mañana":
@@ -242,6 +204,8 @@ var_dump($prensada);*/
                 <td COLSPAN="14"><center>FECHA: <?php echo $fecha ?></center></td>
             
             </tr>
+            
+        </tr>
         <?php        
             }
             ?>
@@ -276,7 +240,7 @@ var_dump($prensada);*/
                 <td>_11</td> 
                 <td>_12</td> 
                 <td>_13</td> 
-                <td>total</td>
+                <td style="background-color: yellow">total</td>
                 
                 
                 
@@ -292,13 +256,16 @@ var_dump($prensada);*/
             
             $result=mysqli_query($conexion,$sql);
             
+           
+            
             while($mostrar=mysqli_fetch_array($result)){
             ?>
             <tr>
                 <!--<td><?php //echo $mostrar['id'] ?></td>-->
                 
                 
-                <td><?php echo $mostrar['cod_rotulo'] ?></td>
+                <td><?php echo $mostrar['id'] ?></td>
+                
                 <td><?php echo $mostrar['referencia'] ?></td>
                 <td><?php echo $mostrar['Pedido'] ?></td>
                 <td><?php echo $mostrar['Lote'] ?></td>
@@ -327,13 +294,16 @@ var_dump($prensada);*/
                 <td><?php "   "//echo $mostrar['vuelta11'] ?></td>
                 <td><?php "   "//echo $mostrar['vuelta12'] ?></td>
                 <td><?php "   "//echo $mostrar['vuelta13'] ?></td>
-                <td><?php "   "//echo $mostrar['total'] ?></td>
+                <td><label for="producidos<?php echo $mostrar['id']  ?>" class="form-label"></label><input type="text" class="form-control" id="producidos<?php echo $mostrar['id']  ?>" name="producidos<?php echo $mostrar['id']  ?>" style="width: 40px" ></td>
                 <!--<td><?php //echo $mostrar['nota'] ?></td>-->
                 
             </tr>
             
             <!--datos generales al final de cada prensada-->
             <?php
+            
+            $cantidadRotulos=$cantidadRotulos+1;
+            $arregloIdRotulo[]=$mostrar['id'];
             }
             
             //a continuación consulto el total de moldes de la prensada actual.
@@ -425,40 +395,24 @@ var_dump($prensada);*/
         </table>
         
         
+                  <input name="cantidadRotulos" type="hidden" value=" <?php
+                        echo $cantidadRotulos; 
+                    ?>">
+                    
+                    <input type="hidden" name="arregloIdRotulo" value="<?php echo  base64_encode(serialize($arregloIdRotulo));?>" >
+        
+         </div>
+                <br>
+                <input type="submit" name="Crear" >
+            </form>
+        </div>
     
     
         
         
     </div>
     
-    <div class="row">
-            <form action="exportExcel.php" method="GET" name="exportExcel">
-
-                <div class="mb-3">
-
-                    
-                    <input name="fecha" type="hidden" value=" <?php
-                        echo $fecha;  
-                    ?>">
-                      <input name="turno" type="hidden" value=" <?php
-                        echo $turno; 
-                    ?>">
-                    
-                </div>        
-                <br>
-
    
-                
-
-                <!--<button onClick='submitForm()'>Exportar a Excel</button>-->
-                <br>
-            </form>
-            
-            <script>
-    function submitForm() {
-        document.getElementById('exportExcel').submit();
-    }
-</script>
         <br></br>
 
     <br>
@@ -469,201 +423,7 @@ var_dump($prensada);*/
     
 
 <?php
-    }      
-            else if($aImprimir==2){
-                        
-            
-            
-            
-            //cuento los rótulos existentes desde el rotulo ingresado con el teclado.
-            
-             $sqlU= "SELECT COUNT(id) AS cuantosRotulos FROM rotulos2 WHERE rotulos2.`fecha` = '".$fecha."' AND rotulos2.`turno` LIKE '%".$turno."%'";
-
-        $resultU=mysqli_query($conexion,$sqlU);         
-
-     
-                while($mostrarU=mysqli_fetch_array($resultU)){
-                    $cuantosRotulos=$mostrarU['cuantosRotulos'];
-            
-            }
-            
-             //convierto el valor a entero en caso de necesitarse
-            
-            $cuantosRotulos=intval($cuantosRotulos);
-            
-            //echo "cuanto rótulos = ".$cuantosRotulos;
-           echo "Etiquetas del día: $fecha en la $turno";
-           
-//creo un bucle para que se ejecute hasta que los datos se terminen.
-
-for($i=1;$i<=$cuantosRotulos;$i++){
-            
-            //consulta para obtener los registros del día y turno específicos
-
-            $sql="SELECT rotulos2.*,referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color', pedidos2.`codigoP` AS Pedido, pedidos2.`nota` AS nota,  pedidos2.`linea` AS linea, lotes2.`nombreL` AS Lote, estaciones2.`nombre` AS 'estacionActual' FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON rotulos2.`colorId` = colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN lotes2  ON  rotulos2.`loteId`= lotes2.`id` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id`   WHERE rotulos2.`fecha` = '".$fecha."' AND rotulos2.`turno` LIKE '%".$turno."%' ORDER BY rotulos2.`id` ASC LIMIT $i";
-            
-            $result=mysqli_query($conexion,$sql);
-            
-            while($mostrar=mysqli_fetch_array($result)){
-            $arrayId[$i-1]=$mostrar['cod_rotulo'];
-            $arrayPrensada[$i-1]=$mostrar['prensada'];
-            $arrayRef[$i-1]=$mostrar['referencia'];
-            $arrayColor[$i-1]=$mostrar['Color'];
-            $arrayPedido[$i-1]=$mostrar['Pedido'];
-            $arrayLote[$i-1]=$mostrar['Lote'];
-            $arrayNota[$i-1]=$mostrar['nota'];
-            $arrayLinea[$i-1]=$mostrar['linea'];
-            /*var_dump($arrayId[$i-1]);
-            var_dump($arrayPrensada[$i-1]);
-            var_dump($arrayRef[$i-1]);
-            var_dump($arrayColor[$i-1]);
-            var_dump($arrayPedido[$i-1]);
-            var_dump($arrayLote[$i-1]);*/
-            }
-}
-?>
-            <table border="1"><font face="arial,verdana,tahoma">
-                
-<?php
-            for($i=0;$i<$cuantosRotulos;$i=$i+3){
-                //echo"i=$i";
-               
-            ?>
-            <tr>
-                <!--<td><?php //echo $mostrar['id'] ?></td>-->
-                
-                <td><center>P=<?php echo $arrayPrensada[$i] ?></td>
-                <td><center>ID_</td>
-                <td><center><?php echo $arrayId[$i] ?></td>
-                <td ROWSPAN="7"></td>
-                <td><center>P=<?php echo $arrayPrensada[$i+1] ?></td>
-                <td><center>ID_</td>
-                <td><center><?php echo $arrayId[$i+1] ?></td>
-                <td ROWSPAN="7"></td>
-                <td><center>P=<?php echo $arrayPrensada[$i+2] ?></td>
-                <td><center>ID_</td>
-                <td><center><?php echo $arrayId[$i+2] ?></td>
-                
-               
-                </tr>
-                
-                <tr>
-                
-                <td><center>REF_</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayRef[$i] ?></font></b></td>
-                <!--<td><center>SEPARADOR</td>-->
-                <td><center>CAJAS REQ</td>
-                
-                <td><center>REF_</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayRef[$i+1] ?></font></b></td>
-                <!--<td><center>SEPARADOR</td>-->
-                <td><center>CAJAS REQ</td>
-               
-                <td><center>REF_</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayRef[$i+2] ?></font></b></td>
-                <!--<td><center>SEPARADOR</td>-->
-                <td><center>CAJAS REQ</td>
-                
-                
-                
-                </tr>
-                
-                <tr>
-                
-                <td><center>COLOR</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayColor[$i]?></font></b></td>
-                <td><center></td>
-                <td><center>COLOR</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayColor[$i+1] ?></font></b></td>
-                <td><center></td>
-                <td><center>COLOR</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayColor[$i+2] ?></font></b></td>
-                <td><center></td>
-                
-                
-                </tr>
-                
-                <tr>
-                
-                <td><center>FECHA</td>
-                <td><center><?php echo $fecha ?></td>
-                <td><center>LÍNEA</td>
-                <td><center>FECHA</td>
-                <td><center><?php echo $fecha ?></td>
-                <td><center>LÍNEA</td>
-                <td><center>FECHA</td>
-                <td><center><?php echo $fecha ?></td>
-                <td><center>LÍNEA</td>
-                
-                
-                </tr>
-                
-                <tr>
-                
-                <td><center>TURNO</td>
-                <td><center><?php echo $turno ?></td>
-                <td><center><?php echo $arrayLinea[$i] ?></td>
-                <td><center>TURNO</td>
-                <td><center><?php echo $turno ?></td>
-                <td><center><?php echo $arrayLinea[$i+1] ?></td>
-                <td><center>TURNO</td>
-                <td><center><?php echo $turno ?></td>
-                <td><center><?php echo $arrayLinea[$i+2] ?></td>
-                
-                
-                </tr>
-                
-                <tr>
-                <td><center>PEDIDO</td>
-                <td><center><?php echo $arrayNota[$i] ?></td>
-                <td><center><?php echo $arrayPedido[$i] ?></td>
-                <td><center>PEDIDO</td>
-                <td><center><?php echo $arrayNota[$i+1] ?></td>
-                <td><center><?php echo $arrayPedido[$i+1] ?></td>
-                <td><center>PEDIDO</td>
-                <td><center><?php echo $arrayNota[$i+2] ?></td>
-                <td><center><?php echo $arrayPedido[$i+2] ?></td>
-                
-                
-                </tr>
-                <tr>
-                
-                <td><center>LOTE</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayLote[$i] ?></font></b></td>
-                <td><center></td>
-                <td><center>LOTE</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayLote[$i+1] ?></font></b></td>
-                <td><center></td>
-                <td><center>LOTE</td>
-                <td><center><b><FONT SIZE=5 face = arial><?php echo $arrayLote[$i+2] ?></font></b></td>
-                <td><center></td>
-                
-                
-                </tr>
-                <tr> <td COLSPAN="11"> </td></tr>
-                
-                
-            
-            
-            <!--datos generales al final de cada prensada-->
-            <?php
-            
-            }
-            ?>
-            
-            </table>
-            <br></br>
-            <br></br>
-            <br></br>
-            <?php
-            //}
-        
-    }
-    else{
-        
-        echo "debe seleccionar lo que desea imprimir";
-        
-    }
+  
             ?>
             
             </body>

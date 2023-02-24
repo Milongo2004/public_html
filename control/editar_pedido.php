@@ -37,41 +37,87 @@ if($result>0) { while ($data =mysqli_fetch_assoc($query))
 
 
 
-  <label for="exampleFormControlInput1" class="form-label">codigoP</label>
+  <label for="exampleFormControlInput1" class="form-label">Código</label>
   <input type="text" value="<?php echo $data['codigoP'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Escriba el Codigo"   name="codigoP"  >
 </div>
 
 <div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>idCliente</label>
-  <input type="text" value="<?php echo $data['idCliente'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Escriba el id del Cliente"  name="idCliente">
+<label for="exampleFormControlInput1" class="form-label" hidden></label>Alias (como se conoce en terminación)</label>
+  <input type="text" value="<?php echo $data['nota'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite el alias del pedido"   name ="nota">
 </div>
 
 
-<div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>juegosTotales</label>
-  <input type="text" value="<?php echo $data['juegosTotales'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite el numero de juegos Totales"  name="juegosTotales">
-</div>
+    <div class="mb-3">
+                <label for="linea" class="form-label">Seleccionar línea</label>
+                 <select class="form-select" id="linea" name="linea" aria-label="Default select example">
+                        <option selected value="
+                        <?php
+                        if ($data['linea']=="RESISTAL"){
+                            echo "RESISTAL";
+                            ?>
+                            ">RESISTAL
+                            <?php
+                        }
+                        else if ($data['linea']=="STARPLUS"){
+                            echo "STARPLUS";
+                            ?>
+                            ">STARPLUS
+                            <?php
+                        }
+                        else if ($data['linea']=="REVEAL"){
+                            echo "REVEAL";
+                            ?>
+                            ">REVEAL
+                            <?php
+                        }
+                        else if ($data['linea']=="STARVIT"){
+                            echo "STARVIT";
+                            ?>
+                            ">STARVIT
+                            <?php
+                        }
+                        else if ($data['linea']=="UHLERPLUS"){
+                            echo "UHLERPLUS";
+                            ?>
+                            ">UHLERPLUS
+                            <?php
+                        }
+                        else if ($data['linea']=="STARDENT"){
+                            echo "STARDENT";
+                            ?>
+                            ">STARDENT
+                            <?php
+                        }
+                        else if ($data['linea']=="ZENITH"){
+                            echo "ZENITH";
+                            ?>
+                            ">ZENITH
+                            <?php
+                        }
+                       
+                        
+                        ?>
+                        </option>
+                        <option value="RESISTAL">RESISTAL</option>
+                        <option value="STARPLUS">STARPLUS</option>
+                        <option value="REVEAL">REVEAL</option>
+                        <option value="STARVIT">STARVIT</option>
+                        <option value="UHLERPLUS">UHLERPLUS</option>
+                        <option value="STARDENT">STARDENT</option>
+                        <option value="ZENITH">ZENITH</option>
+                        
+                 
+                    </select>
+                    </div>
 
-<div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>categoriaP</label>
-  <input type="text" value="<?php echo $data['categoriaP'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite la cateogria"   name ="categoriaP">
-</div>
 
 
-<div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>fechaCreacion</label>
-  <input type="date-time" value="<?php echo $data['fechaCreacion'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite la fecha de creacion"   name ="fechaCreacion">
-</div>
 
-<div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>fechaActualizacion</label>
-  <input type="date-time" value="<?php echo $data['fechaActualizacion'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite la fecha de actualizacion"   name ="fechaActualizacion">
-</div>
+<?php
+}
+}
+?>
 
-<div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label"></label>estado</label>
-  <input type="text" value="<?php echo $data['estado']; }} ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite el estado"   name ="estado">
-</div>
 
 <div class="col-12">
     <button class="btn btn-primary" type="submit">Editar</button>

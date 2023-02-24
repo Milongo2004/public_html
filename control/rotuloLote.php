@@ -22,28 +22,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </head>
 <body>
+    <center>
     <div class="container mt-5">
+        
+        <h1>Buscar rótulos del lote:</h1>
+        
+        <br></br>
+        
         <div class="row">
             <form action="BusquedaPorLote.php" method="get">
+                    <label for="lote" class="form-label">Código del Lote</label>
+                    <input type="text" class="form-control "  id="lote" name="lote" style="width: 100px">
                 
-                <div class="mb-3">
-                    <label for="lote" class="form-label">Buscar Rotulos según su lote</label>
-                    <select class="form-select" id="lote" name="lote" aria-label="Default select example">
-                        <option selected>Seleccione un rótulo</option>
-                    <?php
-                        $sql1="SELECT * from lotes2 ORDER BY id DESC LIMIT 500";
-                        $result=mysqli_query($conexion,$sql1);
-                        
-                        while($mostrar=mysqli_fetch_array($result)){
-                    ?>
-                    <?php
-                        echo '<option value="'.$mostrar["id"].'">'.$mostrar["nombreL"].'</option>';
-                    ?>
-                    <?php
-                        }
-                    ?>
-                    </select>
                 </div>
+                <br>
                 <input type="submit" name="Buscar">
 
 
@@ -52,6 +44,6 @@
         </div>
          
     </div>
-
+</center>
 </body>
 </html>

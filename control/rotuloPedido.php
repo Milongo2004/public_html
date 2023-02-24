@@ -17,28 +17,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </head>
 <body>
+    <center>
     <div class="container mt-5">
+        
+        <h1>Buscar rótulos del pedido</h1>
+        
+        <br></br>
         <div class="row">
             <form action="BusquedaRotulosPorPedido.php" method="get">
                 
-                <div class="mb-3">
-                    <label for="pedido" class="form-label">Buscar ubicación actual del Rotulo según su código de pedido</label>
-                    <select class="form-select" id="pedido" name="pedido" aria-label="Default select example">
-                        <option selected>Seleccione un pedido</option>
-                    <?php
-                        $sql1="SELECT * from pedidos2 ORDER BY idP DESC LIMIT 200";
-                        $result=mysqli_query($conexion,$sql1);
-                        
-                        while($mostrar=mysqli_fetch_array($result)){
-                    ?>
-                    <?php
-                        echo '<option value="'.$mostrar["idP"].'">'.$mostrar["codigoP"].'</option>';
-                    ?>
-                    <?php
-                        }
-                    ?>
-                    </select>
-                </div>
+                <label for="pedido" class="form-label">Código del Pedido</label>
+                    <input type="text" class="form-control "  id="pedido" name="pedido" style="width: 100px">
+               
+                
+                <br>
+                
                 <input type="submit" name="Buscar">
 
 
@@ -47,6 +40,6 @@
         </div>
          
     </div>
-
+</center>
 </body>
 </html>

@@ -394,22 +394,126 @@ $result81=mysqli_query($conexion,$sql81);
  
  //obtengo el dato del id de la referencia para actualizar sus moldes 
  
- //consulto referencia y el total de moldes utilizados del rotulo
+ //consulto referencia y otros detalles del rotulo
  
- //comentado por desuso
+
                     
-                /*    	$sqlR="SELECT referenciaId, cantidadMoldes FROM rotulos2 WHERE id = '".$rotulos[$i]. "'";
+$sqlR="SELECT referenciaId, colorId, pedido,total FROM rotulos2 WHERE id = '".$rotulos[$i]. "'";
 
 $resultR=mysqli_query($conexion,$sqlR);
 
 while($mostrarR=mysqli_fetch_array($resultR)){
-                    $moldesUsados=$mostrarR['cantidadMoldes']; 
-                    $refRotulo=$mostrarR['referenciaId']; 
-}*/
+                    
+                    $referenciaId=$mostrarR['referenciaId']; 
+                    $pedidoId=$mostrarR['pedido']; 
+                    $colorId=$mostrarR['colorId']; 
+                    $juegosIngresan=$mostrarR['total'];
+}
 
+
+ switch ($estacion){
+     case 1:
+     case 2:
+          $sqlSufijoDetalles= "'0', NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+          
+          $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" = '".strval($juegosIngresan)."'",
+              "pulidos"=>" IS NULL",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" IS NULL",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+              
+          break;
+          
+    case 3: 
+         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, '$juegosIngresan',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         
+         $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" IS NULL",
+              "pulidos"=>" = '".strval($juegosIngresan)."'",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" IS NULL",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+              
+         break;
+    case 4:
+         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan',  NULL, NULL, NULL, NULL, NULL, 'Interno', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         
+         $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" IS NULL",
+              "pulidos"=>"NULL",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" = '".strval($juegosIngresan)."'",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+              
+         break;
+    case 5: 
+        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan',  NULL, NULL, NULL, NULL, NULL, 'Externo', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+        
+        $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" IS NULL",
+              "pulidos"=>" IS NULL",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" = '".strval($juegosIngresan)."'",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+              
+         break;
+         
+         /*case 7: 
+        $sqlSufijoDetalles= "'0', '$juegosIngresan', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Externo', current_timestamp());";
+         break;*/
+         
+              
+ }
+ //echo $condicionArray[juegos]; 
+
+ //realizo un registro en la tabla de detalles con los datos obtenidos anteriormente. 
+ $sqlDetalles = "INSERT INTO `pedidoDetalles` (`pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) SELECT '".$pedidoId."', '".$referenciaId."', '".$colorId."', '".$rotulos[$i]."', ". $sqlSufijoDetalles. " WHERE NOT EXISTS (SELECT `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador` FROM `pedidoDetalles` WHERE `pedidoId`='".$pedidoId."' AND `referenciaId`='".$referenciaId."' AND `colorId`= '".$colorId."' AND `rotuloId` = ".$rotulos[$i]." AND `juegos`= '". $condicionArray[juegos]."' AND `granel`".$condicionArray[granel]." AND `programados`".$condicionArray[programados]." AND `producidos`".$condicionArray[producidos]." AND `pulidos`".$condicionArray[pulidos]." AND `enSeparacion`".$condicionArray[enSeparacion]." AND `separado`".$condicionArray[separado]." AND `enEmplaquetado`".$condicionArray[enEmplaquetado]." AND `emplaquetados`".$condicionArray[emplaquetados]." AND `revision1`".$condicionArray[revision1]." AND `revision2`".$condicionArray[revision2]." AND `empacados`".$condicionArray[empacados]." AND `calidad`".$condicionArray[calidad]." AND `colaborador`".$condicionArray[colaborador]." );";
+ 
+ $resultDetalles=mysqli_query($conexion,$sqlDetalles);
+//echo $sqlDetalles;
  
  //cuando el rótulo pasa a la estación de acabado, actualizo el valor de los moldes disponibles de la referencia
-
 
     
 //1. obtengo el valor de los moldes totales y los moldes en uso.
@@ -447,11 +551,7 @@ echo "ingreso exitoso!,1,2,3,rotuloOK,";
 		break;
 
 	
-	default:
-
-	echo "debe seleccionar el proceso a realizar";
-		# code...
-		break;
+	
 		
 		case '9': //para consultar los rótulos y su referencia a la base de datos
 
@@ -739,8 +839,43 @@ while($mostrar121=mysqli_fetch_array($result121)){
 echo "ingreso exitoso!,1,2,3,rotuloOK,";
 
 		break;
+		
+		
+			case '13': //PARA INSERTAR DATOS EN LA TABLA DE PRODUCTO A GRANEL
+		    
+		    echo "cod_rotulo:".$cod_rotulo." gramos:".$juegos;
+		    
+		    $sqlExisteRegistro="SELECT id, rotuloId FROM `productoGranel` WHERE rotuloId ='".$cod_rotulo."' ORDER BY id DESC LIMIT 1";
+		    $resultExisteRegistro=mysqli_query($conexion,$sqlExisteRegistro);
+            
+            while($mostrarUltimoRegistro=mysqli_fetch_array($resultExisteRegistro)){
+            $ultimoRegistroGranel=$mostrarUltimoRegistro['rotuloId'];
+            }
+		   if (is_null($ultimoRegistroGranel)){
+		       
+		    $herramienta313 = new Herramienta();
+            $ingresar_datos_tabla_productoGranel = $herramienta313->ingresar_datos_tabla_productoGranel($cod_rotulo,($juegos-15));
+            
+		   }
+		   else{
+		       $sqlActualizaGramos = "UPDATE productoGranel SET gramos= '".($juegos-15)."' WHERE rotuloId = '".$cod_rotulo."'";
+		       $resultActualizaGramos=mysqli_query($conexion,$sqlActualizaGramos);
+		       
+		       	echo "ingreso exitoso!,1,2,3,rotuloOK,";
+		   }
+		   
+//$result2=mysqli_query($conexion,$sql2);
 
-	
+//echo "elementos enviados".$colorId.",".$loteId.",".$juegos.",".$estacion;
+//echo "ingreso exitoso de bolsas";
+
+		break;
+
+	default:
+
+	echo "debe seleccionar el proceso a realizar";
+		# code...
+		break;
 
 	
 	

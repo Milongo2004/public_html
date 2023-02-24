@@ -297,7 +297,7 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
 
                 <div class="mb-3">
                     <label for="lote" class="form-label">Codigo de lote</label>
-                    <input type="text" class="form-control" autofocus id="lote" name="lote" placeholder="Digita numero de lote">
+                    <input type="text" class="form-control"  id="lote" name="lote" placeholder="Digita numero de lote">
                     </div>
  <br>
 
@@ -305,7 +305,7 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
                 
  <div class="mb-3">
                     <label for="cajas" class="form-label">Número de cajas</label>
-                    <input type="text" class="form-control" id="cajas" name="cajas" placeholder="Digita cantidad cajas">
+                    <input type="text" class="form-control" id="cajas" name="cajas" autofocus placeholder="Digita cantidad cajas">
                 </div>
  <br>
 
@@ -580,7 +580,8 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
                 while($mostrar2=mysqli_fetch_array($result2)){
             ?>
                 
-                <td><?php echo $mostrar2['codigoP'] ."        "?></td>
+                <td><?php echo $mostrar2['codigoP'] ."        ";
+                $codigoPedido=$mostrar2['codigoP']?></td>
                 </h2>
                 
             
@@ -630,6 +631,34 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
                 <td><?php echo $numCaja ?></td>
             
            </h2>
+           <!--
+           <div class="row">
+            <form action="formularioListas_digitaLote.php" method="POST">
+            
+            <div class="mb-3">
+                   
+                    
+                    <label for="uppLow" class="form-label">Cajas</label>
+                    <select class="form-select" autofocus id="tipo" name="tipo" aria-label="Default select example">
+                        <option selected></option>
+                        <?php
+                        //for ($i=1;$i=$cajaMayor;$i++){
+                        ?>
+                        <option value="<?php //echo $i ?>"><?php //echo $i ?></option>
+                        
+                        <?php
+                        
+                        //}
+                        ?>
+                   
+                
+                <input type="submit" name="Empacar" >
+            </form>
+        </div>
+        
+    </div>-->
+    
+    <br>
            
            <?php
            //a continuación consulto el total de juegos empacados por caja.
@@ -715,6 +744,16 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
             //calculo los juegos que faltan por empacar de este pedido.
             
             $juegosFaltan=$juegosPedido-$juegosTotEmpacados;
+            
+            //actualizo el estado del pedido si los juegos empacados >=  a los pedidos. 
+            
+            if ($juegosTotEmpacados >= $juegosPedido){
+                $sqlEstadoPedido="UPDATE pedidos2 SET estado= 'terminado' WHERE idP ='".$numPedido ."'";
+                $resultEstadoPedido=mysqli_query($conexion,$sqlEstadoPedido);
+            }
+            else{
+                
+            }
             
            
             ?>

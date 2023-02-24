@@ -152,7 +152,7 @@ var_dump($prensada);*/
                             
                     ?>
                     <?php
-                        echo '<option value="'.$mostrar["idP"].'">'.$mostrar["codigoP"].'</option>';
+                        echo '<option value="'.$mostrar["idP"].'">'.$mostrar["codigoP"]." / ".$mostrar["nota"].'</option>';
                         
                     ?>
 

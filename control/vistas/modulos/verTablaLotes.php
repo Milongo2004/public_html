@@ -46,7 +46,8 @@
     
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
 
-    <h1>Tabla Lotes</h1>
+<center>
+    <h1>Lotes</h1>
     
     <br>
 
@@ -116,7 +117,7 @@ $.ajax({
  </table>
  
  <br></br>
- 
+ </center>
 </body>
 </html>
 

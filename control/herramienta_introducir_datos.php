@@ -1144,15 +1144,16 @@ public function ingresar_datos_tabla_materialPreparado($colorId,$loteId,$juegos,
 
 	//función para ingresar un nuevo registro a pedidoDetalles.
 	
-	public function ingresar_datos_tabla_pedidoDetalles($pedido,$referencia, $color, $juegos){
+	public function ingresar_datos_tabla_pedidoDetalles($pedido,$referencia, $color, $juegos,$cantidadColores){
 	    //CONVIERTO A ENTERO LOS VALORES OBTENIDOS
 	    
 $pedido=intval($pedido);
 $referencia=intval($referencia);
 $color=intval($color);
 $juegos=intval($juegos);
+$cantidadColores=intval($cantidadColores);
 
-		$sql_Detalles1 = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `estadoJuegos`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,?,?,?,NULL,?,'PEDIDOS',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		$sql_Detalles1 = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,?,?,?,NULL,?,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		$stmt_Detalles1 = $this->conexion->conexion->prepare($sql_Detalles1);
 		
 		$stmt_Detalles1->bindValue(1, $pedido);
@@ -1163,6 +1164,19 @@ $juegos=intval($juegos);
 		
 
 		if($stmt_Detalles1->execute()){
+		    //echo "pedido= ".$pedido;
+		    $sql_juegos = "UPDATE pedidos2 SET pedidos2.`juegosTotales`= (select sum(juegos) as totales FROM pedidoDetalles WHERE pedidoDetalles.`pedidoId` = '". $pedido. "') WHERE idP= '".$pedido."'";
+			$stmt_juegos = $this->conexion->conexion->prepare($sql_juegos);
+			
+			if($stmt_juegos->execute()){
+		   
+			//echo "se ejecutó la consulta para actualizar juegos en pedidos2";
+			
+		}
+		else {
+		    echo "no se actualizaron los juegos en pedidos2";
+		    //&cantidadColores=<?php echo $cantidadColores
+		}
 		
 			//echo "Ingreso Exitoso en tabla pedidos,";
 			?>
@@ -1189,6 +1203,183 @@ $juegos=intval($juegos);
 			
 		}
 }
+
+////////////////////////////////////////////////////////////////////////
+
+//función para ingresar un nuevo registro a pedidoDetalles MASIVA (varios colores con sus juegos para una referencia misma referencia.)
+	
+	public function ingresar_datos_tabla_pedidoDetallesMasivo($pedido,$referencia, $arregloColores, $juegosColor, $cantidadColores){
+	    
+	    for ($i=0; $i<$cantidadColores; $i++){
+	        
+	        if($juegosColor[$i]!=0){
+
+		$sql_Detalles1 = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,?,?,?,NULL,?,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		$stmt_Detalles1 = $this->conexion->conexion->prepare($sql_Detalles1);
+		
+		$stmt_Detalles1->bindValue(1, $pedido);
+		$stmt_Detalles1->bindValue(2, $referencia);
+		$stmt_Detalles1->bindValue(3, $arregloColores[$i]);
+		$stmt_Detalles1->bindValue(4, $juegosColor[$i]);
+	
+		
+
+		if($stmt_Detalles1->execute()){
+		    //echo "pedido= ".$pedido;
+		    $sql_juegos = "UPDATE pedidos2 SET pedidos2.`juegosTotales`= (select sum(juegos) as totales FROM pedidoDetalles WHERE pedidoDetalles.`pedidoId` = '". $pedido. "') WHERE idP= '".$pedido."'";
+			$stmt_juegos = $this->conexion->conexion->prepare($sql_juegos);
+			
+			if($stmt_juegos->execute()){
+		   
+			//echo "se ejecutó la consulta para actualizar juegos en pedidos2";
+			
+		}
+		else {
+		    echo "no se actualizaron los juegos en pedidos2";
+		    //&cantidadColores=<?php echo $cantidadColores
+		}
+		
+			//echo "Ingreso Exitoso en tabla pedidos,";
+			
+		}
+		else{
+			echo "variables recibidas";
+echo "<br>";
+//echo var_dump($arregloColores);
+for ($i=0; $i<$cantidadColores; $i++){
+echo "color" , $i,"=" .$arregloColores[$i];
+echo" juegosColor = ". $juegosColor[$i]."\n";
+echo "<br>";
+
+}
+echo "pedido= ". $pedido."\n";
+echo "<br>";
+echo "referencia= " . $referencia."\n";
+echo "<br>";
+echo "cantidad colres" . $cantidadColores."\n";
+
+			
+		}
+}
+
+?>
+
+<html lang="en">
+			    <body>
+			        
+			<!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_pedidos.php'">Nuevo Registro</button>
+			<button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>-->
+			<meta http-equiv="refresh" content="0.3; url= https://trazabilidadmasterdent.online/control/pedidoDetalles.php?pedidoId=<?php echo $pedido?>&Empacar=Enviar">
+	
+</body>
+</html>
+<?php
+}
+}
+
+//////////////////////////////////////////////////////////
+
+public function ingresar_datos_tabla_productoGranel($rotuloId,$gramos){
+    $rotuloId=intval($rotuloId);
+    $gramos=intval($gramos);
+		$sql_313 = " INSERT INTO productoGranel values (null, ?, ?, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))) ";
+		$stmt_313 = $this->conexion->conexion->prepare($sql_313);
+
+	
+		$stmt_313->bindValue(1, $rotuloId);		
+		$stmt_313->bindValue(2, $gramos);
+		
+		
+		
+	
+
+		if($stmt_313->execute()){
+		
+			echo "ingreso exitoso!,1,2,3,rotuloOK,";
+			
+		}
+		
+		else{
+			echo "no se pudo registrar datos en tabla productoGranel,";
+		}
+}
+
+
+///////////////////////////////////////////
+
+	//función para ingresar un nuevo registro rotulos solo con la referencia y el color para los productos a granel sin id.
+	
+	public function ingresar_datos_tabla_rotulos2_granel($referencia, $color, $gramos){
+
+		$sql_RotulosGranel = " INSERT INTO `rotulos2` (`referenciaId`, `colorId`, `fechaCreacion`) values (?,?,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		$stmt_RotulosGranel = $this->conexion->conexion->prepare($sql_RotulosGranel);
+		
+		
+		$stmt_RotulosGranel->bindValue(1, $referencia);
+		$stmt_RotulosGranel->bindValue(2, $color);
+		
+	
+		
+
+		if($stmt_RotulosGranel->execute()){
+		    
+		
+			echo "Ingreso Exitoso en tabla rotulos2,";
+			
+			//consulto el último id de rotulo creado
+			
+			$sqlUltimoRotulo="SELECT id FROM `rotulos2` ORDER BY id DESC LIMIT 1";
+			
+			$sqlUltimoRotulo = $this->conexion->conexion->prepare($sqlUltimoRotulo);
+		    $sqlUltimoRotulo->execute();
+		    $dgf = $sqlUltimoRotulo->fetch();
+		    //echo $dgf["id"].",";
+		    $ultimoRotulo=$dgf["id"];
+			
+			/*
+			
+			$resultUltimoRotulo=mysqli_query($conexion,$sqlUltimoRotulo);
+			
+			while($mostrarUltimoRotulo=mysqli_fetch_array($resultUltimoRotulo)){
+			    
+                $ultimoRotulo=$mostrarUltimoRotulo['id'];
+            }
+            */
+            
+            //$ultimoRotulo=mysql_result($resultUltimoRotulo,0);
+            //var_dump($ultimoRotulo);
+            
+            echo "ultimo rotulo creado" . $ultimoRotulo;
+            
+    			$sqlGranel= "INSERT INTO productoGranel (rotuloId, gramos, fechaHora) values ('" . $ultimoRotulo. "', '" . $gramos ."' , (select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+    			$sqlGranel=$this->conexion->conexion->prepare($sqlGranel);
+    			$sqlGranel->execute();
+			?>
+			<html lang="en">
+			    <body>
+			        
+			<!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_pedidos.php'">Nuevo Registro</button>
+			<button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>-->
+			<meta http-equiv="refresh" content="0.3; url= https://trazabilidadmasterdent.online/control/formulario_rotulo_granel.php">
+	
+</body>
+</html>
+
+
+<?php
+		}
+		else{
+			echo "no se pudo registrar datos en tabla rotulos2,";
+			echo "datos recibidos";
+		
+			echo "referencia: ".$referencia;
+			echo "color: ".$color;
+			
+			
+		}
+}
+
+
 
 }
 

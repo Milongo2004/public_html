@@ -1,9 +1,12 @@
 <?php
     $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
 
-    $pedido=$_GET ["pedido"];
+    $pedido=$_GET ["pedidoId"];
     if(is_null($pedido)){
+        $pedido=$_GET['pedido'] ;
+        if(is_null($pedido)){
         $pedido=$_POST['pedido'] ;
+    }
     }
     $referencia = isset( $_POST['referencia'] ) ? $_POST['referencia'] : '';
     $antPos = isset( $_POST['antPos'] ) ? $_POST['antPos'] : '';
@@ -299,13 +302,14 @@
                     <label for="color" class="form-label">Color</label>
                     <input type="text" class="form-control "  id="color" name="color">
                     
+                    
                     <label for="lote" class="form-label">Lote</label>
                     <input type="text" class="form-control "  id="lote" name="lote">
                     
                     <label for="caja" class="form-label">Caja</label>
                     <input type="text" class="form-control "  id="caja" name="caja">
                     
-                    <input name="pedido" type="hidden" value=" <?php
+                    <input name="pedidoId" type="hidden" value=" <?php
                         echo $pedido;  
                     ?>">
                      
@@ -375,11 +379,14 @@
             ?>
             <tr>
                 
-                <td><?php echo $mostrarSuma['total'] ?></td>
+                <td><?php echo $mostrarSuma['total'] ;
+                //$juegosEmpacados=$mostrarSuma['total']?></td>
                 
             </tr>
             <?php
             }
+            
+            
             ?>
         </table>
         <br></br>

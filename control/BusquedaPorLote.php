@@ -2,8 +2,12 @@
     $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
 
     $lote=$_GET ["lote"];
-
-
+    
+    $sqlLote="SELECT id from lotes2 WHERE nombreL ='".$lote."' ORDER BY id LIMIT 1";
+    $resultLote=mysqli_query($conexion,$sqlLote);
+    while($mostrarLote=mysqli_fetch_array($resultLote)){
+        $loteId=$mostrarLote['id'];
+    }
 
 ?>
 
@@ -14,35 +18,22 @@
 	<title>RotulosPorLote</title>
 </head>
 <body>
-
-    <?php
-            
-
-        $sql2= "SELECT cod_rotulo from rotulos2 WHERE id ='". $lote. "'";
-        $result2=mysqli_query($conexion,$sql2);
-
-            ?>
+    <center>
 
 
 
-        <h1>Detalles del rótulo 
+
+        <h1>Rotulos del Lote 
 
         
-                 <?php
-
-                while($mostrar2=mysqli_fetch_array($result2)){
-            ?>
-
+              
             
                 
-                <td><?php echo $mostrar2['cod_rotulo'] ?></td>
+                <td><?php echo $lote ?></td>
                 
                 
                 
-            
-            <?php
-            }
-            ?>
+         
             </h1>
     
     
@@ -79,7 +70,7 @@
             
             //$sql= "SELECT * from rotulos2 WHERE id = '". $rotulo. "'";
 
-            $sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, estaciones2.nombre AS estacion FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id`  WHERE rotulos2.`loteId` = '" . $lote. "' ORDER BY rotulos2.`id` DESC";
+            $sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, estaciones2.nombre AS estacion FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id`  WHERE rotulos2.`loteId` = '" . $loteId. "' ORDER BY rotulos2.`id` DESC";
 
             $result=mysqli_query($conexion,$sql);
             
@@ -127,5 +118,6 @@
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaColores.php'">Ver tabla Colores</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaEstaciones.php'">Ver tabla Estaciones</button>
     
+    </center>
 </body>
 </html>

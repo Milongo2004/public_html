@@ -58,17 +58,24 @@ $sql3= "SELECT * FROM referencias2 WHERE id = '". $referencia. "'";
 
 
 //$sql_update = mysqli_query($conexion,  "UPDATE rotulos2 SET cod_rotulo='$codRotulo' , fecha='$fecha', prensada='$prensada',referenciaId='$referencia',loteId='$lote',pedido='$pedido',colorId='$color',pedido='$pedido',cantidadMoldes='$cantMoldes',casillaId='$casillaId', turno='$turno',juegos='$juegos',estacionId2='$estacionActual',vuelta1='$vuelta1',vuelta2='$vuelta2',vuelta3='$vuelta3',vuelta4='$vuelta4',vuelta5='$vuelta5',vuelta6='$vuelta6',vuelta7='$vuelta7',vuelta8='$vuelta8',total='$total',fechaCreacion='$fechaCreacion',fechaActualizacion='$fechaActualizacion',estado='$estado',nota='$nota' WHERE id=$id");
-$sql_update = mysqli_query($conexion,  "UPDATE rotulos2 SET cod_rotulo='$codRotulo' , fecha='$fecha', prensada='$prensada',referenciaId='$referencia',loteId='$lote',pedido='$pedido',colorId='$color',pedido='$pedido',cantidadMoldes='$cantMoldes',casillaId='$casillaId', turno='$turno',juegos='$juegosRotulo',estacionId2='$estacionActual',vuelta1='$juegosRotulo',vuelta2='$juegosRotulo',vuelta3='$juegosRotulo',vuelta4='$juegosRotulo',vuelta5='$juegosRotulo',vuelta6='$juegosRotulo',vuelta7='$juegosRotulo',vuelta8='$juegosRotulo',total='$juegosTotales',fechaCreacion='$fechaCreacion',fechaActualizacion='$fechaActualizacion',estado='$estado',nota='$nota' WHERE id=$id");
+$sql_update = mysqli_query($conexion,  "UPDATE rotulos2 SET cod_rotulo='$codRotulo' , fecha='$fecha', prensada='$prensada',referenciaId='$referencia',loteId='$lote',pedido='$pedido',colorId='$color',pedido='$pedido',cantidadMoldes='$cantMoldes',casillaId='$casillaId', turno='$turno',juegos='$juegosRotulo',estacionId2='$estacionActual',vuelta1='$juegosRotulo',vuelta2='$juegosRotulo',vuelta3='$juegosRotulo',vuelta4='$juegosRotulo',vuelta5='$juegosRotulo',vuelta6='$juegosRotulo',vuelta7='$juegosRotulo',vuelta8='$juegosRotulo',total='$juegosTotales',fechaCreacion='$fechaCreacion',fechaActualizacion='$fechaActualizacion',estado='$estado',nota='$nota' WHERE id='$id';");
+
+$sqlActualizaDetalles= mysqli_query($conexion, "UPDATE pedidoDetalles SET  programados= '$juegosTotales' WHERE rotuloId = '$id' AND id= (SELECT id FROM pedidoDetalles WHERE rotuloId = '$id' ORDER BY id DESC LIMIT 1);");
+//UPDATE `pedidoDetalles` SET `programados`= '48' WHERE `rotuloId` = '10152' AND `id`= (SELECT `id` FROM `pedidoDetalles` WHERE `rotuloId` = '10152' ORDER BY `id` DESC LIMIT 1);
+
+
 mysqli_close($conexion);
 
 if($sql_update){
 
+//registro el detalle en la tabla pedidoDetalles
 
 
 
 
   echo "<script>
   alert('LOS DATOS SE HAN EDITADO DE FORMA CORRECTA');
+  
   window.location='progProduccion3.php?fecha=$fecha&turno=$turno&prensada=$prensada' 
   </script>";
 

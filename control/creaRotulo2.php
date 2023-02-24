@@ -192,4 +192,11 @@ else{
 	$sql81="INSERT INTO `rotuloestaciones2` (`id`, `rotuloId2`, `estacionId`, `ingreso`, `estado`) VALUES (NULL, '". $cod_Rotulo."', '1', (select DATE_SUB(NOW(),INTERVAL 5 HOUR)), '') ";
 
 $result81=mysqli_query($conexion,$sql81);
+
+
+//registro el detalle en la tabla pedidoDetalles
+
+$sqlDetalles="INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) VALUES (NULL, '".$pedido."', '".$referenciaId."', '".$colorId."', ".$cod_Rotulo.", '0', NULL, '".$juegosTotales."', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR)));";
+$resultDetalles=mysqli_query($conexion,$sqlDetalles);
+echo $resultDetalles;
 ?>
