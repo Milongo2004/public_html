@@ -2,9 +2,10 @@
     $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
 
     $estacion=$_GET ["estaciones"];
-      
+      //si la estación no llega por get entonces la busco por post.
     if(is_null($estacion)){
         $estacion=$_POST['estacion'] ;
+        
     }
     
     $id = isset( $_POST['id'] ) ? $_POST['id'] : '';
