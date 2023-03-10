@@ -40,6 +40,8 @@ $sqlSufijoDetalles="";
 $codRotulo;
 $k=0;
 $refId;
+$arregloNombres;
+$arregloId;
 $nombreRef;
 $respuesta9="";
 
@@ -936,6 +938,51 @@ $result81=mysqli_query($conexion,$sql81);
 
 		   
 
+		break;
+		
+		case '14': // para grabar nombres de los emplaquetadores en el módulo
+
+
+
+$cod_rotulo=intval($cod_rotulo);
+
+ //consulta para guardar los nombres y sus id en  arreglos
+            
+             $arregloNombres= array();
+             $arregloId = array();
+            
+            $sqlNombres= "SELECT id, nombre FROM emplaquetadores WHERE 1";
+            $resultNombres= mysqli_query($conexion,$sqlNombres);
+            
+            while($mostrarNombres=mysqli_fetch_array($resultNombres)){
+                $arregloNombres[]=$mostrarNombres['nombre'];
+                //$arregloId[]=$mostrarNombres['id'];
+                
+            }
+           
+          $cuantosNombres=count($arregloNombres);
+            
+
+for($i=0;$i<$cuantosNombres;$i++){
+            
+       
+ //voy creando el  String con los datos separados por un "-",  uno para los códigos y otro para las referencias. 
+ 
+ if ($i==0){
+                //$respuesta9 =  $arregloId[$i]."*".$arregloNombres[$i];
+                $respuesta9 = $arregloNombres[$i];
+                }
+                else if ($i>0){
+                
+                $respuesta9 .= "*".$arregloNombres[$i];
+                
+                }
+ 
+}
+
+            
+         echo "estos son los datos a guardar en el tag,".$respuesta9;
+         
 		break;
 
 	default:

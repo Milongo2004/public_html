@@ -293,6 +293,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 $arregloColores[]=2;
                 $arregloColores[]=3;
                 $arregloColores[]=4;
+                $arregloColores[]=79;
                 $arregloColores[]=80;
                 $arregloColores[]=5;
                 $arregloColores[]=6;
