@@ -22,6 +22,22 @@ $metodo=$_GET ["metodo"];
 
 $lineaPedido="";
 
+$ahora = date("H:i:s");
+$caja1hora1="11:00:00";
+$caja1hora2="12:59:50";
+
+$caja2hora1="13:00:00";
+$caja2hora2="14:59:50";
+
+$caja3hora1="15:00:00";
+$caja3hora2="16:59:50";
+
+$caja4hora1="17:00:00";
+$caja4hora2="18:59:50";
+
+$caja5hora1="19:00:00";
+$caja5hora2="10:59:50";
+
 //consulto la línea según el pedido para comparar con la línea del QR
 
        $sql2= "SELECT linea from pedidos2 WHERE idP ='". $pedido. "'";
@@ -50,7 +66,10 @@ $result1=mysqli_query($conexion,$sql1);
                 
                 //obtengo el dato de los juegos según la línea y el atributo antPos.
                 
-                if ($linea==$lineaPedido){
+                if ($linea==$lineaPedido || $lineaPedido=="NACIONAL"){
+                   /* 
+                    if(($ahora>$caja1hora1 && $ahora<$caja1hora2 && $caja=="1")||($ahora>$caja2hora1 && $ahora<$caja2hora2 && $caja=="2")||($ahora>$caja3hora1 && $ahora<$caja3hora2 && $caja=="3")||($ahora>$caja4hora1 && $ahora<$caja4hora2 && $caja=="4")||($ahora>$caja5hora1 && $ahora<$caja5hora2 && $caja=="5")){
+                    */
                 
                 if ($linea=='RESISTAL' || $linea=='ZENITH'){
                     
@@ -120,6 +139,10 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
 		    $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		    
 		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
+               /* }
+                else {
+                    echo "debe seleccionar la caja correspondiente a la hora actual";
+                }*/
                 }
                 else {
                     ?>
@@ -133,16 +156,25 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
     <center>
 	<h1>
                     <?php
+                    //echo "¡ERROR!".$ahora;
                     echo "¡ERROR!";
                     echo "</br>";
+                    /*
+                    if ($ahora>'20:41:00'){
+                        echo "debe ingresar en la caja 5";
+                    }
+                    else{
+                        echo "debe ingresar en la caja 4";
+                    }
+                    */
                     echo "</br>";
                     echo "LAS LÍNEAS NO CORRESPONDEN";
                     echo "</br>";
                     echo "</br>";
                     echo "</br>";
-                    echo "línea del inventario= ".$lineaPedido;
+                    echo "línea del inventario = ".$lineaPedido;
                     echo "</br>";
-                    echo "línea QR= ".$linea;
+                    echo "línea QR = ".$linea;
                     
                     
                 }
