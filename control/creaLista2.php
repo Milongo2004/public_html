@@ -20,6 +20,18 @@ $caja=$_GET ["caja"];
 $pedido=$_GET ["pedido"];
 $metodo=$_GET ["metodo"];
 
+$lineaPedido="";
+
+//consulto la línea según el pedido para comparar con la línea del QR
+
+       $sql2= "SELECT linea from pedidos2 WHERE idP ='". $pedido. "'";
+        $result2=mysqli_query($conexion,$sql2);
+                while($mostrar2=mysqli_fetch_array($result2)){
+                
+                $lineaPedido=$mostrar2['linea'];
+                
+                }
+
 //obtengo mediante consultas los datos necesarios de la TABLA16, de donde puedo obtener 
 
 $sql1= "SELECT * FROM `codificacionQR` WHERE Referencia = '". $codigoQR. "'";
@@ -37,6 +49,8 @@ $result1=mysqli_query($conexion,$sql1);
 
                 
                 //obtengo el dato de los juegos según la línea y el atributo antPos.
+                
+                if ($linea==$lineaPedido){
                 
                 if ($linea=='RESISTAL' || $linea=='ZENITH'){
                     
@@ -106,5 +120,38 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
 		    $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		    
 		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
+                }
+                else {
+                    ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Error</title>
+</head>
+<body>
+    <center>
+	<h1>
+                    <?php
+                    echo "¡ERROR!";
+                    echo "</br>";
+                    echo "</br>";
+                    echo "LAS LÍNEAS NO CORRESPONDEN";
+                    echo "</br>";
+                    echo "</br>";
+                    echo "</br>";
+                    echo "línea del inventario= ".$lineaPedido;
+                    echo "</br>";
+                    echo "línea QR= ".$linea;
+                    
+                    
+                }
 
 ?>
+
+</h1>
+
+
+	  </center>
+</body>
+</html>

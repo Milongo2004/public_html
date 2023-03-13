@@ -4,6 +4,8 @@ $pedido=$_GET ["pedido"];
 $caja=$_GET ["caja"];
 $metodo=$_GET ["metodo"];
 
+$lineaPedido="";
+
 
 
 
@@ -730,7 +732,9 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
             ?>
                 
                 <td><?php echo $mostrar2['codigoP'] ."        ";
-                $codigoPedido=$mostrar2['codigoP']?></td>
+                $codigoPedido=$mostrar2['codigoP'];
+                
+                ?></td>
                 </h2>
                 
             
