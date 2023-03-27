@@ -14,7 +14,7 @@ $ref=$_GET ["ref"];//ref
 $color=$_GET ["color"];//SubGrupo
 //$antPos=$_GET ["antPos"];//antPos
 
-//$cajas=$_GET ["cajas"];//la declaro y luego si el valor obtenido del formulario  es != de null utilizo la herramienta 21 con los juegos ingresados sino, calculo el valor de los juegos como la multiplicación de las cajas por el numero de juegos y creo un registro grupal como si fuera una caja uno a uno utilizando la misma herramienta.
+$cajas="";//la declaro y luego si el valor obtenido del formulario  es != de null utilizo la herramienta 21 con los juegos ingresados sino, calculo el valor de los juegos como la multiplicación de las cajas por el numero de juegos y creo un registro grupal como si fuera una caja uno a uno utilizando la misma herramienta.
 $caja=$_GET ["caja"];
 $pedido=$_GET ["pedido"];
 $metodo=$_GET ["metodo"];
@@ -99,7 +99,7 @@ $result2=mysqli_query($conexion,$sql2);
     //$juegos=$juegos*$cajas;
     
     $herramienta21 = new Herramienta();
-$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($referencia, $antPos, $supInf, $colorin, $lote, $juegos, $codigoQR, $pedido, $caja, $metodo);
+$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($referencia, $antPos, $supInf, $colorin, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo);
     
 
 

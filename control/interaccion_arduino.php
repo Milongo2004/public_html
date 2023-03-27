@@ -13,8 +13,8 @@ $mayorRotulo=$GET["mayorRotulo_php"];
 $cuentaLecturas=$_GET["cuentaLecturas_php"];
 $estacion=$_GET["hum_php"];
 $juegos=$_GET["temp_php"];
-$idMolde=$_GET["pre_php"];//id digitado con el teclado del módulo RFID
-$cod_molde=$_GET["dist_php"];
+$idMolde=$_GET["pre_php"];//id digitado con el teclado del módulo RFID, 
+$cod_molde=$_GET["dist_php"];//en el proceso 15 el cod_Molde es el id del emplaquetador. 
 $cod_rotulo=$_GET["rotulo_php"];//esta código de rótulo es el que se lee en las estaciones  y en el momento de la ubicación en su casilla.
 
 //variables obtenidas desde la base de datos
@@ -984,6 +984,11 @@ for($i=0;$i<$cuantosNombres;$i++){
          echo "estos son los datos a guardar en el tag,".$respuesta9;
          
 		break;
+		
+			case '15': 
+		    echo "valores recibidos, proceso:".$proceso."- hum/estación:".$estacion."-/juegos/temp:". $juegos."-pre/idMolde: ".$idMolde."-dist/cod_molde:".$cod_molde."-rotulo:".$cod_rotulo;
+		    
+		    break;
 
 	default:
 

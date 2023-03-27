@@ -210,8 +210,10 @@ $pedido, $caja, $metodo){
 
 //ingreso valores del formulario QR a la tabla listaEmpaque, con formulario en el que hay que digitar el lote.
 
-public function ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $codigoQR, $pedido, $caja, $metodo){
-		$sql_21 = " insert into listaEmpaque values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))) ";
+public function ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo){
+    
+ 
+		$sql_21 = " insert into listaEmpaque values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))) ";
 		$stmt_21 = $this->conexion->conexion->prepare($sql_21);
 
 		$stmt_21->bindValue(1, $ref);
@@ -220,9 +222,10 @@ public function ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf
 		$stmt_21->bindValue(4, $color);
 		$stmt_21->bindValue(5, $lote);
 		$stmt_21->bindValue(6, $juegos);
-		$stmt_21->bindValue(7, $codigoQR);
-		$stmt_21->bindValue(8, $pedido);
-		$stmt_21->bindValue(9, $caja);
+		$stmt_21->bindValue(7, $cajas);
+		$stmt_21->bindValue(8, $codigoQR);
+		$stmt_21->bindValue(9, $pedido);
+		$stmt_21->bindValue(10, $caja);
 
 		if($stmt_21->execute()){
 		    

@@ -94,8 +94,9 @@ $result1=mysqli_query($conexion,$sql1);
 
 //CONDICION PARA EL INGRESO UNO A UNO 
 if (($_GET ["cajas"])=="null"){
+    $cajas="1";
 $herramienta21 = new Herramienta();
-$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $codigoQR, $pedido, $caja, $metodo);
+$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo);
 }
 //CONDICION PARA EL INGRESO GRUPAL
 else {
@@ -103,7 +104,7 @@ else {
     $juegos=$juegos*$cajas;
     
     $herramienta21 = new Herramienta();
-$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $codigoQR, $pedido, $caja, $metodo);
+$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo);
     
 }
 

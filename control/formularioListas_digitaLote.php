@@ -816,11 +816,12 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
            <?php
            //a continuación consulto el total de juegos empacados por caja.
            
-           $sqlC="SELECT SUM(juegos) AS total FROM listaEmpaque WHERE caja ='". $numCaja. "' AND pedidoId = '". $numPedido. "'";
+           $sqlC="SELECT SUM(juegos) AS total, SUM(cajasEmpacadas) AS cajas FROM listaEmpaque WHERE caja ='". $numCaja. "' AND pedidoId = '". $numPedido. "'";
             $resultC=mysqli_query($conexion,$sqlC);
             
             while($mostrarC=mysqli_fetch_array($resultC)){
             $juegosCaja=$mostrarC['total'];
+            $cajas=$mostrarC['cajas'];
             }
             //luego presento el calculo de las cajas de producto empacadas en este box
             
@@ -917,7 +918,8 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
         <br></br>
         <table border="1">
             <tr>
-                <td>Box</td>
+                <td>juegos/Box</td>
+                <td>cajas/Box</td>
                 <td>Van</td>
                 <td>Pedido</td>
                 <td>Faltan</td>
@@ -928,6 +930,7 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
           
             <tr>
                 <td><?php echo $juegosCaja ?></td>
+                <td><?php echo $cajas ?></td>
                 <td><?php echo $juegosTotEmpacados ?></td>
                 <td><?php echo $juegosPedido ?></td>
                 <td><?php echo $juegosFaltan ?></td>
