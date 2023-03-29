@@ -84,7 +84,7 @@ $metaGeneral=6020;
                 <td><?php echo $mostrar['nombre'] ?></td>
                 <td><center><?php echo $mostrar['juegosTotales'] ?></center></td>
                 <td><center><?php 
-                
+                /*
                 if ($mostrar['nombre']=='MILEIDY MONTOYA'){
                     echo round(($mostrar['puntosTotales']/672)*100);
                 }
@@ -92,6 +92,8 @@ $metaGeneral=6020;
                 
                 echo round($mostrar['puntosTotales']/$meta*100);
                 }
+                */
+                echo round($mostrar['puntosTotales']/$meta*100);
                 
                 ?></center></td>
                       

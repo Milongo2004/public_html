@@ -373,7 +373,7 @@ while($mostrar7=mysqli_fetch_array($result7)){
 
 		break;
 		
-		case '8':
+		case '8': //recibe el dato de una lectura de uno o varios rótulos y realiza el registro en base de datos en las tablas de rotulo estaciones, rótulos y pedidoDetalles.
 		    //Descompone el dato de rótulo leído y luego uno por uno modifica  el dato de la estación actual  cada rótulo
 	    
 	    //convierto el string enviado por el ESP32 en un arreglo de strings
@@ -410,7 +410,7 @@ $result81=mysqli_query($conexion,$sql81);
  
 
                     
-$sqlR="SELECT referenciaId, colorId, pedido,total, referencias2.gramosJuego AS gramosJuego FROM rotulos2 INNER JOIN referencias2 ON rotulos2.referenciaId = referencias2.id WHERE rotulos2.id = '".$rotulos[$i]. "';";
+$sqlR="SELECT referenciaId, colorId, pedido,total, referencias2.gramosJuego AS gramosJuego, referencias2.tipo AS tipo, pedidos2.linea AS linea FROM rotulos2 INNER JOIN referencias2 ON rotulos2.referenciaId = referencias2.id INNER JOIN pedidos2 ON rotulos2.pedido = pedidos2.idP WHERE rotulos2.id = '".$rotulos[$i]. "';";
 
 $resultR=mysqli_query($conexion,$sqlR);
 
@@ -421,6 +421,8 @@ while($mostrarR=mysqli_fetch_array($resultR)){
                     $colorId=$mostrarR['colorId']; 
                     $juegosIngresan=$mostrarR['total'];
                     $gramosJuego=$mostrarR['gramosJuego'];
+                    $tipo=$mostrarR['tipo'];
+                    $linea=$mostrarR['linea'];
                     //$gramosGranel=$mostrarR['gramosGranel'];
                     //$juegosGranel=$gramosGranel/$gramosJuego;
                     //$juegosGranel=round($juegosGranel);
@@ -563,6 +565,44 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
         }
          break;
          
+         case 6: // dato enviado desde la estación de emplaquetado
+         //los juegos serán en relación a la línea y el tipo de producto (diente/muela): juegos/caja
+         
+         if ($linea=='RESISTAL' || $linea=='ZENITH'){
+                    
+                    if ($tipo=='Diente'){
+                        $juegosIngresan=16;
+                    }
+                    else if ($tipo=='Muela'){
+                        $juegosIngresan=14;
+                    }
+                }
+                else if ($linea=='REVEAL' || $linea=='STARDENT' || $linea=='STARVIT'){
+                    $juegosIngresan=20;
+                }
+                else if ($linea=='UHLERPLUS' || $linea=='STARPLUS'){
+                    $juegosIngresan=12;
+                   
+                }
+         
+         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" IS NULL",
+              "pulidos"=>" = '".strval($juegosIngresan)."'",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" IS NULL",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+         break;
         
          
               
@@ -985,8 +1025,8 @@ for($i=0;$i<$cuantosNombres;$i++){
          
 		break;
 		
-			case '15': 
-		    echo "valores recibidos, proceso:".$proceso."- hum/estación:".$estacion."-/juegos/temp:". $juegos."-pre/idMolde: ".$idMolde."-dist/cod_molde:".$cod_molde."-rotulo:".$cod_rotulo;
+			case '15': //en este caso se registra una caja de producto emplaquetada, junto el id del emplaquetador
+		    echo "texto,rotuloOK, proceso:".$proceso."- hum/estación:".$estacion."-/juegos/temp/gramos:". $juegos."-pre/idMolde: ".$idMolde."-dist/cod_molde/idEmplaquetador:".$cod_molde."-rotulo:".$cod_rotulo."-cuentaLecturas:".$cuentaLecturas;
 		    
 		    break;
 
