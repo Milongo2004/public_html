@@ -355,6 +355,7 @@ while($mostrar5=mysqli_fetch_array($result5)){
         });
     </script>
     
+    <!--
     <div class="row">
             <form action="datosParaDuplicar.php" method="GET" name="duplicar">
 
@@ -386,6 +387,7 @@ while($mostrar5=mysqli_fetch_array($result5)){
     }
 </script>
       
+      -->
         
         <div class="row">
             <form action="formularioImprimirProg.php" method="GET" name="imprimir">

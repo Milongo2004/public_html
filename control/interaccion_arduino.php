@@ -35,6 +35,10 @@ $libre=null;//estado del molde leído para asignaciones.
 $moldesTotales=null;//total de moldes existentes de una referencia.
 $moldesUsados=null;
 
+$totalPedidos=0;
+$totalEmplaquetados=0;
+$faltan=0;
+
 $sqlSufijoDetalles="";
 
 $codRotulo;
@@ -584,6 +588,19 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
                     $juegosIngresan=12;
                    
                 }
+                
+                //consulto la cantidad de juegos pedidos, le resto los juegos emplaquetados + los juegosIngresan que voy a registrar a continuación.
+                
+                $sqlPedidosEmplaquetados="SELECT  sum(`juegos`) as totalPedidos, sum(`emplaquetados`) as totalEmplaquetados from pedidoDetalles WHERE referenciaId ='".$referenciaId."' AND colorId= '".$colorId."' AND pedidoId='".$pedidoId."'";
+       $resultPedidosEmplaquetados= mysqli_query($conexion,$sqlPedidosEmplaquetados);  
+       
+        while($mostrarPedidosEmplaquetados=mysqli_fetch_array($resultPedidosEmplaquetados)){
+                    $totalPedidos=$mostrarPedidosEmplaquetados['totalPedidos'];
+                    $totalEmplaquetados=$mostrarPedidosEmplaquetados['totalEmplaquetados'];
+            }
+            
+            $faltan = $totalPedidos-$totalEmplaquetados-$juegosIngresan;
+            $faltan = $faltan/$juegosIngresan;
          
          $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
          $condicionArray=[
@@ -624,7 +641,7 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
 //echo $gramosJuego."/";
 //echo $gramosGranel."/";
 //echo $juegosGranel."/";
-echo "ingreso exitoso!,1,2,3,rotuloOK,";
+echo "ingreso exitoso!,$faltan,2,3,rotuloOK,";
 
 //echo "</br>";
 //echo $sqlDetalles;
@@ -931,6 +948,10 @@ echo "ingreso exitoso!,1,2,3,rotuloOK,";
 		    //***************************************************
 		    
 		    //actualizo la estación actual y la fecha de actualización.
+		    
+		    if($estacion=='6'){
+		        $estacion='7';
+		    }
 		   
             $sql8="UPDATE rotulos2 SET estacionId2 = '".$estacion. "'"." , fechaActualizacion = (select DATE_SUB(NOW(),INTERVAL 5 HOUR)) WHERE id = '". $cod_rotulo."'";
             $result8=mysqli_query($conexion,$sql8);

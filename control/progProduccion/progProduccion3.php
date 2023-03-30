@@ -304,6 +304,7 @@ var_dump($prensada);*/
         });
     </script>
     
+    <!--
     <div class="row">
             <form action="datosParaDuplicar.php" method="GET" name="duplicar">
 
@@ -337,7 +338,7 @@ var_dump($prensada);*/
         
         
     </div>
-    
+    -->
     
     <div class="row">
             <form action="formularioImprimirProg.php" method="GET" name="imprimir">

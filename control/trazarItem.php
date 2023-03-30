@@ -253,6 +253,16 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             </tr>
             
             <?php
+            
+            $iniciales=array();
+            //consulto las iniciales de los emplaquetadores
+             $sqlEmplaquetadores= "SELECT iniciales FROM emplaquetadores WHERE 1";
+            //echo $sqlEmplaquetadores;
+            $resultEmplaquetadores=mysqli_query($conexion,$sqlEmplaquetadores);
+            
+            while($mostrarEmplaquetadores=mysqli_fetch_array($resultEmplaquetadores)){
+                $iniciales[]=$mostrarEmplaquetadores["iniciales"];
+            }
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
             $sql= $consultaFiltros." ". implode(" AND ",$filtros) ."  ";
             //echo $sql;
@@ -280,7 +290,16 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td><?php echo $mostrar["revision2"]?></td>
                 <td><?php echo $mostrar["empacados"]?></td>
                 <td><?php echo $mostrar["calidad"]?></td>
-                <td><?php echo $mostrar["colaborador"]?></td>
+                <td><?php 
+                
+                if(!(is_null($mostrar["colaborador"]))){
+                
+                echo $iniciales[$mostrar["colaborador"]-1];
+                }
+                else {
+                    echo "";
+                }
+                ?></td>
                 <td><?php echo $mostrar["fechaCreacion"]?></td>
                 
                 
