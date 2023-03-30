@@ -13,7 +13,7 @@ $mayorRotulo=$GET["mayorRotulo_php"];
 $cuentaLecturas=$_GET["cuentaLecturas_php"];
 $estacion=$_GET["hum_php"];
 $juegos=$_GET["temp_php"];
-$idMolde=$_GET["pre_php"];//id digitado con el teclado del módulo RFID, 
+$idMolde=$_GET["pre_php"];//id digitado con el teclado del módulo RFID, corresponde a la cantidad de juegos malos enviados desde el emplaquetado
 $cod_molde=$_GET["dist_php"];//en el proceso 15 el cod_Molde es el id del emplaquetador. 
 $cod_rotulo=$_GET["rotulo_php"];//esta código de rótulo es el que se lee en las estaciones  y en el momento de la ubicación en su casilla.
 
@@ -572,6 +572,9 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
          case 6: // dato enviado desde la estación de emplaquetado
          //los juegos serán en relación a la línea y el tipo de producto (diente/muela): juegos/caja
          
+         
+        
+             
          if ($linea=='RESISTAL' || $linea=='ZENITH'){
                     
                     if ($tipo=='Diente'){
@@ -589,6 +592,8 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
                    
                 }
                 
+                if(is_null($idMolde)||$idMolde==""){//si la cantidad de juegos malos es nula 
+                
                 //consulto la cantidad de juegos pedidos, le resto los juegos emplaquetados + los juegosIngresan que voy a registrar a continuación.
                 
                 $sqlPedidosEmplaquetados="SELECT  sum(`juegos`) as totalPedidos, sum(`emplaquetados`) as totalEmplaquetados from pedidoDetalles WHERE referenciaId ='".$referenciaId."' AND colorId= '".$colorId."' AND pedidoId='".$pedidoId."'";
@@ -601,6 +606,8 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
             
             $faltan = $totalPedidos-$totalEmplaquetados-$juegosIngresan;
             $faltan = $faltan/$juegosIngresan;
+            
+             
          
          $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
          $condicionArray=[
@@ -619,6 +626,29 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
               "calidad"=>" IS NULL",
               "colaborador"=>" IS NULL"
               ];
+              
+         }
+         
+         else{
+             $idMolde=-$idMolde;
+             $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL,  NULL, NULL, NULL, NULL,'$idMolde', '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         $condicionArray=[
+              "juegos"=>"0",
+              "granel"=>" IS NULL",
+              "programados"=>" IS NULL",
+              "producidos"=>" IS NULL",
+              "pulidos"=>" = '".strval($juegosIngresan)."'",
+              "enSeparacion"=>" IS NULL",
+              "separado"=>" IS NULL",
+              "enEmplaquetado"=>" IS NULL",
+              "emplaquetados"=>" IS NULL",
+              "revision1"=>" IS NULL",
+              "revision2"=>" IS NULL",
+              "empacados"=>" IS NULL",
+              "calidad"=>" IS NULL",
+              "colaborador"=>" IS NULL"
+              ];
+         }
          break;
         
          
@@ -951,7 +981,11 @@ echo "ingreso exitoso!,1,2,3,rotuloOK,";
 		    
 		    if($estacion=='6'){
 		        $estacion='7';
-		    }
+		        $juegos=$juegos+12;
+            }
+            else{
+                $juegos=$juegos+2;
+            }
 		   
             $sql8="UPDATE rotulos2 SET estacionId2 = '".$estacion. "'"." , fechaActualizacion = (select DATE_SUB(NOW(),INTERVAL 5 HOUR)) WHERE id = '". $cod_rotulo."'";
             $result8=mysqli_query($conexion,$sql8);
@@ -974,7 +1008,10 @@ $result81=mysqli_query($conexion,$sql81);
             while($mostrarUltimoRegistro=mysqli_fetch_array($resultExisteRegistro)){
             $ultimoRegistroGranel=$mostrarUltimoRegistro['rotuloId'];
             }
-            
+           
+            if ($juegos<=20){
+                $juegos=20;
+            }
             
 		   if (is_null($ultimoRegistroGranel)){
 		       
