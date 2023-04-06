@@ -3,7 +3,14 @@
   $sumaJuegos=0;
   $diferenciaTotal=0;
   $sumaProducidos=0;
-
+  //creo unas variables para la referencia y el color recibidos por método get desde el detalle del pedido
+  $referenciaIdPedido='';
+  $colorIdPedido='';
+  $pedidoIdPedido='';
+  //recibo variables por método get
+  $referenciaIdPedido=$_GET ['referenciaId'];
+  $colorIdPedido=$_GET ['colorId'];
+  $pedidoIdPedido=$_GET ['idP'];
     
             //consulta para crear un arreglo con las referencias y sus id
             
@@ -69,9 +76,19 @@
         $referenciaId= array_search($referencia, $arregloReferencias);
             $filtros[]= "rotulos2.referenciaId = '$referenciaId'";
     }
+    else{
+        if($referenciaIdPedido!=''){
+            $filtros[]= "rotulos2.referenciaId = '$referenciaIdPedido'";
+        }
+    }
     if ($color != ''){
         $colorId= array_search($color, $arregloColores);
             $filtros[]= "rotulos2.colorId = '$colorId'";
+    }
+     else{
+        if($colorIdPedido!=''){
+            $filtros[]= "rotulos2.colorId = '$colorIdPedido'";
+        }
     }
     if ($tipoDato != ''){
             $filtros[]= "referencias2.tipo = '$tipoDato'";
@@ -215,7 +232,7 @@
     
         <table border="1"> 
             <tr>
-                <td>id</td>
+                <!--<td>id</td>-->
                 <td>ID Rotulo</td>
                 <td>Referencia</td>
                 <td>Color</td>
@@ -228,6 +245,12 @@
                 <td>Diferencia</td>
                 <td>FechaProducción</td>
                 <td>fechaIngreso</td>
+                
+                <?php
+                 //if($referenciaIdPedido!=''){
+                 //echo " <td>asignar a pedido</td>";
+                 //}
+                ?>
                 
             </tr>
             
@@ -266,7 +289,7 @@
             while($mostrar=mysqli_fetch_array($result)){
             ?>
             <tr>
-                <td><?php echo $mostrar['id'] ?></td>
+                <!--<td><?php //echo $mostrar['id'] ?></td>-->
                 <td><?php echo $mostrar['rotuloId'] ?></td>
                 <td><?php echo $arregloReferencias[$mostrar['referencia']] ?></td>
                 <td><?php echo $arregloColores[$mostrar['color']] ?></td>
@@ -334,6 +357,14 @@ $.ajax({
  
  
  <br></br>
+ 
+  <?php
+                 if($referenciaIdPedido!=''){
+                 echo " Aquí irá un botón que asignará el rótulo al pedido con ID: $pedidoIdPedido";
+                 }
+                ?>
+                
+                <br></br>
  
  <table border="1">
             

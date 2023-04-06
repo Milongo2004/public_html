@@ -68,6 +68,8 @@ $moldesDisponibles=null;
 
 $rotulos;
 
+$masaCalidad;//nombre del arreglo donde recibo los datos de masa de problemas de calidad.
+
 //$molde=$_GET ["molde"]; donde se use $molde remplazar por $moldeId
 
 //consulto el id del rótulo leído 
@@ -631,7 +633,7 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
          
          else{
              $idMolde=-$idMolde;
-             $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL,  NULL, NULL, NULL, NULL,'$idMolde', '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+             $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL,  NULL,'$idMolde', NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
          $condicionArray=[
               "juegos"=>"0",
               "granel"=>" IS NULL",
@@ -1083,8 +1085,119 @@ for($i=0;$i<$cuantosNombres;$i++){
          
 		break;
 		
-			case '15': //en este caso se registra una caja de producto emplaquetada, junto el id del emplaquetador
-		    echo "texto,rotuloOK, proceso:".$proceso."- hum/estación:".$estacion."-/juegos/temp/gramos:". $juegos."-pre/idMolde: ".$idMolde."-dist/cod_molde/idEmplaquetador:".$cod_molde."-rotulo:".$cod_rotulo."-cuentaLecturas:".$cuentaLecturas;
+		case '15':
+		
+			
+		    //echo "texto,rotuloOK, proceso:".$proceso."- hum/estación:".$estacion."-/juegos/temp/gramos:". $juegos."-pre/idMolde: ".$idMolde."-dist/cod_molde/idEmplaquetador:".$cod_molde."-rotulo:".$cod_rotulo."-cuentaLecturas:".$cuentaLecturas;
+		    
+		    $masaCalidad = explode("$",$idMolde);
+		    
+		    //primero debo consultar el peso de esa referencia por juego, después, realizo el ingreso de cada uno de los datos de calidad como un número de juegos negativo en revisión 1.luego ingreso en granel el sobrante
+		    
+		    //consulto referencia y otros detalles del rotulo
+ 
+
+                    
+$sqlR="SELECT referenciaId, colorId, pedido,total, referencias2.gramosJuego AS gramosJuego, referencias2.tipo AS tipo, pedidos2.linea AS linea FROM rotulos2 INNER JOIN referencias2 ON rotulos2.referenciaId = referencias2.id INNER JOIN pedidos2 ON rotulos2.pedido = pedidos2.idP WHERE rotulos2.id = '".$cod_rotulo. "';";
+
+$resultR=mysqli_query($conexion,$sqlR);
+
+while($mostrarR=mysqli_fetch_array($resultR)){
+                    
+                    $referenciaId=$mostrarR['referenciaId']; 
+                    $pedidoId=$mostrarR['pedido']; 
+                    $colorId=$mostrarR['colorId']; 
+                    $juegosIngresan=$mostrarR['total'];
+                    $gramosJuego=$mostrarR['gramosJuego'];
+                    $tipo=$mostrarR['tipo'];
+                    $linea=$mostrarR['linea'];
+                    //$gramosGranel=$mostrarR['gramosGranel'];
+                    //$juegosGranel=$gramosGranel/$gramosJuego;
+                    //$juegosGranel=round($juegosGranel);
+                    
+}
+
+for($i=0;$i<4;$i++){
+    $situacionCalidad;
+    switch ($i){
+        case 0:
+            $situacionCalidad="BETA";
+            break;
+        case 1:
+            $situacionCalidad="SUCIO";
+            break;
+        case 2:
+            $situacionCalidad="PLASTICO";
+            break;
+        case 3:
+            $situacionCalidad="OTROS";
+            break;
+    }
+    
+    $masaCalidad[$i]=trim($masaCalidad[$i]);
+    $masaCalidadInt=intval($masaCalidad[$i]);
+    if($masaCalidadInt >= 32){
+    $juegosCalidad=$masaCalidadInt/$gramosJuego;
+    }
+    else{
+        $juegosCalidad=0;
+    }
+    $sqlCalidad="INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) VALUES (NULL, '$pedidoId', '$referenciaId', '$colorId', '$cod_rotulo', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '-$juegosCalidad', NULL, NULL, '$situacionCalidad', '$cod_molde', current_timestamp());";
+    
+    $resultCalidad=mysqli_query($conexion,$sqlCalidad);
+}
+
+	    //actualizo la estación actual y la fecha de actualización.
+		    
+		    if($estacion=='6'){
+		        $estacion='7';
+		        $juegos=$juegos+12;
+            }
+            else{
+                $juegos=$juegos+2;
+            }
+		   
+            $sql8="UPDATE rotulos2 SET estacionId2 = '".$estacion. "'"." , fechaActualizacion = (select DATE_SUB(NOW(),INTERVAL 5 HOUR)) WHERE id = '". $cod_rotulo."'";
+            $result8=mysqli_query($conexion,$sql8);
+            
+            // registra paso por la estación
+
+	$sql81="INSERT INTO `rotuloestaciones2` (`id`, `rotuloId2`, `estacionId`, `ingreso`, `estado`) VALUES (NULL, '". $cod_rotulo."', '".$estacion. "', (select DATE_SUB(NOW(),INTERVAL 5 HOUR)), '') ";
+
+$result81=mysqli_query($conexion,$sql81);
+            
+		    //**************************************************
+		    
+		     
+		    
+		    //si existe a granel, lo actualizo, sino, lo creo.
+		    
+		    $sqlExisteRegistro="SELECT id, rotuloId FROM `productoGranel` WHERE rotuloId ='".$cod_rotulo."' ORDER BY id DESC LIMIT 1";
+		    $resultExisteRegistro=mysqli_query($conexion,$sqlExisteRegistro);
+            
+            while($mostrarUltimoRegistro=mysqli_fetch_array($resultExisteRegistro)){
+            $ultimoRegistroGranel=$mostrarUltimoRegistro['rotuloId'];
+            }
+           
+            if ($juegos<=20){
+                $juegos=20;
+            }
+            
+		   if (is_null($ultimoRegistroGranel)){
+		       
+		    $herramienta313 = new Herramienta();
+            $ingresar_datos_tabla_productoGranel = $herramienta313->ingresar_datos_tabla_productoGranel($cod_rotulo,($juegos-20));
+            
+           
+            
+		   }
+		   else{
+		       $sqlActualizaGramos = "UPDATE productoGranel SET gramos= '".($juegos-20)."' WHERE rotuloId = '".$cod_rotulo."'";
+		       $resultActualizaGramos=mysqli_query($conexion,$sqlActualizaGramos);
+		       
+		       	echo "ingreso exitoso!,1 actualizo,2,3,rotuloOK,";
+		   }
+		    
 		    
 		    break;
 

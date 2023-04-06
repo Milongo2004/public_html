@@ -300,7 +300,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Programados</td>
                 <td>Producidos</td>
                 <td>Pulidos</td>
-                <td>EnSeparación</td>
+                <!--<td>EnSeparación</td>-->
                 <td>Separados</td>
                 <td>EnEmplaquetado</td>
                 <td>Emplaquetados</td>
@@ -308,6 +308,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Revisión 2</td>
                 <td>Empacados</td>
                 <td>Historial</td>
+                <td>VerGranel</td>
                
                 <!--<td>acción</td>
                 <td>acción</td>-->
@@ -347,9 +348,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 echo "B6FF8A";
                 }?>"><?php echo $mostrar["totalPulidos"] ?></td>
                 
-                <td bgcolor= "<?php if($mostrar["totalEnSeparacion"]>$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalEnSeparacion"] ?></td>
+                <!--<td bgcolor= "<?php //if($mostrar["totalEnSeparacion"]>$mostrar["totalPedidos"]){
+                //echo "B6FF8A";
+                //}?>"><?php //echo $mostrar["totalEnSeparacion"] ?></td>-->
                 
                 <td bgcolor= "<?php if($mostrar["totalSeparados"]>$mostrar["totalPedidos"]){
                 echo "B6FF8A";
@@ -380,7 +381,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                     echo  "FB413B";
                 }
                 ?>"><?php echo $mostrar["totalEmpacados"] ?></td>
-                <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'"  >Historial</a></td>
+                <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >Historial</a></td>
+                
+                <td><a href="../control/vistas/modulos/verTablaGranel.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >verGranel</a></td>
                 
                 <!--<td><a    href="editar_detellePedido.php?id=<?php //echo $mostrar['id'] ?>&turno=<?php //echo $turno?>&prensada=<?php //echo $prensada?>&fecha=<?php //echo $fecha?> ">Editar</a></td>
                 <td><a href="#" data-href="eliminar_detallePedido.php?id=<?php //echo $mostrar['id']; ?>" data-rg="<?= $mostrar['id'] ?>" id="delRg" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">Eliminar</a></td>-->
@@ -419,6 +422,36 @@ $resultCol=mysqli_query($conexion,$sqlCol);
         });
     </script>
     
+    <!--enlace en tabla para ver producción a granel de esa referencia y color-->
+    
+           <script type="text/javascript">
+        $(document).on("click", "#delRg", function(event) {
+            event.preventDefault();
+
+            let ifRegistro = $(this).attr('data-rg');
+
+            $.ajax({
+                url: "../control/vistas/modulos/verTablaGranel.php",
+                data: {
+                    id: ifRegistro
+                },
+                success: function(result) {
+
+                    console.log(result);
+                    location.reload();
+                   
+
+
+                },
+                error: function(request, status, error) {
+                    console(request.responseText);
+                    console(error);
+                }
+            });
+
+        });
+    </script>
+    
    <table border="1">
         <tr>
                
@@ -432,7 +465,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Programados</td>
                 <td>Producidos</td>
                 <td>Pulidos</td>
-                <td>EnSeparación</td>
+                <!--<td>EnSeparación</td>-->
                 <td>Separados</td>
                 <td>EnEmplaquetado</td>
                 <td>Emplaquetados</td>
@@ -460,7 +493,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td><?php echo $mostrarSuma['totalProgramados'] ?></td>
                 <td><?php echo $mostrarSuma['totalProducidos'] ?></td>
                 <td><?php echo $mostrarSuma['totalPulidos'] ?></td>
-                <td><?php echo $mostrarSuma['totalEnSeparacion'] ?></td>
+                <!--<td><?php //echo $mostrarSuma['totalEnSeparacion'] ?></td>-->
                 <td><?php echo $mostrarSuma['totalSeparados'] ?></td>
                 <td><?php echo $mostrarSuma['totalEnEmplaquetado'] ?></td>
                 <td><?php echo $mostrarSuma['totalEmplaquetados'] ?></td>
