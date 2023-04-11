@@ -667,9 +667,12 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
  $sqlDetalles = "INSERT INTO `pedidoDetalles` (`pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) SELECT '".$pedidoId."', '".$referenciaId."', '".$colorId."', '".$rotulos[$i]."', ". $sqlSufijoDetalles. " WHERE NOT EXISTS (SELECT `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador` FROM `pedidoDetalles` WHERE `pedidoId`='".$pedidoId."' AND `referenciaId`='".$referenciaId."' AND `colorId`= '".$colorId."' AND `rotuloId` = ".$rotulos[$i]." AND `juegos`= '". $condicionArray[juegos]."' AND `granel`".$condicionArray[granel]." AND `programados`".$condicionArray[programados]." AND `producidos`".$condicionArray[producidos]." AND `pulidos`".$condicionArray[pulidos]." AND `enSeparacion`".$condicionArray[enSeparacion]." AND `separado`".$condicionArray[separado]." AND `enEmplaquetado`".$condicionArray[enEmplaquetado]." AND `emplaquetados`".$condicionArray[emplaquetados]." AND `revision1`".$condicionArray[revision1]." AND `revision2`".$condicionArray[revision2]." AND `empacados`".$condicionArray[empacados]." AND `calidad`".$condicionArray[calidad]." AND `colaborador`".$condicionArray[colaborador]." );";
  
  $resultDetalles=mysqli_query($conexion,$sqlDetalles);
+ 
+ if($estacion==6){
 
 $herramientaEmplaquetado = new Herramienta();
-$ingresar_dato_tabla_SeguimientoEmplaquetado = $herramientaEmplaquetado->ingresar_datos_seguimientoEmplaquetado($cod_molde, $linea, $tipo,$juegosIngresan, $puntos);
+$ingresar_dato_tabla_SeguimientoEmplaquetado = $herramientaEmplaquetado->ingresar_datos_seguimientoEmplaquetado($cod_molde, $linea, $tipo,$juegosIngresan,$puntos);
+}
 
 }
 //echo $referenciaId."/";
