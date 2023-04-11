@@ -53,7 +53,7 @@
                  <body>
 
 
-                <button onclick="location.href='https://trazabilidadmasterdent.online/control/formularioEmplaquetado.php'">Emplaquetado</button>
+                <button onclick="location.href='https://trazabilidadmasterdent.online/control/formularioEmplaquetado2.php'">Emplaquetado</button>
 
                 </div>
 

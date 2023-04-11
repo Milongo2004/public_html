@@ -239,7 +239,7 @@ var_dump($prensada);*/
                 <td>_10</td> 
                 <td>_11</td> 
                 <td>_12</td> 
-                <td>_13</td> 
+                <td>total</td> 
                 <td style="background-color: yellow">total</td>
                 
                 
@@ -293,7 +293,7 @@ var_dump($prensada);*/
                 <td><?php "   "//echo $mostrar['vuelta10'] ?></td>
                 <td><?php "   "//echo $mostrar['vuelta11'] ?></td>
                 <td><?php "   "//echo $mostrar['vuelta12'] ?></td>
-                <td><?php "   "//echo $mostrar['vuelta13'] ?></td>
+                <td><?php echo $mostrar['total'] ?></td>
                 <td><label for="producidos<?php echo $mostrar['id']  ?>" class="form-label"></label><input type="text" class="form-control" id="producidos<?php echo $mostrar['id']  ?>" name="producidos<?php echo $mostrar['id']  ?>" style="width: 40px" ></td>
                 <!--<td><?php //echo $mostrar['nota'] ?></td>-->
                 

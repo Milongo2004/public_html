@@ -38,6 +38,7 @@ $moldesUsados=null;
 $totalPedidos=0;
 $totalEmplaquetados=0;
 $faltan=0;
+$puntos=0;
 
 $sqlSufijoDetalles="";
 
@@ -581,16 +582,20 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
                     
                     if ($tipo=='Diente'){
                         $juegosIngresan=16;
+                        
                     }
                     else if ($tipo=='Muela'){
                         $juegosIngresan=14;
                     }
+                     $puntos=$juegosIngresan;
                 }
                 else if ($linea=='REVEAL' || $linea=='STARDENT' || $linea=='STARVIT'){
                     $juegosIngresan=20;
+                     $puntos=$juegosIngresan;
                 }
                 else if ($linea=='UHLERPLUS' || $linea=='STARPLUS'){
                     $juegosIngresan=12;
+                    $puntos=$juegosIngresan*1.2;
                    
                 }
                 
@@ -663,7 +668,8 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
  
  $resultDetalles=mysqli_query($conexion,$sqlDetalles);
 
-
+$herramientaEmplaquetado = new Herramienta();
+$ingresar_dato_tabla_SeguimientoEmplaquetado = $herramientaEmplaquetado->ingresar_datos_seguimientoEmplaquetado($cod_molde, $linea, $tipo,$juegosIngresan, $puntos);
 
 }
 //echo $referenciaId."/";
@@ -1142,7 +1148,7 @@ for($i=0;$i<4;$i++){
     else{
         $juegosCalidad=0;
     }
-    $sqlCalidad="INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) VALUES (NULL, '$pedidoId', '$referenciaId', '$colorId', '$cod_rotulo', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '-$juegosCalidad', NULL, NULL, '$situacionCalidad', '$cod_molde', current_timestamp());";
+    $sqlCalidad="INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) VALUES (NULL, '$pedidoId', '$referenciaId', '$colorId', '$cod_rotulo', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '-$juegosCalidad', NULL, NULL, '$situacionCalidad', '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR)));";
     
     $resultCalidad=mysqli_query($conexion,$sqlCalidad);
 }
