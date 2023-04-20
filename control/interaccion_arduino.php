@@ -39,6 +39,8 @@ $totalPedidos=0;
 $totalEmplaquetados=0;
 $faltan=0;
 $puntos=0;
+//$juegosCalidadTotales=0;
+$masaCalidadTotal=0;
 
 $sqlSufijoDetalles="";
 
@@ -494,18 +496,18 @@ while($mostrarR=mysqli_fetch_array($resultR)){
         $juegosGranel = $gramosGranel/$gramosJuego;
         $juegosGranel=round($juegosGranel);
         
-        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '$juegosGranel',  NULL, NULL, NULL, NULL, NULL, '1', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '$juegosGranel',  NULL, NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
        
          
          $condicionArray=[
               "juegos"=>"0",
               "granel"=>" IS NULL",
               "programados"=>" IS NULL",
-              "producidos"=>" IS NULL",
+              "producidos"=>" IS NULL",///mientras tanto para el ensayo del módulo de almacén de granel entrega emplaquetado.
               "pulidos"=>"IS NULL",
               "enSeparacion"=>" IS NULL",
               "separado"=>" IS NULL",
-              "enEmplaquetado"=>" = '".$juegosGranel."'",
+              "enEmplaquetado"=>" = '".strval($juegosGranel)."'",
               "emplaquetados"=>" IS NULL",
               "revision1"=>" IS NULL",
               "revision2"=>" IS NULL",
@@ -598,6 +600,10 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
                     $puntos=$juegosIngresan*1.2;
                    
                 }
+                else{
+                    $juegosIngresan=20;
+                    $puntos=$juegosIngresan;
+                }
                 
                 if(is_null($idMolde)||$idMolde==""){//si la cantidad de juegos malos es nula 
                 
@@ -682,7 +688,8 @@ $ingresar_dato_tabla_SeguimientoEmplaquetado = $herramientaEmplaquetado->ingresa
 //echo $gramosJuego."/";
 //echo $gramosGranel."/";
 //echo $juegosGranel."/";
-echo "ingreso exitoso!,$faltan,2,3,rotuloOK,";
+//echo "ingreso exitoso!,$faltan,2,3,rotuloOK,";
+echo "ingreso exitoso!,0,2,3,rotuloOK,";
 
 //echo "</br>";
 //echo $sqlDetalles;
@@ -1145,8 +1152,10 @@ for($i=0;$i<4;$i++){
     
     $masaCalidad[$i]=trim($masaCalidad[$i]);
     $masaCalidadInt=intval($masaCalidad[$i]);
+    $masaCalidadTotal=$masaCalidadTotal+$masaCalidadInt;
     if($masaCalidadInt >= 32){
-    $juegosCalidad=$masaCalidadInt/$gramosJuego;
+    $juegosCalidad=($masaCalidadInt-30)/$gramosJuego;
+    //$juegosCalidadTotales=$juegosCalidadTotales+$juegosCalidad;
     }
     else{
         $juegosCalidad=0;
@@ -1181,12 +1190,16 @@ $result81=mysqli_query($conexion,$sql81);
 		    
 		    //si existe a granel, lo actualizo, sino, lo creo.
 		    
+		    //20 es el peso de la bolsa de dientes más el peso de la escarapela, a los juegos a granel les
+		    
 		    $sqlExisteRegistro="SELECT id, rotuloId FROM `productoGranel` WHERE rotuloId ='".$cod_rotulo."' ORDER BY id DESC LIMIT 1";
 		    $resultExisteRegistro=mysqli_query($conexion,$sqlExisteRegistro);
             
             while($mostrarUltimoRegistro=mysqli_fetch_array($resultExisteRegistro)){
             $ultimoRegistroGranel=$mostrarUltimoRegistro['rotuloId'];
             }
+           
+           //los juegos aquí corresponden a un valor de masa en gramos
            
             if ($juegos<=20){
                 $juegos=20;
@@ -1195,13 +1208,13 @@ $result81=mysqli_query($conexion,$sql81);
 		   if (is_null($ultimoRegistroGranel)){
 		       
 		    $herramienta313 = new Herramienta();
-            $ingresar_datos_tabla_productoGranel = $herramienta313->ingresar_datos_tabla_productoGranel($cod_rotulo,($juegos-20));
+            $ingresar_datos_tabla_productoGranel = $herramienta313->ingresar_datos_tabla_productoGranel($cod_rotulo,($juegos-($masaCalidadTotal+20)));
             
            
             
 		   }
 		   else{
-		       $sqlActualizaGramos = "UPDATE productoGranel SET gramos= '".($juegos-20)."' WHERE rotuloId = '".$cod_rotulo."'";
+		       $sqlActualizaGramos = "UPDATE productoGranel SET gramos= '".($juegos-($masaCalidadTotal+20))."' WHERE rotuloId = '".$cod_rotulo."'";
 		       $resultActualizaGramos=mysqli_query($conexion,$sqlActualizaGramos);
 		       
 		       	echo "ingreso exitoso!,1 actualizo,2,3,rotuloOK,";

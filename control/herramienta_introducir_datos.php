@@ -1465,7 +1465,7 @@ else{
 	?>		
 		<html lang="en">
 			    <head>
-			    <meta http-equiv="refresh" content="0.2; url= https://trazabilidadmasterdent.online/control/formularioEmplaquetado2.php">
+			    <meta http-equiv="refresh" content="0.2; url= https://trazabilidadmasterdent.online/control/formularioEmplaquetado3.php">
 			    </head>		
  
 <?php

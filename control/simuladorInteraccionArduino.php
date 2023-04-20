@@ -200,16 +200,16 @@ case 1:
                     <label for="cuentaLecturas_php" class="form-label">cuentaLecturas_php</label>
                     <input type="text" size="15" class="form-control "  id="cuentaLecturas_php" name="cuentaLecturas_php">
          
-                    <label for="hum_php" class="form-label">hum_php</label>
+                    <label for="hum_php" class="form-label">estación/hum_php</label>
                     <input type="text" size="15" class="form-control "  id="hum_php" name="hum_php">
                     
-                    <label for="temp_php" class="form-label">temp_php</label>
+                    <label for="temp_php" class="form-label">juegos/gramos/temp_php</label>
                     <input type="text" size="15" class="form-control "  id="temp_php" name="temp_php">
                     
-                    <label for="pre_php" class="form-label">pre_php</label>
+                    <label for="pre_php" class="form-label">id_molde/juegosMalos_pre_php</label>
                     <input type="text" size="15" class="form-control "  id="pre_php" name="pre_php">
                     
-                    <label for="dist_php" class="form-label">dist_php</label>
+                    <label for="dist_php" class="form-label">cod_molde/idEmplaquetador/dist_php</label>
                     <input type="text" size="15" class="form-control "  id="dist_php" name="dist_php">
                     
                     <label for="rotulo_php" class="form-label">rotulo_php</label>

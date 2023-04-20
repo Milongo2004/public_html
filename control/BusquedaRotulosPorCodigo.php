@@ -80,7 +80,7 @@
             //$sql= "SELECT * from rotulos2 WHERE id = '". $rotulo. "'";
 
             $sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, estaciones2.`nombre` AS estacion FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido` = pedidos2.`idP` INNER JOIN estaciones2 ON rotulos2.`estacionId2` = estaciones2.`id` WHERE rotulos2.`id` = '" . $rotulo. "'";
-
+//echo $sql;
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){
@@ -107,6 +107,49 @@
                 <td><?php echo $mostrar['vuelta7'] ?></td>
                 <td><?php echo $mostrar['vuelta8'] ?></td>            
                 <td><?php echo $mostrar['total'] ?></td>
+                
+                
+            </tr>
+            <?php
+            }
+            ?>
+        </table>
+
+        <br>
+        
+        <h1>Datos Básicos</h1>
+        
+         <table border="1">
+            <tr>
+                <td>ID</td>
+                
+                <td>referencia</td>
+                
+                <td>color</td>
+                
+                
+                
+            </tr>
+            
+            <?php
+            //$sql="SELECT * from Rotulo";
+            
+            //$sql= "SELECT * from rotulos2 WHERE id = '". $rotulo. "'";
+
+            $sqlBasico= "SELECT rotulos2.*, referencias2.`nombre` AS ref,  colores2.`nombre` AS color FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id`  INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id`  WHERE rotulos2.`id` = '" . $rotulo. "'";
+//echo $sql;
+            $resultBasico=mysqli_query($conexion,$sqlBasico);
+            
+            while($mostrarBasico=mysqli_fetch_array($resultBasico)){
+            ?>
+
+            <tr>
+                <td><?php echo $mostrarBasico['id'] ?></td>
+                
+                <td><?php echo $mostrarBasico['ref'] ?></td>
+                
+                <td><?php echo $mostrarBasico['color'] ?></td>
+               
                 
                 
             </tr>

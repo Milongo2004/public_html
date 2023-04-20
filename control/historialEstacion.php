@@ -19,7 +19,9 @@
     $lote = isset( $_POST['lote'] ) ? $_POST['lote'] : '';
     $fechaDesde = isset( $_POST['fechaDesde'] ) ? $_POST['fechaDesde'] : '';
     $fechaHasta = isset( $_POST['fechaHasta'] ) ? $_POST['fechaHasta'] : '';
-    
+    $capasDato = isset( $_POST['capas'] ) ? $_POST['capas'] : '';
+    $fechaProduccionDesde = isset( $_POST['fechaProduccionDesde'] ) ? $_POST['fechaProduccionDesde'] : '';
+    $fechaProduccionHasta = isset( $_POST['fechaProduccionHasta'] ) ? $_POST['fechaProduccionHasta'] : '';
     
     
     
@@ -97,17 +99,27 @@ $resultLot=mysqli_query($conexion,$sqlLot);
         
             $filtros[]= "rotulos2.`loteId` = '$lote'";
     }
+    
+      if ($capasDato != ''){
+        
+            $filtros[]= "referencias2.capas = '$capasDato'";
+    }
+    
     if ($fechaDesde != '' && $fechaHasta != ''){
             $filtros[]= "rotuloestaciones2.`ingreso` BETWEEN '$fechaDesde%' AND '$fechaHasta%'";
     }
     
     
+     if ($fechaProduccionDesde != '' && $fechaProduccionHasta != ''){
+            $filtros[]= "rotulos2.`fecha` BETWEEN '$fechaProduccionDesde%' AND '$fechaProduccionHasta%'";
+    }
+    
    
     
     
-    $consultaFiltros='SELECT rotuloestaciones2.*, rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido`= pedidos2.`idP` WHERE ';
+    $consultaFiltros='SELECT rotuloestaciones2.*, rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido, referencias2.capas AS capas FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido`= pedidos2.`idP` WHERE ';
     
-    $consultaSuma = 'select sum(total) as totales FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` WHERE ';
+    $consultaSuma = 'select sum(total) as totales FROM rotuloestaciones2 INNER JOIN rotulos2 ON rotuloestaciones2.`rotuloId2`= rotulos2.`id` INNER JOIN referencias2 ON rotulos2.referenciaId = referencias2.id WHERE ';
 
 
 
@@ -180,13 +192,29 @@ $resultLot=mysqli_query($conexion,$sqlLot);
                     <label for="lote" class="form-label">Lote</label>
                     <input type="text" size="15" class="form-control "  id="lote" name="lote" style="width: 100px">
                     
+                    <label for="uppLow" class="form-label">Capas</label>
+                    <select class="form-select" autofocus id="capas" name="capas" aria-label="Default select example">
+                        <option selected></option>
+                        <option value="2C">2C</option>
+                        <option value="4C">4C</option>
+                    
+                    </select>
+                    
                     <br></br>
                     
-                    <label for="fechaDesde" class="form-label">Desde</label>
+                    <label for="fechaDesde" class="form-label">Ingresado Desde</label>
                     <input type="Date" class="form-control" id="fechaDesde" name="fechaDesde" placeholder="Ingresa la fecha" >
                     
                     <label for="fechaHasta" class="form-label">Hasta</label>
                     <input type="Date" class="form-control" id="fechaHasta" name="fechaHasta" placeholder="Ingresa la fecha" >
+                    
+                    <br></br>
+                    
+                    <label for="fechaProduccionDesde" class="form-label">Programado Desde</label>
+                    <input type="Date" class="form-control" id="fechaProduccionDesde" name="fechaProduccionDesde" placeholder="Ingresa la fecha" >
+                    
+                    <label for="fechaProduccionHasta" class="form-label">Hasta</label>
+                    <input type="Date" class="form-control" id="fechaProduccionHasta" name="fechaProduccionHasta" placeholder="Ingresa la fecha" >
                     
                     <input name="estacion" type="hidden" value=" <?php
                         echo $estacion;  
@@ -230,10 +258,32 @@ $resultLot=mysqli_query($conexion,$sqlLot);
             
             $result=mysqli_query($conexion,$sql);
             
+ 
+            
             echo "Movimientos de producción por la estación de $estacionActual";
             if ($fechaDesde != '' && $fechaHasta != ''){
             echo " entre $fechaDesde y $fechaHasta";
             }
+            
+            if ($fechaProduccionDesde != '' && $fechaProduccionHasta != ''){
+            echo "- programada entre $fechaProduccionDesde y $fechaProduccionHasta";
+            }
+            
+                        if ($referencia != ''){
+       echo "-Referencia = $referencia, ";
+    }
+    if ($color != ''){
+         echo "-Color = $color, ";
+    }
+ 
+    if ($capasDato != ''){
+        
+             echo "-Capas = $capasDato, ";
+    }
+    if ($codigoP != ''){
+         echo "-Pedido = $pedido, ";
+    }
+           
             
             while($mostrar=mysqli_fetch_array($result)){
             ?>

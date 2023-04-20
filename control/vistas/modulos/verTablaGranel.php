@@ -241,10 +241,11 @@
                 <td>Pedido</td>
                 <td>GramosGranel</td>
                 <td>JuegosGranel</td>
-                <td>JuegosProducidos</td>
-                <td>Diferencia</td>
+                <!--<td>JuegosProducidos</td>
+                <td>Diferencia</td>-->
                 <td>FechaProducción</td>
                 <td>fechaIngreso</td>
+                <td>Acción</td>
                 
                 <?php
                  //if($referenciaIdPedido!=''){
@@ -308,18 +309,22 @@
                 echo "";
                 }
                 ?></td>
+                
+                <!--
                 <td><?php 
                 $sumaProducidos=$sumaProducidos+$mostrar['producidos'];
-                echo $mostrar['producidos'] ?></td>
+                //echo $mostrar['producidos'] ?></td>
                 <td><?php 
-                $diferencia=$mostrar['producidos']-(round($mostrar['gramos']/$gramosJuego[$mostrar['referencia']],1));
+                //$diferencia=$mostrar['producidos']-(round($mostrar['gramos']/$gramosJuego[$mostrar['referencia']],1));
                 $diferenciaTotal=$diferenciaTotal+$diferencia;
-                echo round($diferencia,1) ?></td>
+                //echo round($diferencia,1) ?></td>
+                
+                -->
                 <td><?php echo $mostrar['fechaProduccion'] ?></td>
                 <td><?php echo $mostrar['fechaHora'] ?></td>
                
- <!--<td><a href="eliminar_lotes.php?id=<?php //echo $mostrar['id'];?>">Eliminar</a></td>
- <td><a href="editar_lotes.php?id=<?php //echo $mostrar['id'];?>">Editar</a></td>            -->
+ <td><a href="asignarGranelAPedidio.php?idP=<?php echo $pedidoIdPedido ?>&rotuloId=<?php echo $mostrar['rotuloId'];?>&referenciaId=<?php echo $mostrar['referencia'] ?>&colorId=<?php echo $mostrar['color'] ?>">Asignar a <?php echo $arregloPedidos[$pedidoIdPedido];?></a></td>
+ <!--<td><a href="editar_lotes.php?id=<?php //echo $mostrar['id'];?>">Editar</a></td>            -->
 </tr>
 <?php
 }
@@ -359,9 +364,11 @@ $.ajax({
  <br></br>
  
   <?php
+  /*
                  if($referenciaIdPedido!=''){
                  echo " Aquí irá un botón que asignará el rótulo al pedido con ID: $pedidoIdPedido";
                  }
+                 */
                 ?>
                 
                 <br></br>
@@ -374,8 +381,10 @@ $.ajax({
                 <td>TOTAL REGISTROS</td>
                 <td>GRAMOS GRANEL</td>
                 <td>JUEGOS GRANEL</td>
+                <!--
                 <td>JUEGOS PRODUCIDOS</td>
                 <td>DIFERENCIA TOTAL</td>
+                -->
                 
             </tr>
             
@@ -394,9 +403,10 @@ $.ajax({
                 <td><?php echo $mostrarSuma['totalRegistros'] ?></td>
                 <td><?php echo $mostrarSuma['totalGramos'] ?></td>
                 <td><?php echo $sumaJuegos ?></td>
-                <td><?php echo $sumaProducidos ?></td>
-                <td><?php echo $diferenciaTotal ?></td>
-               
+                <!--
+                <td><?php //echo $sumaProducidos ?></td>
+                <td><?php //echo $diferenciaTotal ?></td>
+                -->
                 
             </tr>
             <?php
