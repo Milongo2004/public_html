@@ -73,9 +73,8 @@ $metaGeneral=6020;
             <?php
             
            
-            
             $sql="SELECT emplaquetadores.*, (SELECT SUM(seguimientoEmplaquetado.puntos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS puntosTotales, (SELECT SUM(seguimientoEmplaquetado.juegos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS juegosTotales FROM emplaquetadores INNER JOIN seguimientoEmplaquetado ON emplaquetadores.id = seguimientoEmplaquetado.emplaquetador where categoria='INTERNO' AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%' group by emplaquetadores.nombre order by juegosTotales desc ";
-            //echo $sql;
+            echo $sql;
             $result=mysqli_query($conexion,$sql); 
             
             while($mostrar=mysqli_fetch_array($result)){
@@ -150,7 +149,7 @@ $.ajax({
             //echo $sqlSuma;
             $resultSuma=mysqli_query($conexion,$sqlSuma);
             
-            //echo $sqlSuma;
+            echo $sqlSuma;
             //echo var_dump($filtros);
             
             while($mostrarSuma=mysqli_fetch_array($resultSuma)){

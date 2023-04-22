@@ -15,6 +15,7 @@
 <head>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/tableroTerminacion1.php'">Tablero</button>
+     <button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoEmplaquetado.php'">Consolidado</button>
     <br></br>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
