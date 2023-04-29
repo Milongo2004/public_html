@@ -48,6 +48,9 @@ while($mostrarR=mysqli_fetch_array($resultR)){
                     $juegosCaja=12;
                     
                 }
+                else{
+                    $juegosCaja=20;//pendiente de verificar. 
+                }
                 
 $juegos=$cajas*$juegosCaja;
 

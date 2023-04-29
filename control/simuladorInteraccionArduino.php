@@ -107,84 +107,16 @@ $resultLot=mysqli_query($conexion,$sqlLot);
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>PorEstacion</title>
+	<title>Simulador</title>
 </head>
 <body>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/historialEstacion.php?estaciones=<?php echo $estacion ?>&Buscar=Enviar'">Historial Estación</button>
+    
     
     <center>
-    <?php
-            
+   
 
-        $sql2= "SELECT nombre from estaciones2 WHERE id ='". $estacion. "'";
-
-        $result2=mysqli_query($conexion,$sql2);
-        
-        //a continuación presento botones según la estación.
-        
-        switch ($estacion){
-            case 7:
-                ?>
-                <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Ver tabla Pedidos</button>
-                <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaListasGeneral.php'">Ver Lista de Empaque Global</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_pedidos.php'">Nuevo Pedido</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_clientes.php'">Nuevo Cliente</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/listaFiltro.php'">Lista de empaque</button>
-    <button onclick="location.href='https://trazabilidadmasterdent.online/control/PDL/inventario_Pdl.php'">Inventario PDL</button>
-    
-    <br>
-
-    </br>
-    
-    <?php
-                break;
-        
-
-case 1:
-    
-            ?>
-            
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaTiempoPrensas.php'">Tiempos Prensas</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPrensadas.php'">Cuenta Prensadas</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_temperaturaPrensas.php'">Temperatura Planchas</button>
-   <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/nuevaProgramacion.php'">Programación de Producción</button>-->
-   <button onclick="location.href='https://trazabilidadmasterdent.online/control/progProduccion/progProduccion1.php'">Programación</button>
-   <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/interaccion_arduino.php?proceso_php=9&rotulo_php=700'">simulaciónTags</button>-->
-    
-    <br>
-
-    </br>
-    
-    <?php
-                break;
-                case 2:
-    break;
-        }
-            ?>
-
-        <h1>Producción actualmente en 
-
-        
-                 <?php
-
-                while($mostrar2=mysqli_fetch_array($result2)){
-                    $estacionActual=$mostrar2['nombre'];
-            ?>
-
-            
-                
-                <td><?php echo $estacionActual ?></td>
-                
-                
-                
-            
-            <?php
-            }
-        
-            ?>
-            
-            </h1>
+        <h2>Datos que envía el Módulo electrónico al programa</h2>
             
             <br>
             
@@ -196,25 +128,25 @@ case 1:
                 
                     <label for="proceso_php" class="form-label">proceso_php</label>
                     <input type="text" size="15" class="form-control "  id="proceso_php" name="proceso_php">
-                    
+                    <br></br>
                     <label for="cuentaLecturas_php" class="form-label">cuentaLecturas_php</label>
                     <input type="text" size="15" class="form-control "  id="cuentaLecturas_php" name="cuentaLecturas_php">
-         
+                    <br></br>
                     <label for="hum_php" class="form-label">estación/hum_php</label>
                     <input type="text" size="15" class="form-control "  id="hum_php" name="hum_php">
-                    
+                    <br></br>
                     <label for="temp_php" class="form-label">juegos/gramos/temp_php</label>
                     <input type="text" size="15" class="form-control "  id="temp_php" name="temp_php">
-                    
+                    <br></br>
                     <label for="pre_php" class="form-label">id_molde/juegosMalos_pre_php</label>
                     <input type="text" size="15" class="form-control "  id="pre_php" name="pre_php">
-                    
+                    <br></br>
                     <label for="dist_php" class="form-label">cod_molde/idEmplaquetador/dist_php</label>
                     <input type="text" size="15" class="form-control "  id="dist_php" name="dist_php">
-                    
+                    <br></br>
                     <label for="rotulo_php" class="form-label">rotulo_php</label>
                     <input type="text" size="15" class="form-control "  id="rotulo_php" name="rotulo_php">
-                    
+                    <br></br>
                     
                    
                     

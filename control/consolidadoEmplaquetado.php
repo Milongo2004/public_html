@@ -185,7 +185,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 <html lang="en">
 <head>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Atrás</button>
+     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formularioEmplaquetado2.php'">Atrás</button>
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

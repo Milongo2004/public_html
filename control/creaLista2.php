@@ -62,8 +62,6 @@ $result1=mysqli_query($conexion,$sql1);
                     $linea=$mostrar1["NombreLinea"];
             }
  
-
-                
                 //obtengo el dato de los juegos según la línea y el atributo antPos.
                 
                 if ($linea==$lineaPedido || $lineaPedido=="NACIONAL"){
@@ -108,9 +106,27 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
     
 }
 
+
+   //Establezco la escepción de las referencias PL3 y H45.
+		   
+		   if($ref=='PL3'){
+		       $ref='PU3';
+		   }
+		    if($ref=='PL3'){
+		       $ref='PU3';
+		   }
+		    if($ref=='J21'){
+		       $ref='21J';
+		   }
+		    if($ref=='H45'){
+		       $ref='45H';
+		   }
+
 	    //preparo el supInf para concatenar con la referencia
 		   $supInf=substr($supInf,0,1);
 		   $ref=$ref."-".$supInf;
+		   
+		
 		   
 		    //consulto la referencia
 		    $sqlRefId="SELECT id FROM `referencias2` WHERE nombre='".$ref."'";

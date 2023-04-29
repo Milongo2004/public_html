@@ -28,6 +28,23 @@ $datoJuegos="";
             }
             //echo "/juegos = ". $datoJuegos;
             
+            
+            //Establezco la escepción de las referencias PL3 y H45.
+		   
+		   if($datoRef=='PL3'){
+		       $datoRef='PU3';
+		   }
+		    if($datoRef=='PL3'){
+		       $datoRef='PU3';
+		   }
+		    if($datoRef=='J21'){
+		       $datoRef='21J';
+		   }
+		    if($datoRef=='H45'){
+		       $datoRef='45H';
+		   }
+            
+            
             //preparo el supInf para concatenar con la referencia
 		   $datoSupInf=substr($datoSupInf,0,1);
 		   $datoRef=$datoRef."-".$datoSupInf;
