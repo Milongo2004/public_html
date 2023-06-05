@@ -37,7 +37,7 @@
     
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
     <br>
-    
+    <center>
     <table border="1">
         <tr>
             <td ROWSPAN="3"> MASTERDENT</td>
@@ -60,7 +60,7 @@
     
         <table border="1">
             <tr>
-                <td>id</td>
+                <!--<td>id</td>-->
                 <td>Prensa</td>
                 <td>Zona</td>
                 <td>Temperatura Indicador</td>
@@ -73,13 +73,13 @@
             </tr>
             
             <?php
-            $sql="SELECT * FROM temperaturaPrensas ORDER BY id DESC ";
+            $sql="SELECT * FROM temperaturaPrensas ORDER BY fechaCreacion DESC ";
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){
             ?>
             <tr>
-                <td><?php echo $mostrar['id'] ?></td>
+                <!--<td><?php //echo $mostrar['id'] ?></td>-->
                 <td><?php echo $mostrar['prensa'] ?></td>
                 <td><?php echo $mostrar['zona'] ?></td>
                 <td><?php echo $mostrar['tempIndicador'] ?></td>
@@ -124,6 +124,6 @@
     </script>
 
 <br></br>
-    
+    </center>
 </body>
 </html>

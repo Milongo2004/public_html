@@ -47,6 +47,7 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
     	<button onclick="location.href='https://trazabilidadmasterdent.online/control/'">Inicio</button>
     	<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php'">Seleccionar otro pedido</button>
     	<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=inventario&Crear=Enviar'">Inventarios</button>
+    	<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=asignacion&Crear=Enviar'">Asignaciones</button>
 			
 			
 			<html lang="en">
@@ -161,6 +162,122 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
                 <!--<h2>Registro de Ítems</h2>-->
                 <?php
                 presentar_formulario_segun_metodo($metodo,$caja,$pedido, $cajaMayor);
+                
+                if ($metodo=="7" || $metodo=="8"){
+                    
+                    ?>
+                    
+    
+        <table border="2">
+            <tr>
+                <!--<td>id</td>-->
+               
+                
+                <td>Referencia</td>
+                <td>Color</td>
+                <td>Pedidos</td>
+                <td>Granel</td>
+                <td>PorProgramar</td>
+                <td>Programados</td>
+                <td>Producidos</td>
+                <td>Pulidos</td>
+                <!--<td>EnSeparación</td>-->
+                <td>Separados</td>
+                <td>EnEmplaquetado</td>
+                <td>Emplaquetados</td>
+                <td>Revisión 1</td>
+                <td>Asignados</td>
+                <td>Empacados</td>
+                <td>Historial</td>
+                <!--<td>VerGranel</td>-->
+               
+                <!--<td>acción</td>
+                <td>acción</td>-->
+                
+                
+            </tr>
+            
+            <?php
+            //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
+            $sql= "SELECT pedidoDetalles.*, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.pedidoId='". $pedido. "' AND pedidoDetalles.revision2 >0 AND pedidoDetalles.revision2 is NOT NULL GROUP BY colorId, referenciaId ORDER BY pedidoDetalles.fechaCreacion DESC";
+            //echo $sql;
+            $result=mysqli_query($conexion,$sql);
+            
+            while($mostrar=mysqli_fetch_array($result)){
+            ?>
+            <tr>
+                <!--<td><?php //echo $mostrar['id'] ?></td>-->
+                
+                
+                
+                
+                <td><?php echo $mostrar['referencia'] ?></td>
+                <td><?php echo $mostrar['Color'] ?></td>
+                <td><?php echo $mostrar["totalPedidos"] ?></td>
+                <td><?php echo $mostrar["totalGranel"]?></td>
+                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalGranel"]+$mostrar["totalProgramados"])?></td>
+                
+                <td bgcolor= "<?php if(($mostrar["totalGranel"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalProgramados"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalProducidos"]>$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalProducidos"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalPulidos"]>$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalPulidos"] ?></td>
+                
+                <!--<td bgcolor= "<?php //if($mostrar["totalEnSeparacion"]>$mostrar["totalPedidos"]){
+                //echo "B6FF8A";
+                //}?>"><?php //echo $mostrar["totalEnSeparacion"] ?></td>-->
+                
+                <td bgcolor= "<?php if($mostrar["totalSeparados"]>$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalSeparados"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalEnEmplaquetado"]>$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalEnEmplaquetado"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalEmplaquetados"]>=$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalEmplaquetados"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalRevision1"]>=$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalRevision1"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalRevision2"]>=$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }?>"><?php echo $mostrar["totalRevision2"] ?></td>
+                
+                <td bgcolor= "<?php 
+                
+                if($mostrar["totalEmpacados"]==$mostrar["totalPedidos"]){
+                echo "B6FF8A";
+                }
+                else if(($mostrar["totalEmpacados"]>$mostrar["totalPedidos"]) || ($mostrar["totalEmpacados"]-$mostrar["totalPedidos"]==$mostrar["totalEmpacados"])){
+                    echo  "FB413B";
+                }
+                ?>"><?php echo $mostrar["totalEmpacados"] ?></td>
+                <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >Historial</a></td>
+                <!--
+                <td><a href="../control/vistas/modulos/verTablaGranel.php?idP=<?php //echo $mostrar['pedidoId']; ?>&referenciaId=<?php //echo $mostrar['referenciaId'] ?>&colorId=<?php //echo $mostrar['colorId'] ?>&Crear=Enviar'" >verGranel</a></td>-->
+                
+                <!--<td><a    href="editar_detellePedido.php?id=<?php //echo $mostrar['id'] ?>&turno=<?php //echo $turno?>&prensada=<?php //echo $prensada?>&fecha=<?php //echo $fecha?> ">Editar</a></td>
+                <td><a href="#" data-href="eliminar_detallePedido.php?id=<?php //echo $mostrar['id']; ?>" data-rg="<?= $mostrar['id'] ?>" id="delRg" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">Eliminar</a></td>-->
+            </tr>
+            <?php
+            }
+            ?>
+        </table>
+        <br></br>
+                    
+                    <?php
+                }
+                else{
                 ?>
         <center><h3>Registros</h3></center>
         <table ALIGN="center" border="1">
@@ -179,9 +296,9 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
             </tr>
             
             <?php
-            $sql="select *  FROM listaEmpaque WHERE caja = '". $caja. "'AND pedidoId = '" .$pedido. "' ORDER BY id DESC LIMIT 1000;";
+            $sql="select *  FROM listaEmpaque WHERE caja = '". $caja. "'AND pedidoId = '" .$pedido. "' ORDER BY id DESC LIMIT 100;";
             $result=mysqli_query($conexion,$sql);
-            
+            //echo $sql;
             while($mostrar=mysqli_fetch_array($result)){
             ?>
             <tr>
@@ -243,6 +360,7 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
    
         
         <?php
+                }
         
         function presentar_formulario_segun_metodo($metodo,$caja,$pedido, $cajaMayor){
                 $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
@@ -599,9 +717,30 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
             if ($metodo=="5"){
                 
              
-    presentar_tabla_segun_caja($caja, $pedido, $metodo);
-    
+    //presentar_tabla_segun_caja($caja, $pedido, $metodo);
+    ?>
+       <div class="container mt-5">
+        <h1>Ingreso a Almacén</h1>
+        <h2>Pedido:
+        <?php
+        $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
+       $sql2= "SELECT codigoP from pedidos2 WHERE idP ='". $pedido. "'";
+        $result2=mysqli_query($conexion,$sql2);
+                while($mostrar2=mysqli_fetch_array($result2)){
             ?>
+                
+                <td><?php echo $mostrar2['codigoP'] ."        ";
+                $codigoPedido=$mostrar2['codigoP'];?>
+                
+                </td>
+                </h2>
+                
+            
+            <?php
+            }
+            ?>
+    
+        
             <h2>Ingreso inventario uno a uno </h2>
         
        
@@ -654,9 +793,32 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
         <?php
             }
             
+            //*****************fin del método 5
+            
             else if($metodo=="6"){
-                presentar_tabla_segun_caja($caja, $pedido, $metodo);
+                //presentar_tabla_segun_caja($caja, $pedido, $metodo);
+                   ?>
+                   <div class="container mt-5">
+        <h1>Ingreso a Almacén</h1>
+        <h2>Pedido:
+        <?php
+        $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
+       $sql2= "SELECT codigoP from pedidos2 WHERE idP ='". $pedido. "'";
+        $result2=mysqli_query($conexion,$sql2);
+                while($mostrar2=mysqli_fetch_array($result2)){
             ?>
+                
+                <td><?php echo $mostrar2['codigoP'] ."        ";
+                $codigoPedido=$mostrar2['codigoP'];
+                
+                ?></td>
+                </h2>
+                
+            
+            <?php
+            }
+            ?>
+            
                 <h2>Ingreso grupal</h2>
                
          <br>
@@ -710,7 +872,169 @@ $resultCaja=mysqli_query($conexion,$sqlCaja);
  <?php
             }
             
+            
+            
             //fin del método 6 ///////////////////************************************************************
+            
+             if ($metodo=="7"){
+                
+             
+    //presentar_tabla_segun_caja($caja, $pedido, $metodo);
+    ?>
+       <div class="container mt-5">
+        <h1>Asignación</h1>
+        <h2>Pedido:
+        <?php
+        $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
+       $sql2= "SELECT codigoP from pedidos2 WHERE idP ='". $pedido. "'";
+        $result2=mysqli_query($conexion,$sql2);
+                while($mostrar2=mysqli_fetch_array($result2)){
+            ?>
+                
+                <td><?php echo $mostrar2['codigoP'] ."        ";
+                $codigoPedido=$mostrar2['codigoP'];?>
+                
+                </td>
+                </h2>
+                
+            
+            <?php
+            }
+            ?>
+    
+        
+            <h2>Asignación uno a uno </h2>
+        
+       
+         <br>
+
+   
+        <div class="row">
+            <form action="creaLista2.php" method="get" name="ingresoLista">
+
+
+
+                <div class="mb-3">
+                    <label for="codigoQR" class="form-label">Código QR</label>
+                    <input type="text" class="form-control" id="codigoQR" name="codigoQR" autofocus placeholder="Digita código QR">
+                    <input name="cajas" type="hidden" value="null">
+                    <input name="pedido" type="hidden" value=" <?php
+                        echo $pedido;  
+                    ?>">
+                    <input name="caja" type="hidden" value=" <?php
+                        echo $caja; 
+                    ?>">
+                    <input name="metodo" type="hidden" value=" <?php
+                        echo $metodo; 
+                    ?>">
+                   
+                </div>        
+                <br>
+
+   
+                
+
+                <input type="submit" name="Crear" >
+                
+            </form>
+            
+     
+
+
+
+
+            
+        </div>
+        
+    </div>
+    
+    <br>    
+
+    
+        
+        <?php
+            }
+            
+            ///*******************Fin del método 7
+            
+             else if($metodo=="8"){
+                //presentar_tabla_segun_caja($caja, $pedido, $metodo);
+                   ?>
+                   <div class="container mt-5">
+        <h1>Asignación</h1>
+        <h2>Pedido:
+        <?php
+        $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
+       $sql2= "SELECT codigoP from pedidos2 WHERE idP ='". $pedido. "'";
+        $result2=mysqli_query($conexion,$sql2);
+                while($mostrar2=mysqli_fetch_array($result2)){
+            ?>
+                
+                <td><?php echo $mostrar2['codigoP'] ."        ";
+                $codigoPedido=$mostrar2['codigoP'];
+                
+                ?></td>
+                </h2>
+                
+            
+            <?php
+            }
+            ?>
+            
+                <h2>Ingreso grupal</h2>
+               
+         <br>
+
+   
+        <div class="row">
+            <form action="creaLista2.php" method="get" name="ingresoLista">
+
+       
+
+    
+                
+ <div class="mb-3">
+                    <label for="cajas" class="form-label">Número de cajas</label>
+                    <input type="text" class="form-control" id="cajas" name="cajas" autofocus placeholder="Digita cantidad cajas">
+                </div>
+ <br>
+
+  
+                <div class="mb-3">
+                    <label for="codigoQR" class="form-label">Código QR</label>
+                    <input type="text" class="form-control" id="codigoQR" name="codigoQR" placeholder="Digita numero de lote">
+                    <input name="pedido" type="hidden" value=" <?php
+                        echo $pedido;
+                    ?>">
+                    <input name="caja" type="hidden" value=" <?php
+                        echo $caja; 
+                    ?>">
+                    <input name="metodo" type="hidden" value=" <?php
+                        echo $metodo; 
+                    ?>">
+                    
+                </div>        
+                <br>
+
+   
+                
+                <input type="submit" name="Crear" >
+            </form>
+        </div>
+        
+    </div>
+    
+    <br>    
+
+        
+        
+
+
+
+ <?php
+            }
+            
+            //**************fin del método 8
         }
             
             function presentar_tabla_segun_caja($numCaja, $numPedido, $metodo){

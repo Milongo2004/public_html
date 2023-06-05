@@ -116,6 +116,19 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             
     ////////////////
     
+    $consultaNACIONAL = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '682'";
+    $resultNACIONAL=mysqli_query($conexion, $consultaNACIONAL);
+            
+            //echo $consultaZENITH;
+            //echo var_dump($filtros);
+            
+            while($mostrarNACIONAL=mysqli_fetch_array($resultZENITH)){
+                $sumaNACIONAL=$mostrarNACIONAL['total'];
+                $totalInventario=$totalInventario+$mostrarNACIONAL['total'];
+            }
+            
+    ////////////////
+    
   echo $totalInventario
 
 ?>

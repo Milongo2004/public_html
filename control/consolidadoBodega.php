@@ -23,7 +23,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
     
     $consultaSuma = 'select sum(juegos) as total FROM listaEmpaque WHERE ';
     
-    $consultaSTARPLUS = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '643'";
+    $consultaSTARPLUS = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '107%' AND pedidoId = '831'";
     $resultSTARPLUS=mysqli_query($conexion, $consultaSTARPLUS);
             
             //echo $consultaSTARPLUS;
@@ -36,7 +36,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             
     ////////////////
     
-    $consultaRESISTAL = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '651'";
+    $consultaRESISTAL = $consultaFiltros." ".implode(" AND ",$filtros) ." codigoQR LIKE '10%' AND codigoQR  NOT LIKE '107%' AND pedidoId = '831'";
     $resultRESISTAL=mysqli_query($conexion, $consultaRESISTAL);
             
             //echo $consultaRESISTAL;
@@ -49,7 +49,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             
     ////////////
     
-    $consultaUHLERPLUS = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '653'";
+    $consultaUHLERPLUS = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '9%' AND pedidoId = '831'";
     $resultUHLERPLUS=mysqli_query($conexion, $consultaUHLERPLUS);
             
             //echo $consultaUHLERPLUS;
@@ -61,7 +61,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             }
             
     /////////////
-    $consultaREVEAL = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '652'";
+    $consultaREVEAL = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '8%' AND pedidoId = '831'";
     $resultREVEAL=mysqli_query($conexion, $consultaREVEAL);
             
             //echo $consultaREVEAL;
@@ -74,7 +74,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             
     /////////////////////
     
-    $consultaSTARDENT = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '641'";
+    $consultaSTARDENT = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '7%' AND pedidoId = '831'";
     $resultSTARDENT=mysqli_query($conexion, $consultaSTARDENT);
             
             //echo $consultaSTARDENT;
@@ -85,7 +85,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
                 $totalInventario=$totalInventario+$mostrarSTARDENT['total'];
             }
             
-    $consultaSTARVIT = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '642'";
+    $consultaSTARVIT = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '5%' AND pedidoId = '831'";
     $resultSTARVIT=mysqli_query($conexion, $consultaSTARVIT);
             
             //echo $consultaSTARVIT;
@@ -98,7 +98,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
             
     ///////////////////
     
-    $consultaZENITH = $consultaFiltros." ".implode(" AND ",$filtros) ." AND pedidoId = '654'";
+    $consultaZENITH = $consultaFiltros." ".implode(" AND ",$filtros) ." AND codigoQR LIKE '6%' AND pedidoId = '831'";
     $resultZENITH=mysqli_query($conexion, $consultaZENITH);
             
             //echo $consultaZENITH;
@@ -120,7 +120,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TerminadoConsolidado</title>
+    <title>BodegaConsolidado</title>
 </head>
 <body>
     
@@ -128,12 +128,12 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
 
 <center>
     <!--<h3><BASEFONT SIZE="20"><?php //echo $fechaActual = date ( 'Y-m-d' );?></h3>-->
-    <h1>Producto Terminado Consolidado</h1>
+    <h1>Inventario Bodega Consolidado</h1>
     
     
     
 <div class="row">
-            <form action="consolidadoInventario.php" method="POST">
+            <form action="consolidadoBodega.php" method="POST">
             
             <div class="mb-3">
            
@@ -158,7 +158,7 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
     <br></br>
     <?php
     if($fechaDesde != ''){
-    echo "Ingreso a inventario desde $fechaDesde hasta $fechaHasta";
+    echo "Ingreso a Bodega desde $fechaDesde hasta $fechaHasta";
     }
     ?>
     

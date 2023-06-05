@@ -1,6 +1,25 @@
 <?php
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
+  
+$color = isset( $_POST['color'] ) ? $_POST['color'] : '';
+$lote = isset( $_POST['lote'] ) ? $_POST['lote'] : '';
 
+$filtros = array();
+
+ if ($color != ''){
+            $filtros[]= "colores2.`nombre` LIKE '%$color%'";
+    }
+    if ($lote != ''){
+            $filtros[]= "nombreL = '$lote'";
+    }
+    
+     
+    if($filtros[0]=='' || is_null($filtros)){
+        $filtros[0]="1 ";
+    }
+
+
+ $consultaFiltros='SELECT lotes2.* , colores2.`nombre` AS color FROM lotes2 INNER JOIN colores2 ON lotes2.`colorId2`= colores2.`id` WHERE ';
 
 
 ?>
@@ -50,6 +69,26 @@
     <h1>Lotes</h1>
     
     <br>
+    
+    <div class="row">
+            <form action="verTablaLotes.php" method="POST">
+            
+          
+                    <label for="color" class="form-label">Color</label>
+                    <input type="text" class="form-control "  id="color" name="color" size="10">
+                    
+                    <label for="lote" class="form-label">Lote</label>
+                    <input type="text" class="form-control "  id="lote" name="lote" size="10">
+                    
+                   
+
+                
+                <input type="submit" name="Empacar" >
+            </form>
+        </div>
+        
+    </div>
+                    <br>
 
     
         <table border="1">
@@ -58,16 +97,24 @@
                 <td>Número</td>
                 <td>color</td>
                 <td>fechaCreacion</td>
-                <td>fechaActualizacion</td>
-                <td>estado</td>
+                <!--<td>fechaActualizacion</td>
+                <td>estado</td>-->
                 <td>Acción</td>
                 <td>Acción</td>
                 
             </tr>
             
             <?php
-            $sql="SELECT lotes2.* , colores2.`nombre` AS color FROM lotes2 INNER JOIN colores2 ON lotes2.`colorId2`= colores2.`id` ORDER BY id DESC ";
             
+            if ($color != ''){
+            echo "-COLOR = $color";
+    }
+    if ($lote != ''){
+            echo "-LOTE = '$lote'";
+    }
+    
+            $sql= $consultaFiltros." ".implode(" AND ",$filtros) ." ORDER BY id DESC ";
+            //echo $sql;
             $result=mysqli_query($conexion,$sql); 
             
             while($mostrar=mysqli_fetch_array($result)){
@@ -77,8 +124,8 @@
                 <td><?php echo $mostrar['nombreL'] ?></td>
                 <td><?php echo $mostrar['color'] ?></td>
                 <td><?php echo $mostrar['fechaCreacion'] ?></td>
-                <td><?php echo $mostrar['fechaActualizacion'] ?></td>
-                <td><?php echo $mostrar['estado'] ?></td>
+                <!--<td><?php //echo $mostrar['fechaActualizacion'] ?></td>
+                <td><?php //echo $mostrar['estado'] ?></td>-->
  <td><a href="eliminar_lotes.php?id=<?php echo $mostrar['id'];?>">Eliminar</a></td>
  <td><a href="editar_lotes.php?id=<?php echo $mostrar['id'];?>">Editar</a></td>            
 </tr>

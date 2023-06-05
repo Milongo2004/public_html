@@ -184,7 +184,7 @@ while($mostrar34=mysqli_fetch_array($result34)){
                     $refRotulo=$mostrar34['referenciaId']; 
 }
 
-//pregunto si la referencia coinside
+//pregunto si la referencia coincide
 
 if($refMolde==$refRotulo){
 

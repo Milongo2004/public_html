@@ -1,12 +1,28 @@
 <?php
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
- $ActualizarDespuesDe = 60;
+ $ActualizarDespuesDe = 15;
  
     
     // Envíe un encabezado Refresh al navegador preferido.
    header('Refresh: '.$ActualizarDespuesDe);
+   
+   function minutosTranscurridos($fecha_i,$fecha_f)
+{
+$minutos = (strtotime($fecha_i)-(strtotime($fecha_f)-(3600*5)))/60;
+$minutos = abs($minutos); $minutos = floor($minutos);
+return $minutos;
+}
 
 $meta=860;
+$estandar=0.698;//minutos/juego
+$minutosProductivos;
+$horaInicioTurno=" 06:00:00";
+
+$fechaInicioTurno=date('Y-m-d');
+$fechaHoraInicioTurno=$fechaInicioTurno.$horaInicioTurno;
+$fechaHoraActual=date('Y-m-d H:i:s');
+
+$minutosTranscurridos= minutosTranscurridos($fechaHoraInicioTurno,$fechaHoraActual);
 $puntos=0;//asigno un valor en puntos a los juegos especialmente a los de starplus para igualar las cargas de trabajo. 
 $metaStarPlus=720;
 $metaGeneral=6020;
@@ -66,6 +82,7 @@ $metaGeneral=6020;
                 <td><H2>NOMBRE</H2></td>
                 <td><H2>EMPLAQUETADOS</H2></td>
                 <td><H2>CUMPLIMIENTO (%)</H2></td>
+                <td><H2>EFICIENCIA (%)</H2></td>
                
                 
             </tr>
@@ -73,9 +90,7 @@ $metaGeneral=6020;
             <?php
             
            
-            
-            //$sql="SELECT emplaquetadores.*, (SELECT SUM(seguimientoEmplaquetado.puntos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS puntosTotales, (SELECT SUM(seguimientoEmplaquetado.juegos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS juegosTotales FROM emplaquetadores INNER JOIN seguimientoEmplaquetado ON emplaquetadores.id = seguimientoEmplaquetado.emplaquetador where categoria='INTERNO' AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%' group by emplaquetadores.nombre order by juegosTotales desc ";
-            $sql="SELECT SUM(pedidoDetalles.emplaquetados) AS emplaquetados, emplaquetadores.nombre AS nombre FROM `pedidoDetalles` inner join emplaquetadores ON pedidoDetalles.colaborador = emplaquetadores.id WHERE pedidoDetalles.fechaCreacion LIKE '".$fechaActual."%' GROUP BY pedidoDetalles.colaborador";
+            $sql="SELECT emplaquetadores.*, (SELECT SUM(seguimientoEmplaquetado.puntos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS puntosTotales, (SELECT SUM(seguimientoEmplaquetado.juegos) FROM seguimientoEmplaquetado WHERE seguimientoEmplaquetado.emplaquetador = emplaquetadores.id AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%') AS juegosTotales FROM emplaquetadores INNER JOIN seguimientoEmplaquetado ON emplaquetadores.id = seguimientoEmplaquetado.emplaquetador where categoria='INTERNO' AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%' group by emplaquetadores.nombre order by juegosTotales desc ";
             //echo $sql;
             $result=mysqli_query($conexion,$sql); 
             
@@ -83,7 +98,7 @@ $metaGeneral=6020;
             ?>
             <tr>
                 <td><?php echo $mostrar['nombre'] ?></td>
-                <td><center><?php echo $mostrar['emplaquetados'] ?></center></td>
+                <td><center><?php echo $mostrar['juegosTotales'] ?></center></td>
                 <td><center><?php 
                 /*
                 if ($mostrar['nombre']=='MILEIDY MONTOYA'){
@@ -97,11 +112,33 @@ $metaGeneral=6020;
                 echo round($mostrar['puntosTotales']/$meta*100);
                 
                 ?></center></td>
+                
+                <td bgcolor="<?php $eficiencia =round(($mostrar['puntosTotales']*$estandar)/$minutosTranscurridos*100);
+                if($eficiencia<80){
+                echo "red";
+                }
+                else if ($eficiencia>=80 and $eficiencia<90){
+                    echo "yellow";
+                }
+                else{
+                    echo "green";
+                }
+                
+                ?>"><center><?php 
+               
+                echo $eficiencia;
+                
+                ?></center></td>
                       
 </tr>
 <?php
 
+
 }
+
+//echo $fechaHoraInicioTurno;
+//echo $fechaHoraActual;
+//echo $minutosTranscurridos;
 ?>
 </table>
 
@@ -147,7 +184,7 @@ $.ajax({
             
             <?php
             //$sql="select * , COUNT(id), sum(juegos) as total FROM listaEmpaque WHERE pedidoId ='". $pedido. "' AND mold = '". $referencia. "' AND shade = '".$color."' GROUP BY mold, shade, lote, uppLow, caja ORDER BY mold;";
-            $sqlSuma="SELECT SUM(pedidoDetalles.emplaquetados) AS emplaquetados FROM `pedidoDetalles` WHERE pedidoDetalles.fechaCreacion LIKE '".$fechaActual."%'";
+            $sqlSuma="SELECT emplaquetadores.*, SUM(juegos) AS total FROM seguimientoEmplaquetado INNER JOIN emplaquetadores ON emplaquetadores.id = seguimientoEmplaquetado.emplaquetador where categoria='INTERNO' AND seguimientoEmplaquetado.fechaHora LIKE '".$fechaActual."%'";
             //echo $sqlSuma;
             $resultSuma=mysqli_query($conexion,$sqlSuma);
             
@@ -158,9 +195,9 @@ $.ajax({
             ?>
             <tr>
                 
-                <td><CENTER><?php echo $mostrarSuma['emplaquetados'] ?></CENTER></td>
+                <td><CENTER><?php echo $mostrarSuma['total'] ?></CENTER></td>
                 <td><CENTER><?php echo round($mostrarSuma['total']/$metaGeneral*100) ?></CENTER></td>
-                <td><CENTER><?php require_once("inventarioDiario.php"); ?></CENTER></td>
+                <td><CENTER><?php require_once("inventarioDiario2.php"); ?></CENTER></td>
                 
             </tr>
             <?php
@@ -169,7 +206,9 @@ $.ajax({
             ?>
         </table>
         <br></br>
+        
  </center>
+ <p>Nota: La eficiencia cambia en función del tiempo transcurrido desde el inicio de la jornada (6:00am) sobre un estándar de 86 puntos/hora (1juego4C=1.2puntos, 1juego2C=1punto)</p>
 </body>
 </html>
 

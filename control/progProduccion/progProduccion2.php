@@ -55,7 +55,7 @@ $date = explode ("-",$fecha);
                     <select class="form-select" id="Ano" name="Ano" aria-label="Default select example">
                         <?php   if($fecha==0){?>
                         <option value="">Año</option>
-                        <option value="22">2022</option>
+                        <!--<option value="22">2022</option>-->
                         <option value="23">2023</option>
                         <option value="24">2024</option>
                         <option value="25">2025</option>
@@ -71,7 +71,7 @@ $date = explode ("-",$fecha);
                             ?>
                             <option value="<?php echo (intval($date[0])-2000);  ?>"><?php echo $date[0];  ?></option>
                         <option value="">Año</option>
-                        <option value="22">2022</option> 
+                        <!--<option value="22">2022</option> -->
                         <option value="23">2023</option>
                         <option value="24">2024</option>
                         <option value="25">2025</option>

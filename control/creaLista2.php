@@ -87,32 +87,36 @@ $result1=mysqli_query($conexion,$sql1);
                     $color=$color." PLUS";
                 }
                
-                
-                //confirmo si se está haciendo un ingreso uno a uno o un ingreso grupal.
+               
+                      //confirmo si se está haciendo un ingreso uno a uno o un ingreso grupal.
 
 //CONDICION PARA EL INGRESO UNO A UNO 
 if (($_GET ["cajas"])=="null"){
     $cajas="1";
-$herramienta21 = new Herramienta();
-$ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo);
+
 }
 //CONDICION PARA EL INGRESO GRUPAL
 else {
     $cajas=$_GET ["cajas"];
     $juegos=$juegos*$cajas;
-    
-    $herramienta21 = new Herramienta();
+}
+               
+               //si el método es 5 o 6 no se hace lista de empaque. sólo se ingresa en detalles. 
+               
+               if($metodo=="7" || $metodo=="8"){
+                   
+               }
+                else{
+                    
+                    $herramienta21 = new Herramienta();
 $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf, $color, $lote, $juegos, $cajas, $codigoQR, $pedido, $caja, $metodo);
-    
+         
 }
 
-
+/*
    //Establezco la escepción de las referencias PL3 y H45.
 		   
 		   if($ref=='PL3'){
-		       $ref='PU3';
-		   }
-		    if($ref=='PL3'){
 		       $ref='PU3';
 		   }
 		    if($ref=='J21'){
@@ -121,6 +125,10 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
 		    if($ref=='H45'){
 		       $ref='45H';
 		   }
+		   
+		   ¨*/
+		   
+		   //las anteriores escepciones se soluionan creando las referencias con el nombre solicitado por el cliente en base de datos.
 
 	    //preparo el supInf para concatenar con la referencia
 		   $supInf=substr($supInf,0,1);
@@ -153,6 +161,13 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
             }
 		    //luego de consultar el id de la referencia, ingreso los datos a la tabla de detalles.
 		    
+		    if($metodo=="7" || $metodo=="8"){
+		          $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		    
+		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
+		    }
+		    else{
+		    
 		    $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		    
 		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
@@ -161,6 +176,8 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
                     echo "debe seleccionar la caja correspondiente a la hora actual";
                 }*/
                 }
+                }
+                
                 else {
                     ?>
 <!DOCTYPE html>
@@ -195,8 +212,14 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
                     
                     
                 }
+                
 
 ?>
+
+<html lang="en">
+			    <head>
+			    <meta http-equiv="refresh" content="0.2; url= https://trazabilidadmasterdent.online/control/formularioListas_digitaLote.php?pedido=<?php echo $pedido?>&caja=<?php echo $caja?>&metodo=<?php echo $metodo?>">
+			    </head>
 
 </h1>
 

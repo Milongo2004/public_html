@@ -228,9 +228,13 @@ public function ingresar_datos_listaEmpaque_digitandoLote($ref, $antPos, $supInf
 		$stmt_21->bindValue(10, $caja);
 
 		if($stmt_21->execute()){
+		    /*
+		    $pedidoBodega='831';
 		    
-		    
-	
+		    $sqlRetiroBodega = " insert into listaEmpaque values (null, $ref, $antPos, $supInf, $color, $lote, ($juegos*-1), $cajas, $codigoQR, $pedidoBodega, $caja, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))) ";
+	        
+	        $resultRetiroBodega = mysqli_query($conexion,$sqlRetiroBodega);
+	*/
 		    
 			//echo "Ingreso Exitoso!";
 			?>
@@ -1481,6 +1485,51 @@ echo $juegos ."/" ;
 		
 		
 	}
+	
+	///////////////////////////////////////////////////////7
+	
+	public function ingresar_datos_temperaturaPrensasAleatorio($prensa, $temperaturas,$fecha){
+
+for($i=0;$i<=10;$i++){
+
+
+
+$sql_T = " INSERT INTO `temperaturaPrensas` values (null, ?, ?, ?, ?, ?, ?, ?, ?) ";
+		$stmt_T = $this->conexion->conexion->prepare($sql_T);
+		
+		$stmt_T->bindValue(1, $prensa);
+		$stmt_T->bindValue(2, $i+1);
+		$stmt_T->bindValue(3, $temperaturas[$i][0]);
+		$stmt_T->bindValue(4, $temperaturas[$i][1]);
+		$stmt_T->bindValue(5, $temperaturas[$i][2]);
+		$stmt_T->bindValue(6, $temperaturas[$i][3]);
+		$stmt_T->bindValue(7, $temperaturas[$i][4]);
+		$stmt_T->bindValue(8, $fecha);
+		
+		//var_dump($temperaturas);
+
+		if($stmt_T->execute()){
+		
+			echo "zona".($i+1)."->OK!-";
+			?>
+			
+
+
+<?php
+		}
+		else{
+			echo "no se pudo registrar datos en tabla pedidos2,";
+		}
+}
+	?>
+<html lang="en">
+			    <body>
+			<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_temperaturaPrensas.php'">Nuevo Registro</button>
+			<button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
+</body>
+</html>
+<?php
+}
 
 
 

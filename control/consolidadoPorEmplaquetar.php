@@ -1,8 +1,5 @@
 <?php
-//$pedido=$_GET ["id"];
-//echo "aquí podremos ver lo ítems del pedido". $pedido. "según su estado dentro del proceso.";
-
-//////////////////////////////////////////////////////////////
+//la presente versión toma los datos de la tabla de pedidoDetalles, en vez de la de seguimiento emplaquetado. suponiendo que las cantidades en ambos coinsidan.
 session_start();
   if(!isset ($_SESSION['Cedula']) or !isset($_SESSION['Contrasena'])){ 
     $cedula=1993;
@@ -58,22 +55,22 @@ session_start();
  
     
     
-   
-  
+    $emplaquetador = isset( $_POST['emplaquetador'] ) ? $_POST['emplaquetador'] : '';
+    
     $referencia = isset( $_POST['referencia'] ) ? $_POST['referencia'] : '';
     $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
-    $uppLow = isset( $_POST['uppLow'] ) ? $_POST['uppLow'] : '';
+    $codigoP = isset( $_POST['codigoP'] ) ? $_POST['codigoP'] : '';
     $tipo = isset( $_POST['tipo'] ) ? $_POST['tipo'] : '';
+    $uppLow = isset( $_POST['uppLow'] ) ? $_POST['uppLow'] : '';
+    $linea = isset( $_POST['linea'] ) ? $_POST['linea'] : '';
+    $categoria = isset( $_POST['categoria'] ) ? $_POST['categoria'] : '';
+    $fechaDesde = isset( $_POST['fechaDesde'] ) ? $_POST['fechaDesde'] : '';
+    $fechaHasta = isset( $_POST['fechaHasta'] ) ? $_POST['fechaHasta'] : '';
     
-    $granel=0;
-    $programados=0;
-    $producidos=0;    
-    $pulidos=0;
-    $separados=0;
+    
+    
     $emplaquetados=0;
-    $revisados=0;
-    $verificados=0;
-    $empacados=0;
+   
     
     // imprimo las variables 
    // echo "pedido= ".$pedido;
@@ -83,8 +80,24 @@ session_start();
     
      $filtros = array();
      
-     if ($pedidoId != ''){
-        $filtros[]= "pedidoDetalles.`pedidoId` = '$pedidoId'";
+      if ($emplaquetador != ''){
+        $filtros[]= "pedidoDetalles.`colaborador` = '$emplaquetador'";
+    }
+     
+     if ($codigoP != ''){
+         
+          // busco el id del pedido según su nombre en la tabla pedidos2
+                
+                
+$sqlPedido= "SELECT `idP` FROM `pedidos2` WHERE codigoP = '$codigoP'";
+$resultPedido=mysqli_query($conexion,$sqlPedido);       
+
+     
+                while($mostrarPedido=mysqli_fetch_array($resultPedido)){
+                    $pedidoId=$mostrarPedido['idP'];
+                   
+            }
+            $filtros[]= "pedidoDetalles.pedidoId = '$pedidoId'";
     }
     
      if ($referencia != ''){
@@ -129,10 +142,36 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             $filtros[]= "referencias2.`tipo` = '$tipo'";
     }
     
+     if ($linea != ''){
+        if ($linea=="NULL"){
+            $filtros[]="1 ";
+        }
+        else{
+        
+            $filtros[]= "pedidos2.`linea` = '$linea'";
+        }
+    }
     
-    $consultaFiltros= 'SELECT pedidoDetalles.*, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE ';
+    if ($categoria != ''){
+        if ($categoria=="INTERNO"){
+            $filtros[]= "emplaquetadores.`categoria` = 'INTERNO'";
+        }
+        else{
+        $filtros[]= "emplaquetadores.`categoria` = 'EXTERNO'";
+        }
+    }
     
-    $consultaSuma = 'select referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` WHERE ';
+    if ($fechaDesde != '' && $fechaHasta != ''){
+            $filtros[]= "pedidoDetalles.`fechaCreacion` BETWEEN '$fechaDesde%' AND '$fechaHasta%'";
+    }
+    
+    if (is_null($filtros[0])){
+        $filtros[]="1";
+    }
+    
+    $consultaFiltros= 'SELECT pedidoDetalles.*, sum(pedidoDetalles.`enEmplaquetado`) as totalAEmplaquetar, emplaquetadores.`nombre` as nombreEmplaquetador, emplaquetadores.`categoria` as categoria, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color, pedidos2.`codigoP` as codigoP, pedidos2.`linea` as linea FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId`= pedidos2.`idP` INNER JOIN emplaquetadores ON pedidoDetalles.`colaborador` = emplaquetadores.`id` WHERE ';
+    
+    $consultaSuma = 'select pedidoDetalles.*, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, sum(pedidoDetalles.`enEmplaquetado`) as totalAEmplaquetar, pedidos2.`codigoP` as codigo, pedidos2.`linea` as linea, emplaquetadores.`categoria` as categoria, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId`= pedidos2.`idP` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` INNER JOIN emplaquetadores ON pedidoDetalles.`colaborador` = emplaquetadores.`id` WHERE ';
     
   }
   
@@ -146,21 +185,18 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 <html lang="en">
 <head>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Atrás</button>
+     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formularioEmplaquetado2.php'">Atrás</button>
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeguimientoPedidos</title>
+    <title>EntregadoAEmplaquetarConsolidado</title>
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>-->
 </head>
 
-<head>
-	<meta charset="UTF-8">
-	<title>Empaque</title>
-</head>
+
 <body>
     <center>
 
@@ -168,92 +204,42 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 
 
 
-        <h1>Seguimiento del pedido <?php echo $pedido  ?>  </h1>
+        <h1>Entregado a Emplaquetar Consolidado</h1>
         
-        <?php
-        
-   
-        
-        //presento el nombre del cliente
 
-        $sql3= "SELECT pedidos2.`idCliente`, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente` = clientes2.`id` WHERE idP ='".$pedidoId. "'";
-        $result3=mysqli_query($conexion,$sql3);
-
-            ?>
-
-
-
-        <h3>Cliente: 
-
-        
-                 <?php
-
-                while($mostrar3=mysqli_fetch_array($result3)){
-                    $nombreCliente=$mostrar3['cliente'];
-            ?>
-
-            
-                
-                <td><?php //echo $mostrar3['cliente'] 
-                echo $nombreCliente;
-                ?></td>
-                
-                
-                
-            
-            <?php
-            }
-            ?>
-            </h3>
-            
-            <?php
-            
-            //presento la línea
-
-        $sql4= "SELECT linea FROM pedidos2 WHERE idP ='". $pedidoId. "'";
-        $result4=mysqli_query($conexion,$sql4);
-
-            ?>
-
-
-
-        <h3>Línea: 
-
-        
-                 <?php
-
-                while($mostrar4=mysqli_fetch_array($result4)){
-                    $línea=$mostrar4['linea'];
-            ?>
-
-            
-                
-                <td><?php echo $línea; ?></td>
-                
-                
-                
-            
-            <?php
-            }
-            ?>
-            </h3>
-  
-
-  
-    
-    
 <div class="row">
-            <form action="trazarPedido.php" method="POST">
+            <form action="consolidadoPorEmplaquetar.php" method="POST">
             
             <div class="mb-3">
                 
-                   
+                    <div class="mb-3">
+                    <label for="emplaquetador" class="form-label">Emplaquetador</label>
+                    <select class="form-select" id="emplaquetador" name="emplaquetador" autofocus aria-label="Default select example">
+                        <option selected></option>
+                    <?php
+                        $sql1="SELECT * from emplaquetadores  ORDER BY id ASC";
+                        $result=mysqli_query($conexion,$sql1);
+                        
+                        while($mostrar=mysqli_fetch_array($result)){
+                    ?>
+                    <?php
+                        echo '<option value="'.$mostrar["id"].'">'.$mostrar["nombre"].'     /       '.$mostrar["iniciales"].'</option>';
+                    ?>
+                    <?php
+                        }
+                    ?>
+                    </select>
+                </div>
+                <br></br>
                     
                     <label for="referencia" class="form-label">Referencia</label>
                     <input type="text" size="15" class="form-control " autofocus  id="referencia" name="referencia">
          
                     <label for="color" class="form-label">Color</label>
                     <input type="text" size="15" class="form-control "  id="color" name="color">
+                    
+                    <label for="codigoP" class="form-label">Pedido</label>
+                    <input type="text" class="form-control "  id="codigoP" name="codigoP" style="width: 100px">
                     
                     <label for="tipo" class="form-label">Muela/Diente</label>
                     <select class="form-select"  id="tipo" name="tipo" aria-label="Default select example">
@@ -271,6 +257,35 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                     
                     </select>
                     
+                     <label for="linea" class="form-label">Línea</label>
+                 <select class="form-select" id="linea" name="linea" aria-label="Default select example">
+                        <option selected value="NULL"></option>
+                        <option value="RESISTAL">RESISTAL</option>
+                        <option value="STARPLUS">STARPLUS</option>
+                        <option value="REVEAL">REVEAL</option>
+                        <option value="STARVIT">STARVIT</option>
+                        <option value="UHLERPLUS">UHLERPLUS</option>
+                        <option value="STARDENT">STARDENT</option>
+                        <option value="ZENITH">ZENITH</option>
+                        
+                 
+                    </select>
+                    
+                     <label for="categoria" class="form-label">INT/EXT</label>
+                    <select class="form-select"  id="categoria" name="categoria" aria-label="Default select example">
+                        <option selected></option>
+                        <option value="INTERNO">INTERNO</option>
+                        <option value="EXTERNO">EXTERNO</option>
+                    
+                    </select>
+                    
+                    <br></br>
+                    
+                    <label for="fechaDesde" class="form-label">Desde</label>
+                    <input type="Date" class="form-control" id="fechaDesde" name="fechaDesde" placeholder="Ingresa la fecha" >
+                    
+                    <label for="fechaHasta" class="form-label">Hasta</label>
+                    <input type="Date" class="form-control" id="fechaHasta" name="fechaHasta" placeholder="Ingresa la fecha" >
                     
                     
                     <input name="id" type="hidden" value=" <?php
@@ -294,21 +309,11 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 
                 <td>Referencia</td>
                 <td>Color</td>
-                <td>Pedidos</td>
-                <td>Granel</td>
-                <td>PorProgramar</td>
-                <td>Programados</td>
-                <td>Producidos</td>
-                <td>Pulidos</td>
-                <!--<td>EnSeparación</td>-->
-                <td>Separados</td>
-                <td>EnEmplaquetado</td>
-                <td>Emplaquetados</td>
-                <td>Revisión 1</td>
-                <td>Asignados</td>
-                <td>Empacados</td>
-                <td>Historial</td>
-                <td>VerGranel</td>
+                <td>Pedido</td>
+                <td>Entregado a Emplaquetar</td>
+                <td>Emplaquetador</td>
+                <td>FechaHora</td>
+                
                
                 <!--<td>acción</td>
                 <td>acción</td>-->
@@ -317,8 +322,77 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             </tr>
             
             <?php
+            
+            echo "Entregado a emplaquetar";
+            
+            if ($emplaquetador != ''){
+                
+                // busco el nombre del emplaquetador según su id en la tabla emplaquetadores
+                
+                
+$sqlNombreEmplaquetador= "SELECT `nombre` FROM `emplaquetadores` WHERE id = '$emplaquetador'";
+$resultNombreEmplaquetador=mysqli_query($conexion,$sqlNombreEmplaquetador);       
+
+     
+                while($mostrarNombreEmplaquetador=mysqli_fetch_array($resultNombreEmplaquetador)){
+                    $nombreEmplaquetador=$mostrarNombreEmplaquetador['nombre'];
+                   
+            }
+        echo " a " . $nombreEmplaquetador;
+    }
+     
+     if ($codigoP != ''){
+         
+          
+            echo "-pedido: ".$codigoP;
+    }
+    
+     if ($referencia != ''){
+        
+        
+            
+           echo "-referencia: ".$referencia;
+            
+                
+    }
+    if ($color != ''){
+        
+            
+           echo "-color: ".$color;
+    }
+    
+    if ($uppLow != ''){
+            echo "-Sup/Inf-> ".$uppLow;
+    }
+     if ($tipo != ''){
+            echo "-tipo: ".$tipo;
+    }
+    
+     if ($linea != ''){
+        if ($linea=="NULL"){
+           
+        }
+        else{
+        
+            echo "-linea: ".$linea;
+        }
+    }
+    
+    if ($categoria != ''){
+        if ($categoria=="INTERNO"){
+            echo "-categoría: INTERNO";
+        }
+        else{
+        echo "-categoría: EXTERNO";
+        }
+    }
+    
+    if ($fechaDesde != '' && $fechaHasta != ''){
+            echo "- entre el " .$fechaDesde. " y el ".$fechaHasta;
+    }
+            
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
-            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." GROUP BY pedidoId, colorId, referenciaId ";
+            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ."AND pedidoDetalles.enEmplaquetado IS NOT NULL GROUP BY colorId, referenciaId ORDER BY pedidoDetalles.fechaCreacion DESC";
             //echo $sql;
             $result=mysqli_query($conexion,$sql);
             
@@ -332,58 +406,12 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 
                 <td><?php echo $mostrar['referencia'] ?></td>
                 <td><?php echo $mostrar['Color'] ?></td>
-                <td><?php echo $mostrar["totalPedidos"] ?></td>
-                <td><?php echo $mostrar["totalGranel"]?></td>
-                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalGranel"]+$mostrar["totalProgramados"])?></td>
+                <td><?php echo $mostrar["codigoP"] ?></td>
+                <td><?php echo $mostrar["totalAEmplaquetar"] ?></td>
+                <td><?php echo $mostrar["nombreEmplaquetador"] ?></td>
+                <td><?php echo $mostrar["fechaCreacion"] ?></td>
                 
-                <td bgcolor= "<?php if(($mostrar["totalGranel"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalProgramados"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalProducidos"]>$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalProducidos"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalPulidos"]>$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalPulidos"] ?></td>
-                
-                <!--<td bgcolor= "<?php //if($mostrar["totalEnSeparacion"]>$mostrar["totalPedidos"]){
-                //echo "B6FF8A";
-                //}?>"><?php //echo $mostrar["totalEnSeparacion"] ?></td>-->
-                
-                <td bgcolor= "<?php if($mostrar["totalSeparados"]>$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalSeparados"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalEnEmplaquetado"]>$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalEnEmplaquetado"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalEmplaquetados"]>=$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalEmplaquetados"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalRevision1"]>=$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalRevision1"] ?></td>
-                
-                <td bgcolor= "<?php if($mostrar["totalRevision2"]>=$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }?>"><?php echo $mostrar["totalRevision2"] ?></td>
-                
-                <td bgcolor= "<?php 
-                
-                if($mostrar["totalEmpacados"]==$mostrar["totalPedidos"]){
-                echo "B6FF8A";
-                }
-                else if(($mostrar["totalEmpacados"]>$mostrar["totalPedidos"]) || ($mostrar["totalEmpacados"]-$mostrar["totalPedidos"]==$mostrar["totalEmpacados"])){
-                    echo  "FB413B";
-                }
-                ?>"><?php echo $mostrar["totalEmpacados"] ?></td>
-                <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >Historial</a></td>
-                
-                <td><a href="../control/vistas/modulos/verTablaGranel.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >verGranel</a></td>
+               
                 
                 <!--<td><a    href="editar_detellePedido.php?id=<?php //echo $mostrar['id'] ?>&turno=<?php //echo $turno?>&prensada=<?php //echo $prensada?>&fecha=<?php //echo $fecha?> ">Editar</a></td>
                 <td><a href="#" data-href="eliminar_detallePedido.php?id=<?php //echo $mostrar['id']; ?>" data-rg="<?= $mostrar['id'] ?>" id="delRg" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">Eliminar</a></td>-->
@@ -460,18 +488,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             </tr>
             <tr>
                
-                <td>Pedidos</td>
-                <td>Granel</td>
-                <td>Programados</td>
-                <td>Producidos</td>
-                <td>Pulidos</td>
-                <!--<td>EnSeparación</td>-->
-                <td>Separados</td>
-                <td>EnEmplaquetado</td>
-                <td>Emplaquetados</td>
-                <td>Revisión1</td>
-                <td>Asignados</td>
-                <td>Empacados</td>
+                
+                <td>Entregado a Emplaquetar</td>
+                
                 
                 
             </tr>
@@ -488,18 +507,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             ?>
             <tr>
                 
-                <td><?php echo $mostrarSuma['totalPedidos'] ?></td>
-                <td><?php echo $mostrarSuma['totalGranel'] ?></td>
-                <td><?php echo $mostrarSuma['totalProgramados'] ?></td>
-                <td><?php echo $mostrarSuma['totalProducidos'] ?></td>
-                <td><?php echo $mostrarSuma['totalPulidos'] ?></td>
-                <!--<td><?php //echo $mostrarSuma['totalEnSeparacion'] ?></td>-->
-                <td><?php echo $mostrarSuma['totalSeparados'] ?></td>
-                <td><?php echo $mostrarSuma['totalEnEmplaquetado'] ?></td>
-                <td><?php echo $mostrarSuma['totalEmplaquetados'] ?></td>
-                <td><?php echo $mostrarSuma['totalRevision1'] ?></td>
-                <td><?php echo $mostrarSuma['totalRevision2'] ?></td>
-                <td><?php echo $mostrarSuma['totalEmpacados'] ?></td>
+               
+                <td><?php echo $mostrarSuma['totalAEmplaquetar'] ?></td>
+               
                 
                 
             </tr>
@@ -522,4 +532,5 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 else {
   echo"<h1>No estoy autorizado para ingresar a esta pagina.</h1>";
 }
+
 ?>

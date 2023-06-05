@@ -31,6 +31,8 @@ session_start();
 
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
   
+  /*
+
   $pedidoId=$_GET ['id'];
     if(is_null($pedidoId)){
         $pedidoId=$_POST['id'] ;
@@ -50,7 +52,7 @@ session_start();
                 }
        
         
-    
+    */
      
     
     
@@ -59,11 +61,14 @@ session_start();
     
     
    
-  
+    $pedido= isset( $_POST['pedido'] ) ? $_POST['pedido'] : '';
+    
     $referencia = isset( $_POST['referencia'] ) ? $_POST['referencia'] : '';
     $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
     $uppLow = isset( $_POST['uppLow'] ) ? $_POST['uppLow'] : '';
     $tipo = isset( $_POST['tipo'] ) ? $_POST['tipo'] : '';
+    
+   
     
     $granel=0;
     $programados=0;
@@ -83,11 +88,25 @@ session_start();
     
      $filtros = array();
      
-     if ($pedidoId != ''){
-        $filtros[]= "pedidoDetalles.`pedidoId` = '$pedidoId'";
+     if ($pedido != ''){
+         
+          // busco el id del pedido según su nombre en la tabla pedidos2
+                
+                
+$sqlPedido= "SELECT `idP` FROM `pedidos2` WHERE `codigoP` = '$pedido'";
+$resultPedido=mysqli_query($conexion,$sqlPedido);       
+
+     
+                while($mostrarPedido=mysqli_fetch_array($resultPedido)){
+                    $pedido=$mostrarPedido['idP'];
+                   
+            }
+         
+        $filtros[]= "pedidoDetalles.`pedidoId` = '$pedido'";
     }
+       
     
-     if ($referencia != ''){
+         if ($referencia != ''){
         
          // busco el id de la referencia según su nombre en la tabla referencias2
                 
@@ -129,10 +148,14 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             $filtros[]= "referencias2.`tipo` = '$tipo'";
     }
     
+    if(is_null($filtros[0]) || $filtros[0]==''){
+        $filtros[0]='1';
+    }
     
-    $consultaFiltros= 'SELECT pedidoDetalles.*, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE ';
     
-    $consultaSuma = 'select referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` WHERE ';
+    $consultaFiltros= "SELECT pedidoDetalles.*, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id`  INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP`INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidos2.`estado` = 'enProceso' AND";
+    
+    $consultaSuma = "select referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados FROM pedidoDetalles INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP` INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` WHERE pedidos2.`estado` = 'enProceso' AND";
     
   }
   
@@ -146,12 +169,12 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 <html lang="en">
 <head>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Atrás</button>
+     <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Atrás</button>-->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeguimientoPedidos</title>
+    <title>PedidosConsolidado</title>
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>-->
@@ -168,87 +191,19 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 
 
 
-        <h1>Seguimiento del pedido <?php echo $pedido  ?>  </h1>
-        
-        <?php
-        
-   
-        
-        //presento el nombre del cliente
-
-        $sql3= "SELECT pedidos2.`idCliente`, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente` = clientes2.`id` WHERE idP ='".$pedidoId. "'";
-        $result3=mysqli_query($conexion,$sql3);
-
-            ?>
-
-
-
-        <h3>Cliente: 
-
-        
-                 <?php
-
-                while($mostrar3=mysqli_fetch_array($result3)){
-                    $nombreCliente=$mostrar3['cliente'];
-            ?>
-
-            
-                
-                <td><?php //echo $mostrar3['cliente'] 
-                echo $nombreCliente;
-                ?></td>
-                
-                
-                
-            
-            <?php
-            }
-            ?>
-            </h3>
-            
-            <?php
-            
-            //presento la línea
-
-        $sql4= "SELECT linea FROM pedidos2 WHERE idP ='". $pedidoId. "'";
-        $result4=mysqli_query($conexion,$sql4);
-
-            ?>
-
-
-
-        <h3>Línea: 
-
-        
-                 <?php
-
-                while($mostrar4=mysqli_fetch_array($result4)){
-                    $línea=$mostrar4['linea'];
-            ?>
-
-            
-                
-                <td><?php echo $línea; ?></td>
-                
-                
-                
-            
-            <?php
-            }
-            ?>
-            </h3>
-  
-
-  
+        <h1>Consolidado de pedidos </h1>
     
     
 <div class="row">
-            <form action="trazarPedido.php" method="POST">
+            <form action="pedidosConsolidado.php" method="POST">
             
             <div class="mb-3">
                 
                    
+                    <label for="pedido" class="form-label">Pedido</label>
+                    <input type="text" size="15" class="form-control " id="pedido" name="pedido">
                     
+                   
                     <label for="referencia" class="form-label">Referencia</label>
                     <input type="text" size="15" class="form-control " autofocus  id="referencia" name="referencia">
          
@@ -270,14 +225,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                         <option value="-I">INF</option>
                     
                     </select>
-                    
-                    
-                    
-                    <input name="id" type="hidden" value=" <?php
-                        echo $pedidoId;  
-                    ?>">
-                     
-
+    
                 
                 <input type="submit" name="Empacar" >
             </form>
@@ -291,7 +239,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             <tr>
                 <!--<td>id</td>-->
                
-                
+                <td>Pedido</td>
                 <td>Referencia</td>
                 <td>Color</td>
                 <td>Pedidos</td>
@@ -318,7 +266,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             
             <?php
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
-            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." GROUP BY pedidoId, colorId, referenciaId ";
+            $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." GROUP BY pedido, colorId, referenciaId ";
             //echo $sql;
             $result=mysqli_query($conexion,$sql);
             
@@ -329,7 +277,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 
                 
                 
-                
+                <td><?php echo $mostrar['pedido'] ?></td>
                 <td><?php echo $mostrar['referencia'] ?></td>
                 <td><?php echo $mostrar['Color'] ?></td>
                 <td><?php echo $mostrar["totalPedidos"] ?></td>
@@ -469,8 +417,8 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Separados</td>
                 <td>EnEmplaquetado</td>
                 <td>Emplaquetados</td>
-                <td>Revisión1</td>
-                <td>Asignados</td>
+                <td>Revisión</td>
+                <td>Revisión</td>
                 <td>Empacados</td>
                 
                 

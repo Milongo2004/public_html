@@ -168,10 +168,10 @@ var_dump($prensada);*/
                 case "mañana":
                 echo "06:00 am - 02:00 pm";
                 break;
-                case "tarde":
+                case "Tarde":
                 echo "02:00 pm - 10:00 pm";
                 break;
-                case "noche":
+                case "Noche":
                 echo "10:00 pm - 06:00 am";
                 break;
                 }?></center></td>

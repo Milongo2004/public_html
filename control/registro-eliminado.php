@@ -28,7 +28,8 @@ $datoJuegos="";
             }
             //echo "/juegos = ". $datoJuegos;
             
-            
+           /* 
+           //Se crea el registro en base de datos de las referencias según el requerimiento del cliente. 
             //Establezco la escepción de las referencias PL3 y H45.
 		   
 		   if($datoRef=='PL3'){
@@ -43,7 +44,7 @@ $datoJuegos="";
 		    if($datoRef=='H45'){
 		       $datoRef='45H';
 		   }
-            
+            */
             
             //preparo el supInf para concatenar con la referencia
 		   $datoSupInf=substr($datoSupInf,0,1);

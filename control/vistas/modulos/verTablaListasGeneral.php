@@ -30,9 +30,52 @@ session_start();
 
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
   
+   
+    
+  
   }
   
   if($rol==1 OR $rol==3 ){
+      
+      $referencia = isset( $_POST['referencia'] ) ? $_POST['referencia'] : '';
+    $antPos = isset( $_POST['antPos'] ) ? $_POST['antPos'] : '';
+    $uppLow = isset( $_POST['uppLow'] ) ? $_POST['uppLow'] : '';
+    $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
+    $lote = isset( $_POST['lote'] ) ? $_POST['lote'] : '';
+    $caja = isset( $_POST['caja'] ) ? $_POST['caja'] : '';
+    $pedido = isset( $_POST['pedido'] ) ? $_POST['pedido'] : '';
+    
+    
+    $filtros = array();
+   if ($pedido != ''){
+            $filtros[]= "pedido = '$pedido'";
+    }
+    if ($referencia != ''){
+            $filtros[]= "mold = '$referencia'";
+    }
+    if ($antPos != ''){
+            $filtros[]= "antPos = '$antPos'";
+    }
+    if ($uppLow != ''){
+            $filtros[]= "uppLow = '$uppLow'";
+    }
+    if ($color != ''){
+            $filtros[]= "shade LIKE '%$color%'";
+    }
+    if ($lote != ''){
+            $filtros[]= "lote = '$lote'";
+    }
+    if ($caja != ''){
+            $filtros[]= "caja = '$caja'";
+    }
+    
+    if($filtros[0]=='' || is_null($filtros)){
+        $filtros[0]="1 ";
+    }
+    
+    $consultaFiltros='select listaEmpaque.*, pedidos2.`codigoP` AS pedido, clientes2.nombreCliente AS cliente FROM listaEmpaque INNER JOIN pedidos2 ON listaEmpaque.`pedidoId` = pedidos2.`idP` INNER JOIN clientes2 ON pedidos2.idCliente = clientes2.id WHERE ';
+    
+    
     
   
   ?>
@@ -79,9 +122,62 @@ session_start();
 </head>
 <body>
     
+    
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
+    
+    <center>
+        
+        
 
     <h2>Lista de empaque global</h2>
+    
+    
+      <div class="row">
+            <form action="verTablaListasGeneral.php" method="POST">
+            
+            <div class="mb-3">
+                    <label for="referencia" class="form-label">Referencia</label>
+                    
+                    <input type="text" class="form-control "  id="referencia" name="referencia" size="10">
+                    
+                    
+                <label for="antPos" class="form-label">Ant/Pos</label>
+                    <select class="form-select"  id="antPos" name="antPos" aria-label="Default select example">
+                        <option selected></option>
+                        <option value="ANT">ANT</option>
+                        <option value="POS">POS</option>
+                    
+                    </select>
+                    
+                     <label for="uppLow" class="form-label">Sup/Inf</label>
+                    <select class="form-select"  id="uppLow" name="uppLow" aria-label="Default select example">
+                        <option selected></option>
+                        <option value="SUP">SUP</option>
+                        <option value="INF">INF</option>
+                    
+                    </select>
+         
+                    <label for="color" class="form-label">Color</label>
+                    <input type="text" class="form-control "  id="color" name="color" size="10">
+                    
+                    <label for="lote" class="form-label">Lote</label>
+                    <input type="text" class="form-control "  id="lote" name="lote" size="10">
+                    
+                    <!--<label for="caja" class="form-label">Caja</label>
+                    <input type="text" class="form-control "  id="caja" name="caja" size="10">-->
+                    
+                   <label for="pedido" class="form-label">Pedido</label>
+                    <input type="text" class="form-control "  id="pedido" name="pedido" size="10">
+                     
+
+                
+                <input type="submit" name="Empacar" >
+            </form>
+        </div>
+        
+    </div>
+                    <br>
+    
     <table border="1">
             <tr>
                 <td>id</td>
@@ -92,13 +188,39 @@ session_start();
                 <td>LOTE</td>
                 <td>JUEGOS</td>
                 <td>PEDIDO</td>
+                <td>CLIENTE</td>
                 <td>FECHA</td>
                 <td>ACCIÓN</td>
                 
             </tr>
             
              <?php
-            $sql="select listaEmpaque.*, pedidos2.`codigoP` AS pedido FROM listaEmpaque INNER JOIN pedidos2 ON listaEmpaque.`pedidoId` = pedidos2.`idP` ORDER BY `id` DESC;";
+             
+             if ($pedido != ''){
+            echo "-pedido = '$pedido'";
+    }
+    if ($referencia != ''){
+            echo "-mold = '$referencia'";
+    }
+    if ($antPos != ''){
+            echo "-antPos = '$antPos'";
+    }
+    if ($uppLow != ''){
+            echo "-uppLow = '$uppLow'";
+    }
+    if ($color != ''){
+            echo "-shade = $color";
+    }
+    if ($lote != ''){
+            echo "-lote = '$lote'";
+    }
+    if ($caja != ''){
+            echo "-caja = '$caja'";
+    }
+             
+             
+            $sql=$consultaFiltros." ".implode(" AND ",$filtros) ." ORDER BY `id` DESC LIMIT 1000";
+            //echo $sql;
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){
@@ -112,6 +234,7 @@ session_start();
                 <td><?php echo $mostrar['lote'] ?></td>
                 <td><?php echo $mostrar['juegos'] ?></td>
                 <td><?php echo $mostrar['pedido'] ?></td>
+                <td><?php echo $mostrar['cliente'] ?></td>
                 <td><?php echo $mostrar['Fecha'] ?></td>
                 <td><a href="#" data-href="https://trazabilidadmasterdent.online/control/eliminar_pedido.php?id=<?php echo $mostrar['idP']; ?>" data-rg="<?= $mostrar['idP'] ?>" id="delRg" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">Eliminar</a></td>
                 
@@ -148,8 +271,10 @@ session_start();
         });
     </script>
 
+<br></br>
 
-    
+<p>Cuando no se filtra se listan los ultimos 1000 registros de lista de empaque.</p>
+    </center>
 </body>
 </html>
 

@@ -239,11 +239,12 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>EnEmplaquetado</td>
                 <td>Emplaquetados</td>
                 <td>Revisión 1</td>
-                <td>Revisión 2</td>
+                <td>Asignados</td>
                 <td>Empacados</td>
                 <td>Calidad</td>
                 <td>Colaborador</td>
                 <td>Fecha</td>
+                <td>Acción</td>
                 
                
                 <!--<td>acción</td>
@@ -301,6 +302,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 }
                 ?></td>
                 <td><?php echo $mostrar["fechaCreacion"]?></td>
+                <td><a href="#" data-href="eliminaDetalle.php?id=<?php echo $mostrar['id']; ?>" data-rg="<?= $mostrar['id'] ?>" id="delRg" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">Eliminar</a></td>
                 
                 
                 
@@ -311,14 +313,14 @@ $resultCol=mysqli_query($conexion,$sqlCol);
         </table>
         <br></br>
         
-         <script type="text/javascript">
+        <script type="text/javascript">
         $(document).on("click", "#delRg", function(event) {
             event.preventDefault();
 
             let ifRegistro = $(this).attr('data-rg');
 
             $.ajax({
-                url: "../control/trazarItem.php",
+                url: "https://trazabilidadmasterdent.online/control/eliminaDetalle.php",
                 data: {
                     id: ifRegistro
                 },
@@ -326,7 +328,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 
                     console.log(result);
                     location.reload();
-                   
+                  
 
 
                 },
@@ -338,6 +340,8 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 
         });
     </script>
+        
+         
     
    <table border="1">
             <tr>

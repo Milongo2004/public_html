@@ -158,7 +158,7 @@ $.ajax({
                 
                 <td><CENTER><?php echo $mostrarSuma['total'] ?></CENTER></td>
                 <td><CENTER><?php echo round($mostrarSuma['total']/$metaGeneral*100) ?></CENTER></td>
-                <td><CENTER><?php require_once("inventarioDiario.php"); ?></CENTER></td>
+                <td><CENTER><?php require_once("inventarioDiario2.php"); ?></CENTER></td>
                 
             </tr>
             <?php

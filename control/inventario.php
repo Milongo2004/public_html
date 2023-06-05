@@ -288,13 +288,31 @@
             <?php
             //$sql="select * , COUNT(id), sum(juegos) as total FROM listaEmpaque WHERE pedidoId ='". $pedido. "' AND mold = '". $referencia. "' AND shade = '".$color."' GROUP BY mold, shade, lote, uppLow ORDER BY mold;";
             
-            $encabezados="Fecha del Documento;Tipo Transacción;Número del Documento;Cliente Acreedor;Bodega;Referencia;Código del Concept0;Documento Destino;Concepto de Pago;Tipo Iva;Cantidad;Precio;Total Descuento;Centro de Costo";
+            echo "Producto Terminado";
+            
+             if ($referencia != ''){
+       echo "-Referencia = $referencia, ";
+    }
+    if ($color != ''){
+         echo "-Color = $color, ";
+    }
+   
+             
+            if ($fechaDesde != '' && $fechaHasta != ''){
+            
+            echo " entre $fechaDesde y $fechaHasta, ";
+            }
+           
+            
+            $encabezados="Fecha del Documento;Tipo Transacción;Número del Documento;Cliente Acreedor;Bodega;Referencia;Código del Concepto;Documento Destino;Concepto de Pago;Tipo Iva;Cantidad;Precio;Total Descuento;Centro de Costo";
             $var="";
             $sql=$consultaFiltros." ". implode(" AND ",$filtros) ." GROUP BY mold, shade, lote, uppLow ORDER BY mold;";
             $result=mysqli_query($conexion,$sql);
             
             //echo $sql;
             //echo var_dump($filtros);
+            
+            
             
             while($mostrar=mysqli_fetch_array($result)){
             ?>
@@ -312,8 +330,8 @@
             </tr>
             <?php
             
-            $var .= $mostrar['codigoQR'].”;”.$mostrar['mold'].”;”. $mostrar['uppLow']."\n";
-            
+            $var .= $mostrar['codigoQR'].";".$mostrar['mold'].";". $mostrar['uppLow']."\n";
+            //echo $var;
             }
             ?>
         </table>
@@ -347,40 +365,41 @@
             
             ?>
         </table>
-        <br></br>
+        <br>
         
         
     </div>
     
     <?php
     
-  function accion(){
-header("Content-Description: File Transfer");
-header("Content-Typ: application/force-download");
-//header("Content-Disposition: attachment; filename=archivo.csv");
-echo $encabezados." ".$var;
-  }
-  /*
-  function acciondos(){
-    echo 19;
-  }
-  */
+    $ingresoBodega="UPDATE listaEmpaque SET pedidoId = '831' WHERE juegos>2 AND";
+    
+     $sqlBodega=$ingresoBodega." ".implode(" AND ",$filtros);
+            //echo $sqlBodega;
+            //$resultBodega=mysqli_query($conexion,$sqlBodega); 
+    
+   
+
+
+
+    
+  
 ?>
 
-<input type="submit" name="" value="Exportar" id="boton1" onclick = "funcion();">
-<script>
-  function funcion(){
-    //alert('<?php echo accion(); ?>');
-    //alert(<?php //echo acciondos(); ?>);
-    /* Escribir en el Documento*/
-    document.write('<?php echo accion(); ?>');
-    //document.write(<?php echo acciondos(); ?>);
-  }
-</script>
+<!--<input type="submit" name="" value="Exportar" id="boton1" onclick = "accion()">-->
 
-    <br>
+
     
-    
+    <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/recibirEnBodega.php?query=<?php echo $sqlBodega;?>&Crear=Enviar'">Recibir en Bodega</button>-->
+    <form action="recibirEnBodega.php" method="POST">
+         <input type="submit" name="button1"
+                class="button" value="Recibir en Bodega" />
+         <input name="query" type="hidden" value=" <?php
+                        echo $sqlBodega;  
+                    ?>">
+         <input name="pedido" type="hidden" value=" <?php
+                        echo $pedido;  
+                    ?>">
     
     </center>
     

@@ -17,7 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </head>
 <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoInventario.php'">Inventario Consolidado</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoInventario.php'">Producto Terminado Consolidado</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoBodega.php'">Bodega Consolidado</button>
 <body>
     
     <center><h1>Selección de  
@@ -27,6 +28,9 @@
             }
             else if($destino=='inventario'){
                 echo "Línea para ingreso a inventario";
+            }
+            else if($destino=='asignacion'){
+                echo "Pedido para asignación de producto terminado";
             }
             else{
             echo "Pedido para Empaque";
@@ -41,6 +45,9 @@
             } 
             else if ($destino=='inventario'){
                 echo "inventario.php";
+            } 
+            else if ($destino=='asignacion'){
+                echo "asignacionAPedido.php";
             } 
             else{
             echo "empaque.php";
@@ -57,6 +64,9 @@
             else if($destino=='inventario'){
                 echo "inventario";
             }
+             else if($destino=='asignacion'){
+                echo "asignación a pedido";
+            }
             else{
             echo "Empaque";
             }
@@ -66,6 +76,15 @@
                    if($destino=='inventario'){
                        
                 $sql1="SELECT pedidos2.*, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente`= clientes2.`id` WHERE codigoP LIKE 'ING%' ORDER BY idP DESC";
+            }
+            else if($destino=='empaqueNacional'){
+                $sql1="SELECT pedidos2.*, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente`= clientes2.`id` WHERE codigoP LIKE 'ATC%' ORDER BY idP DESC";
+            }
+             else if($destino=='empaqueInternacional'){
+                $sql1="SELECT pedidos2.*, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente`= clientes2.`id` WHERE codigoP NOT LIKE 'ATC%' AND codigoP NOT LIKE 'ING%' AND codigoP NOT LIKE 'PRUEBA%' ORDER BY idP DESC";
+            }
+             else if($destino=='asignacion'){
+                $sql1="SELECT pedidos2.*, clientes2.`nombreCliente` AS cliente from pedidos2 INNER JOIN clientes2 ON pedidos2.`idCliente`= clientes2.`id` WHERE codigoP NOT LIKE 'ATC%' AND codigoP NOT LIKE 'ING%' AND codigoP NOT LIKE 'PRUEBA%' AND pedidos2.estado ='enProceso' OR pedidos2.codigoP ='ING NACIONAL' OR pedidos2.codigoP ='INTERNACIONAL' ORDER BY idP DESC";
             }
             else{
                         

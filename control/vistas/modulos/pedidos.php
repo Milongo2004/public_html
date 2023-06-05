@@ -47,10 +47,14 @@
 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_lotes.php'">Nuevo Lote</button>
 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_clientes.php'">Nuevo Cliente</button>
 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php'">lista de empaque</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=empaqueNacional&Crear=Enviar'">Lista de empaque nacional</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=empaqueInternacional&Crear=Enviar'">Lista de empaque Internacional</button>
 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=inventario&Crear=Enviar'">Inventario</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=asignacion&Crear=Enviar'">Asignación de producto terminado</button>
 
 <h1></h1>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaPedidos.php'">Ver Pedidos</button>
+     <button onclick="location.href='https://trazabilidadmasterdent.online/control/pedidosConsolidado.php'">Consolidado de Pedidos</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_seleccionPedido.php?destino=detalles&Crear=Enviar'">Consultar/Editar Pedidos</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaLotes.php'">Ver Lotes</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/vistas/modulos/verTablaGranel.php'">Producto a Granel</button>
