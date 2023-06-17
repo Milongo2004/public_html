@@ -13,7 +13,8 @@
     $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
     $pedido = isset( $_POST['pedido'] ) ? $_POST['pedido'] : '';
     $lote = isset( $_POST['lote'] ) ? $_POST['lote'] : '';
-    $fecha = isset( $_POST['fecha'] ) ? $_POST['fecha'] : '';
+    $fechaDesde = isset( $_POST['fechaDesde'] ) ? $_POST['fechaDesde'] : '';
+    $fechaHasta = isset( $_POST['fechaHasta'] ) ? $_POST['fechaHasta'] : '';
     
     
     
@@ -92,8 +93,8 @@ $resultLot=mysqli_query($conexion,$sqlLot);
         
             $filtros[]= "rotulos2.`loteId` = '$lote'";
     }
-    if ($fecha != ''){
-            $filtros[]= "rotulos2.`fechaActualizacion` LIKE '$fecha%'";
+    if ($fechaDesde != '' and $fechaHasta != ''){
+            $filtros[]= "rotulos2.`fechaActualizacion` BETWEEN '$fechaDesde%' AND '$fechaHasta%'";
     }
     
     $consultaFiltros='SELECT rotulos2.*, referencias2.`nombre` AS ref, lotes2.`nombreL` AS lote, colores2.`nombre` AS color, pedidos2.`codigoP` AS pedido FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id` INNER JOIN lotes2 ON rotulos2.`loteId`= lotes2.`id` INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id` INNER JOIN pedidos2 ON rotulos2.`pedido`= pedidos2.`idP` WHERE ';
@@ -216,8 +217,13 @@ case 1:
                     <label for="lote" class="form-label">Lote</label>
                     <input type="text" size="15" class="form-control "  id="lote" name="lote">
                     
-                    <label for="fecha" class="form-label">Fecha</label>
-                    <input type="Date" class="form-control" id="fecha" name="fecha" placeholder="Ingresa la fecha" >
+                    <H3>Ingresada a la estación entre</H3>
+                    
+                    <label for="fechaDesde" class="form-label">Fecha Desde</label>
+                    <input type="Date" class="form-control" id="fechaDesde" name="fechaDesde" placeholder="fecha de inicio" >
+                    
+                    <label for="fechaHasta" class="form-label">Fecha Desde</label>
+                    <input type="Date" class="form-control" id="fechaHasta" name="fechaHasta" placeholder="fecha de fin" >
                     
                     <input name="estacion" type="hidden" value=" <?php
                         echo $estacion;  
@@ -232,7 +238,7 @@ case 1:
     </div>
                     
 <br></br>
-    
+        
         <table border="1">
             <tr>
                 <td>id</td>
@@ -256,6 +262,8 @@ case 1:
             //$sql="SELECT * from Rotulo";
             //$sql= "SELECT * from rotulos2 WHERE estacionId2 ='". $estacion. "'";
             //$sql= "SELECT rotulos2.*, referencias2.`nombre` AS ref, colores2.`nombre` AS color FROM rotulos2 INNER JOIN referencias2 ON rotulos2.`referenciaId`= referencias2.`id`  INNER JOIN colores2 ON rotulos2.`colorId`= colores2.`id`  WHERE rotulos2.`estacionId2` = '". $estacion. "'";
+            echo  $fechaDesde." - ". $fechaHasta;
+            
             $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." ORDER BY rotulos2.`fechaActualizacion` DESC";
             //echo $sql;
             $result=mysqli_query($conexion,$sql);

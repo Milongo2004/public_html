@@ -12,7 +12,7 @@ $horaAntes="17:";
 
 //minuto y segundo serán aleatorios, día será en ciclo for. 
 
-for($dia=1;$dia<=30;$dia++){
+for($dia=1;$dia<=13;$dia++){
     
     
 
@@ -23,20 +23,20 @@ $segundo=rand(10,59);
 
 
 $horaCompleta=$horaAntes.$minuto.":".$segundo;
-$fechaAntesDia="2023-05-";
+$fechaAntesDia="2023-06-";
 $fechaHoraCompleta=$fechaAntesDia.$dia." ".$horaCompleta;
 
-$I1 =rand(116,123); $S1 =rand(116,119);      ; $P1=rand(116,123);  $A1=rand(-2,3);                  $O1=$_GET ["01"];
+$I1 =rand(116,123); $S1 =rand(116,119);      ; $P1=rand(116,123);  if($P1>123){$A1=rand(-2,0);}else{$A1=0;}                  $O1=$_GET ["01"];
 $I2 =rand(116,123); $S2 =119                 ; $P2=rand(116,123);  $A2="0";                         $O2=$_GET ["02"];
-$I3 =rand(116,123); $S3 =rand(116,119);      ; $P3=rand(116,123);  $A3=rand(-2,3);                  $O3=$_GET ["03"];
+$I3 =rand(116,123); $S3 =rand(116,119);      ; $P3=rand(116,123);  if($P3>123){$A3=rand(-2,0);}else{$A3=0;}                  $O3=$_GET ["03"];
 $I4 =rand(116,123); $S4 =119                 ; $P4=rand(116,123);  $A4="0";                         $O4=$_GET ["04"];
 $I5 =rand(116,123); $S5 =119                 ; $P5=rand(116,123);  $A5="0";                         $O5=$_GET ["05"];
 $I6 =rand(116,123); $S6 =120                 ; $P6=rand(116,123);  $A6="0";                         $O6=$_GET ["06"];
 $I7 =rand(116,123); $S7 =120                 ; $P7=rand(116,123);  $A7="0";                         $O7=$_GET ["07"];
 $I8 =rand(116,123); $S8 =119                 ; $P8=rand(116,123);  $A8="0";                         $O8=$_GET ["08"];
-$I9 =rand(116,123); $S9 =rand(116,119);      ; $P9=rand(116,123);  $A9=rand(-2,3);                  $O9=$_GET ["09"];
+$I9 =rand(116,123); $S9 =rand(116,119);      ; $P9=rand(116,123);  if($P9>123){$A9=rand(-2,0);}else{$A9=0;}                  $O9=$_GET ["09"];
 $I10=rand(116,123); $S10=119                 ;$P10=rand(116,123); $A10="0";                        $O10=$_GET ["010"];
-$I11=rand(116,123); $S11=rand(116,119);      ;$P11=rand(116,123); $A11=rand(-2,3);                 $O11=$_GET ["011"];
+$I11=rand(116,123); $S11=rand(116,119);      ;$P11=rand(116,123); if($P11>123){$A11=rand(-2,0);}else{$A11=0;}                $O11=$_GET ["011"];
 
 //convierto los valores obtenidos en int
 

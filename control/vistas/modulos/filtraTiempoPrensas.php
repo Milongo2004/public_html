@@ -517,7 +517,7 @@ case 3:
             
             <?php
             $sql="SELECT * FROM tiempoPrensas WHERE `prensa`= '$prensa' AND fechaCreacion BETWEEN '" .$desde."' AND '".$hasta."' ORDER BY id DESC";
-
+            //echo $sql;
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){

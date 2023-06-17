@@ -54,6 +54,8 @@
 
 
                 <button onclick="location.href='https://trazabilidadmasterdent.online/control/formularioEmplaquetado2.php'">Emplaquetado</button>
+                <br></br>
+                <button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoEstaciones/consolidadoEstaciones2.php'">Consolidado Estaciones</button>
 
                 </div>
 
