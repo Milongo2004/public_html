@@ -160,7 +160,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
     
     
     $consultaFiltros= 'SELECT pedidoDetalles.*, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE ';
-    
+    $consultaFiltrosAgrupada='SELECT pedidoDetalles.*, SUM(pedidoDetalles.juegos) as total, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE ';
     $consultaSuma = 'select *, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, sum(pedidoDetalles.`juegos`) as totales FROM pedidoDetalles  INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` WHERE ';
     
   }
@@ -353,20 +353,20 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                
             }
             else if ($línea=="UHLERPLUS"){
-                $arregloColores[]=1;
-                $arregloColores[]=2;
-                $arregloColores[]=3;
-                $arregloColores[]=4;
-                $arregloColores[]=5;
-                $arregloColores[]=6;
-                $arregloColores[]=7;
-                $arregloColores[]=8;
-                $arregloColores[]=9;
-                $arregloColores[]=10;
-                $arregloColores[]=11;
-                $arregloColores[]=12;
-                $arregloColores[]=13;
-                $arregloColores[]=14;
+                $arregloColores[]=27;
+                $arregloColores[]=28;
+                $arregloColores[]=29;
+                $arregloColores[]=30;
+                $arregloColores[]=31;
+                $arregloColores[]=32;
+                $arregloColores[]=33;
+                $arregloColores[]=34;
+                $arregloColores[]=35;
+                $arregloColores[]=36;
+                $arregloColores[]=37;
+                $arregloColores[]=38;
+                $arregloColores[]=39;
+                $arregloColores[]=40;
                
             }
             else if ($línea=="ZENITH"){
@@ -604,6 +604,24 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             </tr>
             
             <?php
+            
+  
+    
+     if ($referencia != ''){
+            echo "- REFERENCIA = ".$_POST['referencia'];
+    }
+    
+    if ($color != ''){
+            echo "- COLOR = ".$_POST['color'];
+    }
+    
+    if ($tipo != ''){
+            echo "- TIPO = $tipo";
+    }
+      if ($uppLow != ''){
+            echo "- SUP/INF= $uppLow";
+    }
+            
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
             $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." AND pedidoDetalles.`juegos` != '0' ORDER BY pedidoDetalles.`id` DESC";
             //echo $sql;
@@ -666,6 +684,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             
             <?php
             //$sql="select * , COUNT(id), sum(juegos) as total FROM listaEmpaque WHERE pedidoId ='". $pedido. "' AND mold = '". $referencia. "' AND shade = '".$color."' GROUP BY mold, shade, lote, uppLow, caja ORDER BY mold;";
+            
             $sqlSuma=$consultaSuma." ". implode(" AND ",$filtros);
             $resultSuma=mysqli_query($conexion,$sqlSuma);
             
@@ -679,12 +698,43 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td><?php echo $mostrarSuma['totales'] ?></td>
                 
             </tr>
+            
+            
+            
+           
+            <?php
+            }
+            ?>
+        </table>
+        
+        <h2>Totales por referencia</h2>
+        <table border="1">
+            <tr>
+             <td>Referencia</td>
+             <td>Juegos</td>
+            </tr>
+        <?php
+            //$sql="select * , COUNT(id), sum(juegos) as total FROM listaEmpaque WHERE pedidoId ='". $pedido. "' AND mold = '". $referencia. "' AND shade = '".$color."' GROUP BY mold, shade, lote, uppLow, caja ORDER BY mold;";
+             $sqlAgrupada= $consultaFiltrosAgrupada." ". implode(" AND ",$filtros) ." AND pedidoDetalles.`juegos` != '0' GROUP BY pedidoDetalles.referenciaId ORDER BY pedidoDetalles.`id` DESC";
+            //echo $sql;
+            $resultAgrupada=mysqli_query($conexion,$sqlAgrupada);
+            
+            //echo $sqlSuma;
+            //echo var_dump($filtros);
+            
+            while($mostrarAgrupada=mysqli_fetch_array($resultAgrupada)){
+            ?>
+            <tr>
+                <td><?php echo $mostrarAgrupada['referencia'] ?></td>
+                <td><?php echo $mostrarAgrupada['total'] ?></td>
+                
+            </tr>
+            
             <?php
             }
             ?>
         </table>
         <br></br>
-            
           <p>Nota: el filtro de búsqueda para superior e inferior sólo detecta las referencias cuyo nombre termine en "-S" o "-I"</p>
             
 

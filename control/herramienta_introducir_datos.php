@@ -1331,6 +1331,17 @@ $juegosGranel="";
                     $gramosGranel = $datos['gramosGranel'];
                     $juegosGranel = ($gramosGranel/$gramosJuego);
                     $juegosGranel=round($juegosGranel);
+                    
+//actualizo la cantidad de juegos en la tabla rótulos para cuando se trate de producto que retorna a granel después de emplaquetado
+if ($juegosGranel<$juegosIngresan){
+    
+
+$sqlTotalJuegosRotulo="UPDATE rotulos2 SET total='".$juegosGranel."' WHERE rotuloId ='".$rotuloId."'";
+$sqlTotalJuegosRotulo= $this->conexion->conexion->prepare($sqlTotalJuegosRotulo);
+$sqlTotalJuegosRotulo->execute();
+
+}
+//creo detalle según corresponda si ya fue separado va a detalle granel sino                     
 		    
 $sqlYaSeparado="SELECT COUNT(id) as cuantos FROM pedidoDetalles WHERE rotuloId='".$rotuloId. "' and separado is not null;";
 $sqlYaSeparado= $this->conexion->conexion->prepare($sqlYaSeparado);

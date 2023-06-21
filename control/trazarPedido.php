@@ -31,6 +31,10 @@ session_start();
 
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
   
+  $sumaItem=array();
+  $juegosItem=array(array());
+  $nombreItem='';
+  
   $pedidoId=$_GET ['id'];
     if(is_null($pedidoId)){
         $pedidoId=$_POST['id'] ;
@@ -307,6 +311,8 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Revisión 1</td>
                 <td>Asignados</td>
                 <td>Empacados</td>
+                <td>Faltan</td>
+                <td>EnProceso</td>
                 <td>Historial</td>
                 <td>VerGranel</td>
                
@@ -323,6 +329,25 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){
+                
+                /*
+                $nombreItem=$mostrar['referencia'].$mostrar['Color'];
+                $sumaItem[$nombreItem]=0;
+                
+                $sqlSumaJuegosEnProceso="SELECT pedidoDetalles.*, rotulos2.estacionId2 as estacionId, rotulos2.total as juegos FROM pedidoDetalles INNER JOIN rotulos2 ON pedidoDetalles.rotuloId = rotulos2.id WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' AND pedidoDetalles.`referenciaId` = '".$mostrar['referencia']."' AND pedidoDetalles.`colorId` = '".$mostrar['Color']."' AND rotuloId is not null GROUP BY rotuloId";
+                
+            $sqlSumaJuegosEnProceso= $this->conexion->conexion->prepare($sqlSumaJuegosEnProceso);
+            $sqlSumaJuegosEnProceso->execute();
+		    $datos = $sqlSumaJuegosEnProceso->fetch();
+		    
+		    
+		            $juegosItem[$nombreItem][] = $datos['juegos'];
+		            
+		            foreach($juegosItem[$nombreItem][] as $juegItem){
+		            $sumaItem[$nombreItem]=$sumaItem[$nombreItem]+$juegItem;
+		            }
+		            */
+                
             ?>
             <tr>
                 <!--<td><?php //echo $mostrar['id'] ?></td>-->
@@ -334,9 +359,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td><?php echo $mostrar['Color'] ?></td>
                 <td><?php echo $mostrar["totalPedidos"] ?></td>
                 <td><?php echo $mostrar["totalGranel"]?></td>
-                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalGranel"]+$mostrar["totalProgramados"])?></td>
+                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalRevision2"]+$mostrar["totalProgramados"])?></td>
                 
-                <td bgcolor= "<?php if(($mostrar["totalGranel"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
+                <td bgcolor= "<?php if(($mostrar["totalRevision2"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
                 echo "B6FF8A";
                 }?>"><?php echo $mostrar["totalProgramados"] ?></td>
                 
@@ -381,6 +406,17 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                     echo  "FB413B";
                 }
                 ?>"><?php echo $mostrar["totalEmpacados"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalPedidos"]-$mostrar["totalEmpacados"]==0){
+                echo "B6FF8A";
+                }
+                else if($mostrar["totalPedidos"]-$mostrar["totalEmpacados"]<0){
+                    echo  "FB413B";
+                }
+                ?>"><?php echo ($mostrar["totalPedidos"])-($mostrar["totalEmpacados"])?></td>
+                
+                <td><?php echo $sumaItem[$nombreItem] ?></td>
+                
                 <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >Historial</a></td>
                 
                 <td><a href="../control/vistas/modulos/verTablaGranel.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >verGranel</a></td>

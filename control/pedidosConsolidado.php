@@ -62,7 +62,7 @@ session_start();
     
    
     $pedido= isset( $_POST['pedido'] ) ? $_POST['pedido'] : '';
-    
+    $cliente= isset( $_POST['cliente'] ) ? $_POST['cliente'] : '';
     $referencia = isset( $_POST['referencia'] ) ? $_POST['referencia'] : '';
     $color = isset( $_POST['color'] ) ? $_POST['color'] : '';
     $uppLow = isset( $_POST['uppLow'] ) ? $_POST['uppLow'] : '';
@@ -104,6 +104,10 @@ $resultPedido=mysqli_query($conexion,$sqlPedido);
          
         $filtros[]= "pedidoDetalles.`pedidoId` = '$pedido'";
     }
+    
+        if($cliente != ''){
+            $filtros[]= "nombreCliente LIKE '%$cliente%'";
+        }
        
     
          if ($referencia != ''){
@@ -153,9 +157,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
     }
     
     
-    $consultaFiltros= "SELECT pedidoDetalles.*, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id`  INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP`INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidos2.`estado` = 'enProceso' AND";
+    $consultaFiltros= "SELECT pedidoDetalles.*, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, pedidos2.`idCliente` AS idCliente, clientes2.nombreCliente AS nombreCliente, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados, referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, colores2.`nombre` AS Color FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id`  INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP`INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` INNER JOIN clientes2 ON pedidos2.idCliente = clientes2.id WHERE pedidos2.`estado` = 'enProceso' AND";
     
-    $consultaSuma = "select referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados FROM pedidoDetalles INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP` INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` WHERE pedidos2.`estado` = 'enProceso' AND";
+    $consultaSuma = "select referencias2.`nombre` AS referencia, referencias2.`tipo` AS tipo, pedidos2.`codigoP` AS pedido, pedidos2.`estado` AS estado, pedidos2.`idCliente` AS idCliente, clientes2.nombreCliente AS nombreCliente, sum(pedidoDetalles.`juegos`) as totalPedidos,sum(pedidoDetalles.`programados`) as totalProgramados, sum(pedidoDetalles.`granel`) as totalGranel, sum(pedidoDetalles.`pulidos`) as totalPulidos, sum(pedidoDetalles.`producidos`) as totalProducidos, sum(pedidoDetalles.`enSeparacion`) as totalEnSeparacion, sum(pedidoDetalles.`separado`) as totalSeparados, sum(pedidoDetalles.`enEmplaquetado`) as totalEnEmplaquetado, sum(pedidoDetalles.`emplaquetados`) as totalEmplaquetados, sum(pedidoDetalles.`revision1`) as totalRevision1, sum(pedidoDetalles.`revision2`) as totalRevision2, sum(pedidoDetalles.`empacados`) as totalEmpacados FROM pedidoDetalles INNER JOIN pedidos2 ON pedidoDetalles.`pedidoId` = pedidos2.`idP` INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN clientes2 ON pedidos2.idCliente = clientes2.id WHERE pedidos2.`estado` = 'enProceso' AND";
     
   }
   
@@ -203,6 +207,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                     <label for="pedido" class="form-label">Pedido</label>
                     <input type="text" size="15" class="form-control " id="pedido" name="pedido">
                     
+                    <label for="cliente" class="form-label">Cliente</label>
+                    <input type="text" size="15" class="form-control " id="cliente" name="cliente">
+                    
                    
                     <label for="referencia" class="form-label">Referencia</label>
                     <input type="text" size="15" class="form-control " autofocus  id="referencia" name="referencia">
@@ -240,6 +247,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <!--<td>id</td>-->
                
                 <td>Pedido</td>
+                <td>Cliente</td>
                 <td>Referencia</td>
                 <td>Color</td>
                 <td>Pedidos</td>
@@ -255,6 +263,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 <td>Revisión 1</td>
                 <td>Asignados</td>
                 <td>Empacados</td>
+                <td>Faltan</td>
                 <td>Historial</td>
                 <td>VerGranel</td>
                
@@ -265,6 +274,41 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             </tr>
             
             <?php
+            
+            
+            if ($pedido != ''){
+             echo " - Pedido = ".$_POST['pedido'];
+    }
+    
+        if($cliente != ''){
+           echo " - Cliente = ".$cliente;
+        }
+       
+    
+         if ($referencia != ''){
+        
+        
+            
+            echo " - Referencia = ".$_POST['referencia'];
+            
+                
+    }
+    if ($color != ''){
+            
+            echo " - Color = ".$_POST['color'];
+    }
+    
+    if ($uppLow != ''){
+           echo " - Sup/Inf=  $uppLow";
+    }
+     if ($tipo != ''){
+            echo " - Tipo = $tipo";
+    }
+    
+            
+            
+            
+            
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
             $sql= $consultaFiltros." ". implode(" AND ",$filtros) ." GROUP BY pedido, colorId, referenciaId ";
             //echo $sql;
@@ -278,13 +322,14 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                 
                 
                 <td><?php echo $mostrar['pedido'] ?></td>
+                <td><?php echo $mostrar['nombreCliente'] ?></td>
                 <td><?php echo $mostrar['referencia'] ?></td>
                 <td><?php echo $mostrar['Color'] ?></td>
                 <td><?php echo $mostrar["totalPedidos"] ?></td>
                 <td><?php echo $mostrar["totalGranel"]?></td>
-                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalGranel"]+$mostrar["totalProgramados"])?></td>
+                <td><?php echo ($mostrar["totalPedidos"]*1.25)-($mostrar["totalRevision2"]+$mostrar["totalProgramados"])?></td>
                 
-                <td bgcolor= "<?php if(($mostrar["totalGranel"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
+                <td bgcolor= "<?php if(($mostrar["totalRevision2"]+$mostrar["totalProgramados"])>$mostrar["totalPedidos"]*1.25){
                 echo "B6FF8A";
                 }?>"><?php echo $mostrar["totalProgramados"] ?></td>
                 
@@ -329,6 +374,15 @@ $resultCol=mysqli_query($conexion,$sqlCol);
                     echo  "FB413B";
                 }
                 ?>"><?php echo $mostrar["totalEmpacados"] ?></td>
+                
+                <td bgcolor= "<?php if($mostrar["totalPedidos"]-$mostrar["totalEmpacados"]==0){
+                echo "B6FF8A";
+                }
+                else if($mostrar["totalPedidos"]-$mostrar["totalEmpacados"]<0){
+                    echo  "FB413B";
+                }
+                ?>"><?php echo ($mostrar["totalPedidos"])-($mostrar["totalEmpacados"])?></td>
+                
                 <td><a href="../control/trazarItem.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >Historial</a></td>
                 
                 <td><a href="../control/vistas/modulos/verTablaGranel.php?idP=<?php echo $mostrar['pedidoId']; ?>&referenciaId=<?php echo $mostrar['referenciaId'] ?>&colorId=<?php echo $mostrar['colorId'] ?>&Crear=Enviar'" >verGranel</a></td>

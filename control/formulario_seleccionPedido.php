@@ -17,8 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </head>
 <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoInventario.php'">Producto Terminado Consolidado</button>
-<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoBodega.php'">Bodega Consolidado</button>
+<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoAsignado.php'">Producto Terminado Consolidado</button>
+<!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/consolidadoBodega.php'">Bodega Consolidado</button>-->
 <body>
     
     <center><h1>Selección de  
