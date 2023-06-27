@@ -266,7 +266,7 @@ $resultCol=mysqli_query($conexion,$sqlCol);
             }
             //$sql="SELECT pedidoDetalles.*, referencias2.`nombre` AS 'referencia', colores2.`nombre` AS 'Color' FROM pedidoDetalles INNER JOIN referencias2 ON pedidoDetalles.`referenciaId`= referencias2.`id` INNER JOIN colores2 ON pedidoDetalles.`colorId` = colores2.`id` WHERE pedidoDetalles.`pedidoId` = '".$pedidoId."' ORDER BY pedidoDetalles.`id` DESC";
             $sql= $consultaFiltros." ". implode(" AND ",$filtros) ."  ";
-            echo $sql;
+            //echo $sql;
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){

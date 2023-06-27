@@ -1332,6 +1332,10 @@ $juegosGranel="";
                     $juegosGranel = ($gramosGranel/$gramosJuego);
                     $juegosGranel=round($juegosGranel);
                     
+                    if (is_null($pedidoId)){
+                        $pedidoId='NULL';
+                    }
+                    
 //actualizo la cantidad de juegos en la tabla rótulos para cuando se trate de producto que retorna a granel después de emplaquetado
 if ($juegosGranel<$juegosIngresan){
     
@@ -1355,13 +1359,13 @@ $sqlYaSeparado= $this->conexion->conexion->prepare($sqlYaSeparado);
 if ($separadosEsteRotulo<1){
 
 
- $sql_Detalles1 = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedidoId."','".$referenciaId."','".$colorId."','".$rotuloId."',NULL,NULL,NULL,NULL,NULL,NULL,'".$juegosGranel."', NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
-
+ $sql_Detalles1 = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,".$pedidoId.",'".$referenciaId."','".$colorId."','".$rotuloId."',NULL,NULL,NULL,NULL,NULL,NULL,'".$juegosGranel."', NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+ echo $sql_Detalles1;
             $sql_Detalles1= $this->conexion->conexion->prepare($sql_Detalles1);
             $sql_Detalles1->execute();
 }
 else{
-    $sql_DetallesGranel = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedidoId."','".$referenciaId."','".$colorId."','".$rotuloId."',NULL,'".$juegosGranel."',NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+    $sql_DetallesGranel = " INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,".$pedidoId.",'".$referenciaId."','".$colorId."','".$rotuloId."',NULL,'".$juegosGranel."',NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 
             $sql_DetallesGranel= $this->conexion->conexion->prepare($sql_DetallesGranel);
             $sql_DetallesGranel->execute();

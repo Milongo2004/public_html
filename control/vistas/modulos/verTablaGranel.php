@@ -166,7 +166,9 @@
     
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control/formulario_rotulo_granel.php'">Nuevo Rotulo</button>
-    <!--<button onclick="location.href='https://trazabilidadmasterdent.online/control/eliminarGranelRepetidos.php'">eliminar registros repetidos</button>-->
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/trazarPedido.php?id=<?php echo $pedidoIdPedido?>'">Volver al pedido</button>
+    <button onclick="location.href='https://trazabilidadmasterdent.online/control/pedidosConsolidado.php'">Ir al consolidado</button>
+
     
     <center>
 
