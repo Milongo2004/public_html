@@ -1005,7 +1005,7 @@ echo "ingreso exitoso!,1,2,3,rotuloOK,";
                 $juegos=$juegos+2;
             }
 		   
-            $sql8="UPDATE rotulos2 SET estacionId2 = '".$estacion. "'"." ,pedido = null, fechaActualizacion = (select DATE_SUB(NOW(),INTERVAL 5 HOUR)) WHERE id = '". $cod_rotulo."'";
+            $sql8="UPDATE rotulos2 SET estacionId2 = '".$estacion. "', fechaActualizacion = (select DATE_SUB(NOW(),INTERVAL 5 HOUR)) WHERE id = '". $cod_rotulo."'";
             $result8=mysqli_query($conexion,$sql8);
             
             // registra paso por la estación

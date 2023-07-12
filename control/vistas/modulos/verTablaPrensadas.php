@@ -76,7 +76,7 @@
             
             //muestro todos los registros con minutos>1
     
-            $sql="SELECT * FROM cuentaPrensadas2 WHERE minutos > '2' ORDER BY `id` DESC LIMIT 100";
+            $sql="SELECT * FROM cuentaPrensadas2 WHERE minutos > '2' ORDER BY `id` DESC LIMIT 30000";
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){

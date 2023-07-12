@@ -88,7 +88,7 @@
             
             //muestro todos los registros
     
-            $sql="SELECT * FROM tiempoPrensas ORDER BY `id` DESC LIMIT 100";
+            $sql="SELECT * FROM tiempoPrensas ORDER BY `id` DESC LIMIT 30000";
             $result=mysqli_query($conexion,$sql);
             
             while($mostrar=mysqli_fetch_array($result)){
