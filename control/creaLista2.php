@@ -162,13 +162,13 @@ $ingresar_datos_listaEmpaque = $herramienta21->ingresar_datos_listaEmpaque_digit
 		    //luego de consultar el id de la referencia, ingreso los datos a la tabla de detalles.
 		    
 		    if($metodo=="7" || $metodo=="8"){
-		          $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		          $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".-$juegos."',NULL,'".$juegos."',NULL,NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		    
 		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
 		    }
 		    else{
 		    
-		    $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".$juegos."',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
+		    $sql_Detalles1 = "INSERT INTO `pedidoDetalles` (`id`, `pedidoId`, `referenciaId`, `colorId`, `rotuloId`, `juegos`, `granel`, `programados`, `producidos`, `pulidos`, `enSeparacion`, `separado`, `enEmplaquetado`, `emplaquetados`, `revision1`, `revision2`, `empacados`, `calidad`, `colaborador`, `fechaCreacion`) values (NULL,'".$pedido."','".$refId."','".$colorId."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'".-$juegos."','".$juegos."',NULL,NULL,(select DATE_SUB(NOW(),INTERVAL 5 HOUR)))";
 		    
 		     $resultDetalles1 = mysqli_query($conexion,$sql_Detalles1);
                /* }

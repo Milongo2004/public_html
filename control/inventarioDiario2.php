@@ -24,11 +24,12 @@ $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u6
         $filtros[]="1";
     }
     
-    $consultaFiltros='select sum(revision2) as total FROM pedidoDetalles WHERE ';
+    $consultaFiltros='select sum(revision2) as total FROM pedidoDetalles WHERE revision2>=0 AND ';
     
     $consultaSuma = 'select sum(revision2) as total FROM pedidoDetalles WHERE ';
     
     $consultaGeneral = $consultaFiltros." ".implode(" AND ",$filtros);
+    //echo $consultaGeneral;
     $resultGeneral=mysqli_query($conexion, $consultaGeneral);
             
             //echo $consultaSTARPLUS;

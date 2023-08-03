@@ -402,7 +402,7 @@ while($mostrar7=mysqli_fetch_array($result7)){
 $result8=mysqli_query($conexion,$sql8);
 
 
-// consulta para registrar la hora de entrada en cada estación
+// Registra la hora de entrada en cada estación
 
 	$sql81="INSERT INTO `rotuloestaciones2` (`id`, `rotuloId2`, `estacionId`, `ingreso`, `estado`) VALUES (NULL, '". $rotulos[$i]."', '".$estacion. "', (select DATE_SUB(NOW(),INTERVAL 5 HOUR)), NULL) ";
 
@@ -442,7 +442,7 @@ while($mostrarR=mysqli_fetch_array($resultR)){
  switch ($estacion){
      case 1:
      case 2:
-          $sqlSufijoDetalles= "'0', NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+          $sqlSufijoDetalles= "'0', NULL, '-$juegosIngresan', '$juegosIngresan', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
           
           
           $condicionArray=[
@@ -465,7 +465,7 @@ while($mostrarR=mysqli_fetch_array($resultR)){
           break;
           
     case 3: 
-         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, '$juegosIngresan',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         $sqlSufijoDetalles= "'0', NULL, NULL, '-$juegosIngresan', '$juegosIngresan',  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
          $condicionArray=[
               "juegos"=>"0",
               "granel"=>" IS NULL",
@@ -496,7 +496,7 @@ while($mostrarR=mysqli_fetch_array($resultR)){
         $juegosGranel = $gramosGranel/$gramosJuego;
         $juegosGranel=round($juegosGranel);
         
-        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '$juegosGranel',  NULL, NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, '-$juegosGranel', '$juegosGranel',  NULL, NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
        
          
          $condicionArray=[
@@ -544,7 +544,7 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
         
 //idea: en vez de eliminar el registro de granel creo uno nuevo con la misma cantidad de gramos pero en negativo. //no ejecutada porque puede entrar en conflicto con la creación y actualización de registros. 
 
-        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '".$juegosGranel."',  NULL, NULL, NULL, NULL, NULL, '2', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+        $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, '".-$juegosGranel."', '".$juegosGranel."',  NULL, NULL, NULL, NULL, NULL, '2', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
         
         $condicionArray=[
               "juegos"=>"0",
@@ -622,7 +622,7 @@ $resultEliminarGranel=mysqli_query($conexion,$sqlEliminaGranel);
             
              
          
-         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$juegosIngresan', NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
+         $sqlSufijoDetalles= "'0', NULL, NULL, NULL, NULL, NULL, NULL, '-$juegosIngresan', '$juegosIngresan', NULL, NULL, NULL, NULL, '$cod_molde', (select DATE_SUB(NOW(),INTERVAL 5 HOUR))";
          $condicionArray=[
               "juegos"=>"0",
               "granel"=>" IS NULL",
@@ -688,8 +688,8 @@ $ingresar_dato_tabla_SeguimientoEmplaquetado = $herramientaEmplaquetado->ingresa
 //echo $gramosJuego."/";
 //echo $gramosGranel."/";
 //echo $juegosGranel."/";
-//echo "ingreso exitoso!,$faltan,2,3,rotuloOK,";
-echo "ingreso exitoso!,0,2,3,rotuloOK,";
+echo "ingreso exitoso!,$faltan,2,3,rotuloOK,";
+//echo "ingreso exitoso!,0,2,3,rotuloOK,";
 
 //echo "</br>";
 //echo $sqlDetalles;

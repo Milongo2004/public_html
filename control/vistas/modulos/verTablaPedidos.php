@@ -1,38 +1,13 @@
 
 <?php
   
-session_start();
-  if(!isset ($_SESSION['Cedula']) or !isset($_SESSION['Contrasena'])){ 
-    $cedula=1993;
-  $contrasena=2050;
-    echo "<script>
-    alert('Zona  no autorizada,por favor inicia la seccion');
-    window.location='../index.php';
-  
-  
-    
-  </script>";
-  
-   
-  }
-  
-  else{
-    
-    
-    $cedula=$_SESSION['Cedula'];
-    $contrasena=$_SESSION['Contrasena']; 
-   $rol=$_SESSION['Rol'];
-  
-
-
-
 
 
   $conexion = mysqli_connect("localhost","u638142989_master2022","Master2022*","u638142989_MasterdentDB");
   
-  }
   
-  if($rol==1 OR $rol==3 ){
+  
+  
     
     $idP = isset( $_POST['idP'] ) ? $_POST['idP'] : '';
     $codigoP = isset( $_POST['codigoP'] ) ? $_POST['codigoP'] : '';
@@ -43,6 +18,22 @@ session_start();
     $estado = isset( $_POST['estado'] ) ? $_POST['estado'] : '';
     $fechaDesde = isset( $_POST['fechaDesde'] ) ? $_POST['fechaDesde'] : '';
     $fechaHasta = isset( $_POST['fechaHasta'] ) ? $_POST['fechaHasta'] : '';
+    
+    //variable para determinar las columnas a mostrar según área de la empresa
+    
+   $origenBusqueda=$_GET['origenBusqueda'];
+    
+    if ($origenBusqueda==NULL || $origenBusqueda==''){
+    
+    $origenBusqueda=$_POST['origenBusqueda'];
+    
+    }
+    
+    $origenBusqueda=trim($origenBusqueda," ");
+    
+  //echo $origenBusqueda;
+  //var_dump($origenBusqueda);
+  
   
   $filtros = array();
    if ($idP != ''){
@@ -141,7 +132,7 @@ session_start();
                     <input type="text" class="form-control "  id="idP" name="idP" style="width: 50px">
                     
                     <label for="codigoP" class="form-label">CódigoP</label>
-                    <input type="text" class="form-control "  id="codigoP" name="codigoP" style="width: 100px">
+                    <input type="text" class="form-control "  id="codigoP" name="codigoP" style="width: 100px" autofocus>
                     
                     <label for="nota" class="form-label">Alias</label>
                     <input type="text" class="form-control "  id="nota" name="nota" style="width: 100px">
@@ -190,6 +181,10 @@ session_start();
                     <label for="fechaHasta" class="form-label">Hasta</label>
                     <input type="Date" class="form-control" id="fechaHasta" name="fechaHasta" placeholder="Ingresa la fecha" >
                     
+                    <input name="origenBusqueda" type="hidden" value=" <?php
+                        echo $origenBusqueda;  
+                    ?>">
+                    
                 
                 <input type="submit" name="Empacar" >
             </form>
@@ -219,6 +214,9 @@ session_start();
             <?php
             
             echo "Pedidos realizados";
+            
+           //echo " para : " . $origenBusqueda;
+            
             if ($fechaDesde != '' && $fechaHasta != ''){
             echo " entre $fechaDesde y $fechaHasta";
             }
@@ -297,7 +295,7 @@ session_start();
                 
                 <td><a href="../../editar_pedido.php?id=<?php echo $mostrar['idP']; ?> ">Editar</a></td>
                 <td><a href="../../eliminar_pedido.php?id=<?php echo $mostrar['idP']; ?> ">Eliminar</a></td>
-                <td><a href="../../trazarPedido.php?id=<?php echo $mostrar['idP']; ?> "  >Ver Ítems</a></td>
+                <td><a href="../../trazarPedido.php?id=<?php echo $mostrar['idP']; ?>&origenBusqueda=<?php echo $origenBusqueda?> "  >Ver Ítems</a></td>
             </tr>
             <?php
             }
@@ -436,9 +434,5 @@ session_start();
 </html>
 
 <?php
-}
 
-else {
-  echo"<h1>No estoy autorizado para ingresar a esta pagina.</h1>";
-}
 ?>

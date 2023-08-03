@@ -3,27 +3,27 @@
 //echo "aquí podremos ver lo ítems del pedido". $pedido. "según su estado dentro del proceso.";
 
 //////////////////////////////////////////////////////////////
-session_start();
-  if(!isset ($_SESSION['Cedula']) or !isset($_SESSION['Contrasena'])){ 
-    $cedula=1993;
-  $contrasena=2050;
-    echo "<script>
-    alert('Zona  no autorizada,por favor inicia la seccion');
-    window.location='../index.php';
-  
-  
-    
-  </script>";
-  
-   
-  }
-  
-  else{
-    
-    
-    $cedula=$_SESSION['Cedula'];
-    $contrasena=$_SESSION['Contrasena']; 
-   $rol=$_SESSION['Rol'];
+//condenado por session start malo   session_start();
+//condenado por session start malo     if(!isset ($_SESSION['Cedula']) or !isset($_SESSION['Contrasena'])){ 
+//condenado por session start malo       $cedula=1993;
+//condenado por session start malo     $contrasena=2050;
+//condenado por session start malo       echo "<script>
+//condenado por session start malo       alert('Zona  no autorizada,por favor inicia la seccion');
+//condenado por session start malo       window.location='../index.php';
+//condenado por session start malo     
+//condenado por session start malo     
+//condenado por session start malo       
+//condenado por session start malo     </script>";
+//condenado por session start malo     
+//condenado por session start malo      
+//condenado por session start malo     }
+//condenado por session start malo     
+//condenado por session start malo     else{
+//condenado por session start malo       
+//condenado por session start malo       
+//condenado por session start malo       $cedula=$_SESSION['Cedula'];
+//condenado por session start malo       $contrasena=$_SESSION['Contrasena']; 
+//condenado por session start malo      $rol=$_SESSION['Rol'];
   
 
 
@@ -48,7 +48,20 @@ session_start();
  
   
     $referenciaId = isset( $_GET['referenciaId'] ) ? $_GET['referenciaId'] : '';
+    
+    
     $colorId = isset( $_GET['colorId'] ) ? $_GET['colorId'] : '';
+    
+     //variable para determinar las columnas a mostrar según área de la empresa
+    
+    $origenBusqueda=$_GET['origenBusqueda'];
+    
+    if ($origenBusqueda==NULL || $origenBusqueda==''){
+    
+    $origenBusqueda=$_POST['origenBusqueda'];
+    
+    }
+     $origenBusqueda=trim($origenBusqueda," ");
     
     $granel=0;
     $programados=0;
@@ -92,9 +105,9 @@ session_start();
     
     $consultaSuma = 'select sum(juegos) as totales FROM pedidoDetalles WHERE ';
     
-  }
+  //condenado por session start malo }
   
-  if($rol==1 OR $rol==3 ){
+  //condenado por session start malo if($rol==1 OR $rol==3 ){
     
   
   
@@ -104,7 +117,7 @@ session_start();
 <html lang="en">
 <head>
     <button onclick="location.href='https://trazabilidadmasterdent.online/control'">Inicio</button>
-     <button onclick="location.href='https://trazabilidadmasterdent.online/control/trazarPedido.php?id=<?php echo $pedidoId; ?>&referenciaId=<?php echo $referenciaId; ?>&colorId=<?php echo $colorId; ?>&Crear=Enviar'">Atrás</button>
+     <button onclick="location.href='https://trazabilidadmasterdent.online/control/trazarPedido.php?id=<?php echo $pedidoId; ?>&referenciaId=<?php echo $referenciaId; ?>&colorId=<?php echo $colorId; ?>&origenBusqueda=<?php echo $origenBusqueda?>&Crear=Enviar'">Atrás</button>
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -379,9 +392,9 @@ $resultCol=mysqli_query($conexion,$sqlCol);
 
 
 
-}
-
-else {
-  echo"<h1>No estoy autorizado para ingresar a esta pagina.</h1>";
-}
+//condenado por session start malo   }
+//condenado por session start malo   
+//condenado por session start malo   else {
+//condenado por session start malo     echo"<h1>No estoy autorizado para ingresar a esta pagina.</h1>";
+//condenado por session start malo   }
 ?>

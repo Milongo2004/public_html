@@ -7,8 +7,9 @@ $idP=$_GET['id'];
 $query=mysqli_query($conexion,"SELECT * FROM pedidos2 WHERE idP='$idP'" );
 mysqli_close($conexion);
 $result=mysqli_num_rows($query);
-if($result>0) { while ($data =mysqli_fetch_assoc($query))
-{
+if($result>0) { 
+    
+    while ($data =mysqli_fetch_assoc($query)){
 
 
 ?>
@@ -41,8 +42,10 @@ if($result>0) { while ($data =mysqli_fetch_assoc($query))
   <input type="text" value="<?php echo $data['codigoP'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Escriba el Codigo"   name="codigoP"  >
 </div>
 
+
+
 <div class="mb-3">
-<label for="exampleFormControlInput1" class="form-label" hidden></label>Alias (como se conoce en terminación)</label>
+<label for="exampleFormControlInput1" class="form-label" hidden></label>Alias (como se conoce en el área de terminación)</label>
   <input type="text" value="<?php echo $data['nota'];  ?>" class="form-control" id="exampleFormControlInput1" placeholder="Digite el alias del pedido"   name ="nota">
 </div>
 
@@ -94,10 +97,9 @@ if($result>0) { while ($data =mysqli_fetch_assoc($query))
                             ">ZENITH
                             <?php
                         }
-                       
+                     
                         
-                        ?>
-                        </option>
+                        ?></option>
                         <option value="RESISTAL">RESISTAL</option>
                         <option value="STARPLUS">STARPLUS</option>
                         <option value="REVEAL">REVEAL</option>
@@ -109,11 +111,32 @@ if($result>0) { while ($data =mysqli_fetch_assoc($query))
                  
                     </select>
                     </div>
+                    
 
 
 
 
 <?php
+
+if(substr($data['codigoP'], 0, 3)=='ATC'){
+    
+    ?>
+    
+    <div class="mb-3">
+<label for="juegos" class="form-label" hidden></label>juegos</label>
+  <input type="text" value="<?php echo $data['juegosTotales'];  ?>" class="form-control" id="juegos" placeholder="Juegos del pedido"   name ="juegos">
+</div>
+    <?php
+}
+else{
+    ?>
+      <input name="juegos" type="hidden" value=" <?php
+                        echo $data['juegosTotales'];  
+                    ?>">
+    <?php
+}
+
+
 }
 }
 ?>
@@ -125,6 +148,9 @@ if($result>0) { while ($data =mysqli_fetch_assoc($query))
 
   </form>
   <br></br>
+  
+  <p>Nota: Siempre que se modifique un campo, se debe seleccionar la línea de producto de la lista desplegable para evitar que se elimine del pedido.</p>
+  <p>Estamos trabajando en la corrección del error. </p>
     <br></br>
       <br></br>
 
